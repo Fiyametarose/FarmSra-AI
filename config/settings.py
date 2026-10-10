@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "diagnoses",
     "crops",
     "advisory",
+    "expert_reviews",
 ]
 
 MIDDLEWARE = [

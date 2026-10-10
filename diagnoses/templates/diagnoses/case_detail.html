@@ -46,5 +46,53 @@
         </section>
     {% endif %}
 
+    <section class="card">
+        <h2>Expert Review</h2>
+        {% if active_referral %}
+            <p><strong>Status:</strong> {{ active_referral.get_state_display }}</p>
+            {% if active_referral.state == 'reviewed' and active_referral.review %}
+                <div class="result-card" style="margin-top: 1rem; border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
+                    <h3>Review by Expert {{ active_referral.review.expert.email }}</h3>
+                    <p><strong>Outcome:</strong> {{ active_referral.review.get_outcome_display }}</p>
+                    <p><strong>Findings:</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.findings }}</span></p>
+                    {% if active_referral.review.next_steps %}
+                        <p><strong>Next Steps:</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.next_steps }}</span></p>
+                    {% endif %}
+                </div>
+            {% endif %}
+            <form action="{% url 'revoke-review' case.id %}" method="post" style="margin-top: 1rem;">
+                {% csrf_token %}
+                <button type="submit" class="button button-danger">Revoke Consent</button>
+            </form>
+        {% else %}
+            <p>You can share this case with an agricultural expert for a secondary assessment. The expert will see your crop details, image, and the AI's prediction.</p>
+            <form action="{% url 'request-review' case.id %}" method="post">
+                {% csrf_token %}
+                <div style="margin-bottom: 1rem;">
+                    <label>
+                        <input type="checkbox" required name="consent" value="on">
+                        I consent to sharing my crop, leaf image, AI prediction, confidence, symptoms, and relevant advisory with an agricultural expert for review. My name, email, and exact location will not be shared.
+                    </label>
+                </div>
+                <button type="submit" class="button">Request Expert Review</button>
+            </form>
+        {% endif %}
+
+        {% if revoked_referrals %}
+            <h3 style="margin-top: 2rem;">Previous Reviews</h3>
+            {% for ref in revoked_referrals %}
+                <div class="result-card" style="margin-top: 1rem; border: 1px solid var(--border); padding: 1rem; border-radius: 8px; opacity: 0.8;">
+                    <h4>Review by Expert {{ ref.review.expert.email }} <span class="pill" style="float: right;">Consent Revoked</span></h4>
+                    <p><strong>Outcome:</strong> {{ ref.review.get_outcome_display }}</p>
+                    <p><strong>Findings:</strong><br><span style="white-space: pre-wrap;">{{ ref.review.findings }}</span></p>
+                    {% if ref.review.next_steps %}
+                        <p><strong>Next Steps:</strong><br><span style="white-space: pre-wrap;">{{ ref.review.next_steps }}</span></p>
+                    {% endif %}
+                    <small>Submitted: {{ ref.review.submitted_at|date:"d M Y, H:i" }} | Revoked: {{ ref.revoked_at|date:"d M Y, H:i" }}</small>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </section>
+
     <div class="form-actions"><a class="button" href="{% url 'select-crop' %}">Check Another Crop</a></div>
 {% endblock %}

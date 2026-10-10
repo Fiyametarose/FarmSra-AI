@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">Expert Dashboard</a> / History{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <h1>Review History</h1>
+        <p>Cases you have previously reviewed.</p>
+    </div>
+
+    <section class="card">
+        <h2>Submitted Reviews</h2>
+        {% if reviews %}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border); text-align: left;">
+                            <th style="padding: 0.5rem;">Date Reviewed</th>
+                            <th style="padding: 0.5rem;">Crop</th>
+                            <th style="padding: 0.5rem;">Outcome</th>
+                            <th style="padding: 0.5rem;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for review in reviews %}
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 0.5rem;">{{ review.submitted_at|date:"d M Y, H:i" }}</td>
+                            <td style="padding: 0.5rem;">
+                                {% if review.referral.state != 'revoked' %}
+                                    {{ review.referral.diagnosis.get_crop_display }}
+                                {% else %}
+                                    <span style="color: gray; font-size: 0.85rem;">[Hidden]</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 0.5rem;">
+                                {{ review.get_outcome_display }}
+                                {% if review.referral.state == 'revoked' %}
+                                    <br><span class="pill" style="font-size: 0.75rem;">Consent Revoked</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 0.5rem;">
+                                {% if review.referral.state != 'revoked' %}
+                                    <a class="button button-secondary" href="{% url 'expert-case-detail' review.referral.id %}">View Case</a>
+                                {% else %}
+                                    <span style="color: gray; font-size: 0.85rem;">Access Revoked</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>You have not submitted any reviews yet.</p>
+        {% endif %}
+    </section>
+{% endblock %}

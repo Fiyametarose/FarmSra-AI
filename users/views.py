@@ -18,6 +18,8 @@ def farmer_required(view_func):
 def role_home_name(user):
     if user.role == user.Role.FARMER:
         return "dashboard"
+    if user.role == user.Role.EXPERT:
+        return "expert-dashboard"
     if user.role == user.Role.ADMINISTRATOR and user.is_staff:
         return "admin:index"
     return "workspace-unavailable"
@@ -58,6 +60,8 @@ def workspace_unavailable(request):
         return redirect("login")
     if request.user.role == request.user.Role.FARMER:
         return redirect("dashboard")
+    if request.user.role == request.user.Role.EXPERT:
+        return redirect("expert-dashboard")
     if request.user.role == request.user.Role.ADMINISTRATOR and request.user.is_staff:
         return redirect("admin:index")
     return render(request, "users/workspace_unavailable.html", status=503)

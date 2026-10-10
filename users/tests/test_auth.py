@@ -55,7 +55,7 @@ class AuthenticationTests(TestCase):
         self.assertEqual(user.role, self.User.Role.FARMER)
         self.assertRedirects(response, reverse("dashboard"))
 
-    def test_expert_login_routes_to_unavailable_workspace(self):
+    def test_expert_login_routes_to_dashboard(self):
         expert = self.User.objects.create_user(
             "expert@example.com",
             "safe-expert-password",
@@ -67,15 +67,8 @@ class AuthenticationTests(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse("workspace-unavailable"),
+            reverse("expert-dashboard"),
             fetch_redirect_response=False,
-        )
-        workspace = self.client.get(reverse("workspace-unavailable"))
-        self.assertEqual(workspace.status_code, 503)
-        self.assertContains(
-            workspace,
-            "Expert workspace is not available yet",
-            status_code=503,
         )
 
     def test_staff_administrator_login_routes_to_admin(self):

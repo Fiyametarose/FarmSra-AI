@@ -135,10 +135,18 @@ def recover_case(request, case_id):
 
 @farmer_required
 def case_detail(request, case_id):
+    case = owned_case(request, case_id)
+    active_referral = case.expert_referrals.exclude(state='revoked').first()
+    revoked_referrals = case.expert_referrals.filter(state='revoked', review__isnull=False).order_by('-revoked_at')
+
     return render(
         request,
         "diagnoses/case_detail.html",
-        {"case": owned_case(request, case_id)},
+        {
+            "case": case,
+            "active_referral": active_referral,
+            "revoked_referrals": revoked_referrals
+        },
     )
 
 

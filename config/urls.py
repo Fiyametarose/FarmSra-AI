@@ -20,4 +20,5 @@ urlpatterns = [
     path("", include("diagnoses.urls")),
     path("crops/", include("crops.urls")),
     path("advisory/", include("advisory.urls")),
+    path("", include("expert_reviews.urls")),
 ]

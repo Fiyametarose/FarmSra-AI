@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}Expert Dashboard{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <a class="button button-secondary float-right" href="{% url 'expert-history' %}">View Review History</a>
+        <h1>Expert Dashboard</h1>
+        <p>Assigned cases awaiting your review.</p>
+    </div>
+
+    <section class="card">
+        <h2>Assigned Referrals</h2>
+        {% if referrals %}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border); text-align: left;">
+                            <th style="padding: 0.5rem;">Date Assigned</th>
+                            <th style="padding: 0.5rem;">Crop</th>
+                            <th style="padding: 0.5rem;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for referral in referrals %}
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 0.5rem;">{{ referral.assigned_at|date:"d M Y, H:i" }}</td>
+                            <td style="padding: 0.5rem;">{{ referral.diagnosis.get_crop_display }}</td>
+                            <td style="padding: 0.5rem;"><a class="button button-secondary" href="{% url 'expert-case-detail' referral.id %}">Review Case</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>You have no pending case assignments at this time.</p>
+        {% endif %}
+    </section>
+{% endblock %}

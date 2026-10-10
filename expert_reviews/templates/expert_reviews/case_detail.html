@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">Expert Dashboard</a> / Case {{ case.reference }}{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <h1>Review Case: {{ case.reference }}</h1>
+        <p>{{ case.get_crop_display }} · Submitted on {{ case.created_at|date:"d M Y" }}</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <div>
+            <section class="card">
+                <h2>Crop Image & Details</h2>
+                <img src="{% url 'expert-case-image' referral.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="max-width: 100%; height: auto; border-radius: 8px;">
+                {% if case.symptoms %}
+                    <p><strong>Symptoms:</strong><br><span style="white-space: pre-wrap;">{{ case.symptoms }}</span></p>
+                {% endif %}
+            </section>
+
+            <section class="card" style="margin-top: 2rem;">
+                <h2>AI Prediction</h2>
+                <div class="result-card" style="border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
+                    <h3>{{ case.display_prediction }}</h3>
+                    <div class="confidence">{{ case.confidence_percent }}%</div>
+                    <small>Model: {{ case.model_identifier }}</small>
+                </div>
+            </section>
+        </div>
+
+        <div>
+            <section class="card">
+                <h2>Expert Assessment</h2>
+                {% if error %}
+                    <div class="warning">{{ error }}</div>
+                {% endif %}
+
+                {% if referral.state == 'reviewed' and referral.review %}
+                    <div class="result-card" style="border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
+                        <p><strong>Outcome:</strong> {{ referral.review.get_outcome_display }}</p>
+                        <p><strong>Findings:</strong><br><span style="white-space: pre-wrap;">{{ referral.review.findings }}</span></p>
+                        {% if referral.review.next_steps %}
+                            <p><strong>Next Steps:</strong><br><span style="white-space: pre-wrap;">{{ referral.review.next_steps }}</span></p>
+                        {% endif %}
+                        <small>Submitted at: {{ referral.review.submitted_at|date:"d M Y, H:i" }}</small>
+                    </div>
+                {% elif referral.state == 'assigned' %}
+                    <form action="{% url 'expert-submit-review' referral.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="outcome">Assessment Outcome *</label>
+                            <select id="outcome" name="outcome" required>
+                                <option value="" disabled selected>Select an outcome</option>
+                                <option value="agrees">Agrees with AI Prediction</option>
+                                <option value="alternative">Alternative Assessment</option>
+                                <option value="inconclusive">Inconclusive</option>
+                                <option value="more_info_needed">More Information Needed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="findings">Professional Findings *</label>
+                            <textarea id="findings" name="findings" rows="5" required placeholder="Explain your assessment..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="next_steps">Suggested Next Steps</label>
+                            <textarea id="next_steps" name="next_steps" rows="3" placeholder="What should the farmer do next?"></textarea>
+                        </div>
+                        <button type="submit" class="button">Submit Review</button>
+                    </form>
+                {% else %}
+                    <p>This referral is no longer active.</p>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+{% endblock %}
