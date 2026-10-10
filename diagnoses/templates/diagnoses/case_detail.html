@@ -8,5 +8,43 @@
         <div class="warning">ⓘ <strong>Estimated result, not a confirmed diagnosis.</strong> Confidence is not disease severity or guaranteed accuracy.</div>
     {% elif case.status == 'failed' %}<section class="card failure"><h2>Analysis could not be completed</h2><p>{{ case.failure_message }}</p><p>Your case and image remain saved. You can return later or start another crop check.</p></section>
     {% else %}<section class="card"><h2>Analysis is not complete</h2><a class="button" href="{% url 'case-analyzing' case.id %}">Continue analysis</a></section>{% endif %}
+
+    {% if case.is_eligible_for_advisory %}
+        <section class="card">
+            <h2>Agricultural Guidance</h2>
+            {% if case.advisory %}
+                {% if case.advisory.is_generated %}
+                    <span class="pill">AI-generated from sources</span>
+                {% else %}
+                    <span class="pill">Retrieved Sources</span>
+                {% endif %}
+                <div style="white-space: pre-wrap; margin-top: 1rem;">{{ case.advisory.content }}</div>
+                {% if case.advisory.retrieved_sources %}
+                    <hr>
+                    <h3>References</h3>
+                    <ul>
+                    {% for source in case.advisory.retrieved_sources %}
+                        <li style="margin-bottom: 0.5rem;">
+                            <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.title }}</a> ({{ source.publisher }})
+                            {% if source.date %} - {{ source.date }}{% endif %}
+                            {% if source.chunk_id %}
+                                <br><small><strong>Source {{ source.chunk_id }}</strong>:<br>
+                                <em>"{{ source.text }}"</em></small>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                <p class="warning" style="margin-top: 1rem;">ⓘ <strong>Note:</strong> Advice may be specific to other regions. Consult local extension services for specific treatment dosages.</p>
+            {% else %}
+                <p>Request evidence-backed agricultural guidance for this diagnosis.</p>
+                <form action="{% url 'generate-advisory' case.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="button">Retrieve Guidance</button>
+                </form>
+            {% endif %}
+        </section>
+    {% endif %}
+
     <div class="form-actions"><a class="button" href="{% url 'select-crop' %}">Check Another Crop</a></div>
 {% endblock %}

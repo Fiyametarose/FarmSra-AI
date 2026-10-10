@@ -74,11 +74,26 @@ class DiagnosisCase(models.Model):
 
     @property
     def is_spider_mite(self):
-        return self.crop == self.Crop.TOMATO and self.predicted_class_index == 5
+        return self.predicted_class == "Tomato_Spider_mites_Two_spotted_spider_mite"
 
     @property
     def is_uncertain(self):
-        return self.model_confidence is not None and self.model_confidence < 0.70
+        return self.model_confidence is None or self.model_confidence < 0.70
+
+    @property
+    def is_eligible_for_advisory(self):
+        if self.status != self.Status.COMPLETED:
+            return False
+        if not self.predicted_class:
+            return False
+        if self.is_uncertain:
+            return False
+        if self.is_spider_mite:
+            return False
+        healthy_classes = ["Tomato_healthy", "Potato___healthy", "Corn_(maize)___healthy"]
+        if self.predicted_class in healthy_classes:
+            return False
+        return True
 
     def __str__(self):
         return f"{self.get_crop_display()} {self.reference}"

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "users",
     "diagnoses",
     "crops",
+    "advisory",
 ]
 
 MIDDLEWARE = [
@@ -107,3 +108,4 @@ MODEL_ARTIFACTS_DIR = BASE_DIR / "model_artifacts"
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024
 MAX_DECODED_IMAGE_PIXELS = 25_000_000
 PROCESSING_STALE_AFTER_SECONDS = 15 * 60
+CHROMA_DB_DIR = BASE_DIR / "chroma_db"
