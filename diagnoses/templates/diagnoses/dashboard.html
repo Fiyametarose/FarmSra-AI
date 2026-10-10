@@ -3,9 +3,24 @@
 {% block breadcrumb %}Dashboard{% endblock %}
 {% block content %}
   <div class="page-heading"><h1>Welcome back, {{ user.first_name|default:"farmer" }}</h1><p>A clearer view of your crop checks and what to do next.</p></div>
-  <section class="callout"><div><h2>Something different in your crop?</h2><p>Start with a clear leaf photo and receive a tentative model estimate.</p><a class="button" href="{% url 'select-crop' %}">⌗ Start Diagnosis</a></div><div class="crop-art">♧</div></section>
-  <section class="card"><div class="section-title"><h2>Recent crop checks</h2><a href="{% url 'history' %}">View history →</a></div>
-    {% if recent_cases %}<div class="case-list">{% for case in recent_cases %}<a href="{% url 'case-detail' case.id %}"><strong>{{ case.get_crop_display }} · {{ case.reference }}</strong><span>{{ case.display_prediction }}</span><time>{{ case.created_at|date:"d M Y" }}</time></a>{% endfor %}</div>{% else %}<div class="empty"><h3>No saved crop checks yet</h3><p>Your completed analyses will appear here.</p></div>{% endif %}
-  </section>
-  <div class="dashboard-grid"><section class="card"><h3>Farm location</h3><p>{{ user.farm_location|default:"Not added" }}</p></section><section class="card"><h3>Supported crops</h3><p>Tomato · Potato · Maize</p></section><section class="card"><h3>Your privacy</h3><p>Case photos are available only through your signed-in account.</p></section></div>
+  <div class="dashboard-grid">
+      <section class="card">
+        <div class="section-title"><h2>Your registered crops</h2><a href="{% url 'crop-list' %}">View all ({{ crop_count }}) →</a></div>
+        {% if recent_crops %}
+          <div class="case-list">{% for crop in recent_crops %}<a href="{% url 'crop-detail' crop.id %}"><strong>{{ crop.name }}</strong><span>{{ crop.get_species_display }} · {% if crop.planting_date %}Planted {{ crop.planting_date|date:"M Y" }}{% else %}No date{% endif %}</span><span class="badge">{{ crop.get_status_display }}</span></a>{% endfor %}</div>
+          <a class="button" href="{% url 'crop-add' %}" style="margin-top: 1rem;">+ Register Crop</a>
+        {% else %}
+          <div class="empty"><h3>No crops registered</h3><p>Register your crops to keep track of their history and diagnoses.</p><a class="button" href="{% url 'crop-add' %}">+ Register Crop</a></div>
+        {% endif %}
+      </section>
+      <section class="card">
+        <div class="section-title"><h2>Recent diagnoses</h2><a href="{% url 'history' %}">View history →</a></div>
+        {% if recent_cases %}
+          <div class="case-list">{% for case in recent_cases %}<a href="{% url 'case-detail' case.id %}"><strong>{{ case.get_crop_display }} · {{ case.reference }}</strong><span>{{ case.display_prediction }}</span><time>{{ case.created_at|date:"d M Y" }}</time></a>{% endfor %}</div>
+          <a class="button" style="margin-top: 1rem;" href="{% url 'select-crop' %}">⌗ Diagnose Crop</a>
+        {% else %}
+          <div class="empty"><h3>No saved crop checks yet</h3><p>Your completed analyses will appear here.</p><a class="button" href="{% url 'select-crop' %}">⌗ Start Diagnosis</a></div>
+        {% endif %}
+      </section>
+  </div>
 {% endblock %}

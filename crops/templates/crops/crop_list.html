@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block nav_my_crops %}active{% endblock %}
+{% block breadcrumb %}My Crops{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <a class="button float-right" href="{% url 'crop-add' %}">+ Register Crop</a>
+  <h1>My Crops</h1>
+  <p>Manage your registered crops and view their details.</p>
+</div>
+<div class="dashboard-grid">
+{% if crops %}
+  {% for crop in crops %}
+  <section class="card">
+    <div class="section-title">
+      <h2>{{ crop.name }}</h2>
+      <a href="{% url 'crop-detail' crop.id %}">View details →</a>
+    </div>
+    <p><strong>Species:</strong> {{ crop.get_species_display }}</p>
+    <p><strong>Status:</strong> <span class="badge">{{ crop.get_status_display }}</span></p>
+    {% if crop.planting_date %}<p><strong>Planted:</strong> {{ crop.planting_date }}</p>{% endif %}
+  </section>
+  {% endfor %}
+{% else %}
+  <section class="card empty" style="grid-column: 1 / -1;">
+    <h3>No crops registered</h3>
+    <p>Register a crop to keep track of its history and diagnoses.</p>
+    <a class="button" href="{% url 'crop-add' %}">+ Register Crop</a>
+  </section>
+{% endif %}
+</div>
+{% endblock %}

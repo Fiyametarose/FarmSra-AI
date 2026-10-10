@@ -18,8 +18,10 @@
         <small>FARM WORKSPACE</small>
         <nav>
           <a href="{% url 'dashboard' %}" class="{% block nav_dashboard %}{% endblock %}">▦ <span>Dashboard</span></a>
+          <a href="{% url 'crop-list' %}" class="{% block nav_my_crops %}{% endblock %}">▤ <span>My Crops</span></a>
           <a href="{% url 'select-crop' %}" class="{% block nav_diagnose %}{% endblock %}">⌗ <span>Diagnose Crop</span></a>
           <a href="{% url 'history' %}" class="{% block nav_history %}{% endblock %}">◷ <span>History</span></a>
+          <a href="{% url 'settings-account' %}" class="{% block nav_settings %}{% endblock %}">⚙ <span>Settings</span></a>
         </nav>
         <div class="sidebar-user">
           <strong>{{ user.get_full_name|default:user.email }}</strong>

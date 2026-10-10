@@ -10,13 +10,21 @@ from .models import DiagnosisCase
 class DiagnosisUploadForm(forms.ModelForm):
     class Meta:
         model = DiagnosisCase
-        fields = ("image", "symptoms", "location")
+        fields = ("registered_crop", "image", "symptoms", "location")
         widgets = {
             "symptoms": forms.Textarea(
                 attrs={"rows": 5, "placeholder": "Describe visible changes (optional)"}
             ),
             "location": forms.TextInput(attrs={"placeholder": "Case location"}),
         }
+
+    def __init__(self, *args, farmer=None, crop_species=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if farmer and crop_species:
+            self.fields["registered_crop"].queryset = farmer.registered_crops.filter(species=crop_species)
+        else:
+            self.fields["registered_crop"].queryset = DiagnosisCase.objects.none()
+        self.fields["registered_crop"].empty_label = "Select a registered crop (optional)"
 
     def clean_image(self):
         upload = self.cleaned_data["image"]

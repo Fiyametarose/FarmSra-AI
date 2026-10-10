@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block nav_my_crops %}active{% endblock %}
+{% block breadcrumb %}<a href="{% url 'crop-list' %}">My Crops</a> / {% if is_edit %}Edit {{ crop.name }}{% else %}Register Crop{% endif %}{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <h1>{% if is_edit %}Edit {{ crop.name }}{% else %}Register a new crop{% endif %}</h1>
+</div>
+<form method="post" class="card">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+    <div class="form-errors">
+      {% for error in form.non_field_errors %}
+        <p class="error">{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="form-group">
+    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+    {{ form.name }}
+    {% if form.name.help_text %}<span class="help-text">{{ form.name.help_text }}</span>{% endif %}
+    {{ form.name.errors }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.species.id_for_label }}">{{ form.species.label }}</label>
+    {{ form.species }}
+    {% if form.species.help_text %}<span class="help-text">{{ form.species.help_text }}</span>{% endif %}
+    {{ form.species.errors }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.planting_date.id_for_label }}">{{ form.planting_date.label }}</label>
+    {{ form.planting_date }}
+    {% if form.planting_date.help_text %}<span class="help-text">{{ form.planting_date.help_text }}</span>{% endif %}
+    {{ form.planting_date.errors }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
+    {{ form.location }}
+    {% if form.location.help_text %}<span class="help-text">{{ form.location.help_text }}</span>{% endif %}
+    {{ form.location.errors }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.notes.id_for_label }}">{{ form.notes.label }}</label>
+    {{ form.notes }}
+    {% if form.notes.help_text %}<span class="help-text">{{ form.notes.help_text }}</span>{% endif %}
+    {{ form.notes.errors }}
+  </div>
+  <div class="form-group">
+    <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+    {{ form.status }}
+    {% if form.status.help_text %}<span class="help-text">{{ form.status.help_text }}</span>{% endif %}
+    {{ form.status.errors }}
+  </div>
+  <div class="form-actions">
+    {% if is_edit %}
+      <a class="button button-secondary" href="{% url 'crop-detail' crop.id %}">Cancel</a>
+    {% else %}
+      <a class="button button-secondary" href="{% url 'crop-list' %}">Cancel</a>
+    {% endif %}
+    <button class="button" type="submit">Save</button>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block nav_settings %}active{% endblock %}
+{% block breadcrumb %}Settings{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <h1>Settings</h1>
+  <p>Manage your account preferences and details.</p>
+</div>
+<div class="dashboard-grid">
+  <aside class="settings-nav card">
+    <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <a href="{% url 'settings-account' %}" class="button button-secondary" style="text-align: left;">Account Details</a>
+      <a href="{% url 'settings-location' %}" class="button" style="text-align: left;">Farm Location</a>
+    </nav>
+  </aside>
+  <section class="card">
+    <h2>Farm Location</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="form-errors">
+          {% for error in form.non_field_errors %}
+            <p class="error">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="form-group">
+        <label for="{{ form.country.id_for_label }}">{{ form.country.label }}</label>
+        {{ form.country }}
+        {% if form.country.help_text %}<span class="help-text">{{ form.country.help_text }}</span>{% endif %}
+        {{ form.country.errors }}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.region.id_for_label }}">{{ form.region.label }}</label>
+        {{ form.region }}
+        {% if form.region.help_text %}<span class="help-text">{{ form.region.help_text }}</span>{% endif %}
+        {{ form.region.errors }}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.subcounty.id_for_label }}">{{ form.subcounty.label }}</label>
+        {{ form.subcounty }}
+        {% if form.subcounty.help_text %}<span class="help-text">{{ form.subcounty.help_text }}</span>{% endif %}
+        {{ form.subcounty.errors }}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.ward.id_for_label }}">{{ form.ward.label }}</label>
+        {{ form.ward }}
+        {% if form.ward.help_text %}<span class="help-text">{{ form.ward.help_text }}</span>{% endif %}
+        {{ form.ward.errors }}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.town.id_for_label }}">{{ form.town.label }}</label>
+        {{ form.town }}
+        {% if form.town.help_text %}<span class="help-text">{{ form.town.help_text }}</span>{% endif %}
+        {{ form.town.errors }}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.locality.id_for_label }}">{{ form.locality.label }}</label>
+        {{ form.locality }}
+        {% if form.locality.help_text %}<span class="help-text">{{ form.locality.help_text }}</span>{% endif %}
+        {{ form.locality.errors }}
+      </div>
+      <div class="form-actions">
+        <button class="button" type="submit">Save Changes</button>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}

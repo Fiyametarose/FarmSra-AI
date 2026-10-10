@@ -27,6 +27,13 @@ class DiagnosisCase(models.Model):
         on_delete=models.CASCADE,
         related_name="diagnosis_cases",
     )
+    registered_crop = models.ForeignKey(
+        "crops.Crop",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="diagnoses",
+    )
     crop = models.CharField(max_length=10, choices=Crop)
     image = models.ImageField(upload_to=case_image_path)
     symptoms = models.TextField(blank=True)

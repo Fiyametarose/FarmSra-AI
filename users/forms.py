@@ -91,3 +91,41 @@ class EmailAuthenticationForm(forms.Form):
 
     def get_user(self):
         return self.user_cache
+
+class FarmerAccountForm(forms.ModelForm):
+    full_name = forms.CharField(max_length=300)
+
+    class Meta:
+        model = User
+        fields = ("full_name", "email")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.fields["full_name"].initial = f"{self.instance.first_name} {self.instance.last_name}".strip()
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
+            raise ValidationError("An account with this email address already exists.")
+        return email
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        names = self.cleaned_data["full_name"].strip().split(maxsplit=1)
+        user.first_name = names[0]
+        user.last_name = names[1] if len(names) > 1 else ""
+        if commit:
+            user.save()
+        return user
+
+
+class FarmerLocationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("country", "region", "subcounty", "ward", "town", "locality")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name in ("country", "region", "subcounty", "ward", "town"):
+            self.fields[field_name].required = True

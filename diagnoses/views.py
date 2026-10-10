@@ -45,7 +45,13 @@ def dashboard(request):
     recent_cases = request.user.diagnosis_cases.filter(
         status=DiagnosisCase.Status.COMPLETED
     )[:3]
-    return render(request, "diagnoses/dashboard.html", {"recent_cases": recent_cases})
+    recent_crops = request.user.registered_crops.all()[:3]
+    crop_count = request.user.registered_crops.count()
+    return render(request, "diagnoses/dashboard.html", {
+        "recent_cases": recent_cases,
+        "recent_crops": recent_crops,
+        "crop_count": crop_count,
+    })
 
 
 @farmer_required
@@ -58,7 +64,13 @@ def upload(request, crop):
     if crop not in DiagnosisCase.Crop.values:
         raise PermissionDenied
     initial = {"location": request.user.farm_location}
-    form = DiagnosisUploadForm(request.POST or None, request.FILES or None, initial=initial)
+    form = DiagnosisUploadForm(
+        request.POST or None,
+        request.FILES or None,
+        initial=initial,
+        farmer=request.user,
+        crop_species=crop,
+    )
     if request.method == "POST" and form.is_valid():
         case = form.save(commit=False)
         case.farmer = request.user
