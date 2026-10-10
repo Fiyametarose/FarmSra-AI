@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}FarmSra AI — Understand Your Crop's Health{% endblock %}
+{% block public_content %}
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">● AI for healthier crops and stronger farmers</span>
+      <h1>Understand Your <em>Crop's Health</em></h1>
+      <p>FarmSra AI helps farmers identify possible crop problems from a leaf photo and keep a secure history of their results.</p>
+      <div class="button-row">
+        <a class="button" href="{% url 'register' %}">→ Create Account</a>
+        <a class="button button-secondary" href="{% url 'login' %}">Log In</a>
+      </div>
+      <div class="feature-row"><span>⚡ AI-powered insights</span><span>✓ Saved case history</span><span>♙ Private farmer data</span></div>
+    </div>
+    <div class="hero-visual"><div class="leaf-art">☘</div><h2>Your farm,<br>in clearer focus.</h2><p>Photo-based crop-health estimates for tomato, potato, and maize.</p></div>
+  </section>
+{% endblock %}

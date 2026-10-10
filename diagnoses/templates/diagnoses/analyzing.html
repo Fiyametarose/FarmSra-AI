@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}Diagnose Crop{% endblock %}
+
+{% block content %}
+  <div class="page-heading">
+    <h1>Analyzing Your Crop</h1>
+    <p>
+      We’re examining your {{ case.get_crop_display|lower }} photo for visible
+      crop-health patterns.
+    </p>
+  </div>
+
+  <div class="steps">
+    <span>✓ Select crop</span>
+    <span>✓ Upload photo</span>
+    <strong>3 <span>AI analysis</span></strong>
+    <span>4 Your result</span>
+  </div>
+
+  <section class="card analyzing-card">
+    <img
+      src="{% url 'case-image' case.id %}"
+      alt="Uploaded {{ case.get_crop_display }} leaf"
+    >
+    <div>
+      <div class="spinner"></div>
+      <span class="eyebrow">ANALYZING YOUR PHOTO</span>
+      <h2>
+        {% if should_submit %}Starting analysis…{% else %}Analysis in progress…{% endif %}
+      </h2>
+      <p>Your saved result will be ready shortly.</p>
+    </div>
+  </section>
+
+  <div class="warning">
+    ⓘ Photo-based results are estimates, not confirmed diagnoses.
+  </div>
+
+  {% if should_submit %}
+    <form id="process-form" method="post" action="{% url 'case-process' case.id %}">
+      {% csrf_token %}
+    </form>
+  {% elif recovery_available %}
+    <form method="post" action="{% url 'case-recover' case.id %}">
+      {% csrf_token %}
+      <p>
+        This analysis has been processing for more than {{ stale_minutes }} minutes
+        and may have been interrupted.
+      </p>
+      <button class="button button-secondary" type="submit">
+        Restart interrupted analysis
+      </button>
+    </form>
+  {% else %}
+    <a class="button button-secondary" href="{% url 'case-analyzing' case.id %}">
+      Refresh status
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {% if should_submit %}
+    <script>
+      window.setTimeout(() => {
+        document.getElementById("process-form").submit();
+      }, 350);
+    </script>
+  {% endif %}
+{% endblock %}

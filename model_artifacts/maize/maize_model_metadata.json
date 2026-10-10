@@ -1,0 +1,18 @@
+{
+    "project": "FarmSra AI",
+    "crop": "maize",
+    "architecture": "MobileNetV2",
+    "image_size": [
+        224,
+        224
+    ],
+    "number_of_classes": 4,
+    "class_names": [
+        "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+        "Corn_(maize)___Common_rust_",
+        "Corn_(maize)___Northern_Leaf_Blight",
+        "Corn_(maize)___healthy"
+    ],
+    "test_accuracy": 0.9634760618209839,
+    "confidence_threshold": null
+}

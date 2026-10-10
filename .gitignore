@@ -1,0 +1,33 @@
+# Local environment
+.venv/
+.env
+.env.*
+!.env.example
+.django-secret
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Runtime data
+media/
+staticfiles/
+chroma_db/
+*.sqlite3
+
+# Trained model weights
+model_artifacts/**/*.keras
+
+# Local agent instructions and task notes
+AGENTS.md
+docs/implementation/
+README_FIRST.md
+ASSET_MANIFEST.json
+
+# Local design references
+docs/reference/designs/
+docs/reference/*.pdf
+docs/reference/*.docx

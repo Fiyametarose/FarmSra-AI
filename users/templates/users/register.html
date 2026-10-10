@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create account — FarmSra AI{% endblock %}
+{% block public_content %}
+  <section class="auth-layout register-layout">
+    <div class="auth-visual"><div class="leaf-art">☘</div><p class="eyebrow">HEALTHIER CROPS. STRONGER FARMS.</p><h2>Join FarmSra AI</h2><p>Create a farmer account to check tomato, potato, and maize leaf photos.</p></div>
+    <div class="auth-panel wide">
+      <h1>Create Your Account</h1><p id="step-copy">Step 1 of 2 · Add your personal details to continue.</p>
+      <form method="post" class="stacked-form" id="registration-form" novalidate>{% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-step" data-step="1">
+          <span class="account-label">FARMER account · assigned automatically</span>
+          <h3><b>1</b> Personal details · Step 1 of 2</h3>
+          <label>Full Name{{ form.full_name }}{{ form.full_name.errors }}</label>
+          <label>Email Address{{ form.email }}{{ form.email.errors }}</label>
+          <label>Password{{ form.password1 }}{{ form.password1.errors }}</label>
+          <label>Confirm Password{{ form.password2 }}{{ form.password2.errors }}</label>
+          <button class="button" type="button" id="registration-next">Continue</button>
+        </div>
+        <div class="form-step hidden" data-step="2">
+          <div class="assigned-role"><span>♙ FARMER</span><strong>Assigned</strong></div>
+          <h3><b>2</b> Farm location · Step 2 of 2</h3>
+          <p>Choose Kenya or Ethiopia, then describe your farm location.</p>
+          <label>Country{{ form.country }}{{ form.country.errors }}</label>
+          <label>Region / County{{ form.region }}{{ form.region.errors }}</label>
+          <label>Zone / Sub-county{{ form.subcounty }}{{ form.subcounty.errors }}</label>
+          <label>Woreda / Ward{{ form.ward }}{{ form.ward.errors }}</label>
+          <label>City / Town{{ form.town }}{{ form.town.errors }}</label>
+          <label>Kebele / Locality <small>(optional)</small>{{ form.locality }}{{ form.locality.errors }}</label>
+          <label class="check-label">{{ form.terms_accepted }} {{ form.terms_accepted.label }}{{ form.terms_accepted.errors }}</label>
+          <button class="button button-secondary" type="button" id="registration-back">Back</button>
+          <button class="button" type="submit">→ Create Account</button>
+        </div>
+      </form>
+      <p class="center">Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+    </div>
+  </section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/registration.js' %}"></script>{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Workspace unavailable — FarmSra AI{% endblock %}
+
+{% block public_content %}
+  <section class="status-page">
+    <div class="card status-card">
+      <span class="eyebrow">EXPERT ACCOUNT</span>
+      <h1>Expert workspace is not available yet</h1>
+      <p>
+        Your account is active, but the agricultural-expert workspace belongs to
+        a later implementation milestone. You have not been granted Django
+        administration access.
+      </p>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="button" type="submit">Log out</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

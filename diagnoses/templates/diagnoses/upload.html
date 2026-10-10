@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load static %}
+{% block nav_diagnose %}active{% endblock %}{% block breadcrumb %}Diagnose Crop{% endblock %}
+{% block content %}
+  <div class="page-heading"><span class="pill">{{ crop_name }}</span><h1>Upload Crop Photo</h1><p>Add a clear photo of your {{ crop_name|lower }} leaf so the model can assess visible patterns.</p></div>
+  <div class="steps"><span>✓ Select crop</span><strong>2 <span>Upload photo</span></strong><span>3 AI analysis</span><span>4 Your result</span></div>
+  <form method="post" enctype="multipart/form-data" class="upload-grid">{% csrf_token %}
+    <section class="card upload-card"><h2>Crop image <small>(required)</small></h2>{{ form.image.errors }}<label class="drop-zone" for="{{ form.image.id_for_label }}"><span id="preview-placeholder">▧<b>Choose a clear leaf photo</b><small>JPEG, PNG, or WebP · maximum 10 MB</small></span><img id="image-preview" hidden alt="Selected crop leaf preview">{{ form.image }}</label></section>
+    <section class="card"><h2>Add context <small>(optional)</small></h2><label>What changes have you noticed?{{ form.symptoms }}{{ form.symptoms.errors }}</label></section>
+    <section class="card location-card"><h2>Case location</h2><p>Defaults to your registered farm location. Edit it if this photo was taken elsewhere.</p>{{ form.location }}{{ form.location.errors }}</section>
+    <div class="warning">ⓘ <strong>An estimate, not a confirmed diagnosis.</strong> Model results may be inaccurate. Consult an agricultural expert before treatment.</div>
+    <div class="form-actions"><a class="button button-secondary" href="{% url 'select-crop' %}">← Back to Crops</a><button class="button" type="submit">⌗ Analyze Crop Photo</button></div>
+  </form>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/upload.js' %}"></script>{% endblock %}

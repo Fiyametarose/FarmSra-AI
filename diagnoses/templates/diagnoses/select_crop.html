@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block nav_diagnose %}active{% endblock %}{% block breadcrumb %}Diagnose Crop{% endblock %}
+{% block content %}
+  <div class="page-heading"><h1>Select a Crop</h1><p>Choose the crop you would like to check. We’ll guide you from there.</p></div>
+  <div class="steps"><strong>1 <span>Select Crop</span></strong><span>2 Upload image</span><span>3 Analysis</span><span>4 Your result</span></div>
+  <div class="crop-grid">
+    <a href="{% url 'case-upload' 'tomato' %}" class="crop-card"><div class="crop-symbol tomato">●</div><h2>Tomato</h2><p>Solanum lycopersicum</p><span>Continue →</span></a>
+    <a href="{% url 'case-upload' 'maize' %}" class="crop-card"><div class="crop-symbol maize">♒</div><h2>Maize</h2><p>Zea mays</p><span>Continue →</span></a>
+    <a href="{% url 'case-upload' 'potato' %}" class="crop-card"><div class="crop-symbol potato">● ●</div><h2>Potato</h2><p>Solanum tuberosum</p><span>Continue →</span></a>
+  </div>
+{% endblock %}

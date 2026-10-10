@@ -1,0 +1,26 @@
+name: farmsra-ai
+
+services:
+  db:
+    image: postgres:18.4-bookworm
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: farmsra
+      POSTGRES_USER: farmsra
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Password required}
+
+    ports:
+      - "127.0.0.1:5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U farmsra -d farmsra"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

@@ -1,0 +1,43 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}FarmSra AI{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="{% if user.is_authenticated and user.role == 'farmer' %}workspace{% else %}public{% endif %}">
+    {% if user.is_authenticated and user.role == 'farmer' %}
+      <aside class="sidebar">
+        <a class="brand brand-light" href="{% url 'dashboard' %}"><span class="brand-mark">⌁</span> FarmSra AI</a>
+        <small>FARM WORKSPACE</small>
+        <nav>
+          <a href="{% url 'dashboard' %}" class="{% block nav_dashboard %}{% endblock %}">▦ <span>Dashboard</span></a>
+          <a href="{% url 'select-crop' %}" class="{% block nav_diagnose %}{% endblock %}">⌗ <span>Diagnose Crop</span></a>
+          <a href="{% url 'history' %}" class="{% block nav_history %}{% endblock %}">◷ <span>History</span></a>
+        </nav>
+        <div class="sidebar-user">
+          <strong>{{ user.get_full_name|default:user.email }}</strong>
+          <span>Farmer</span>
+          <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link-button">↪ Log out</button></form>
+        </div>
+      </aside>
+      <div class="workspace-main">
+        <header class="topbar"><span>Workspace</span><strong>{% block breadcrumb %}Dashboard{% endblock %}</strong><span class="top-user">{{ user.email }}</span></header>
+        <main class="page">{% block content %}{% endblock %}</main>
+      </div>
+    {% else %}
+      <header class="public-header">
+        <a class="brand" href="{% url 'welcome' %}"><span class="brand-mark">⌁</span> FarmSra AI</a>
+        <span class="language">◉ English</span>
+      </header>
+      <main>{% block public_content %}{% endblock %}</main>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

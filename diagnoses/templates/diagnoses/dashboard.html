@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block nav_dashboard %}active{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+{% block content %}
+  <div class="page-heading"><h1>Welcome back, {{ user.first_name|default:"farmer" }}</h1><p>A clearer view of your crop checks and what to do next.</p></div>
+  <section class="callout"><div><h2>Something different in your crop?</h2><p>Start with a clear leaf photo and receive a tentative model estimate.</p><a class="button" href="{% url 'select-crop' %}">⌗ Start Diagnosis</a></div><div class="crop-art">♧</div></section>
+  <section class="card"><div class="section-title"><h2>Recent crop checks</h2><a href="{% url 'history' %}">View history →</a></div>
+    {% if recent_cases %}<div class="case-list">{% for case in recent_cases %}<a href="{% url 'case-detail' case.id %}"><strong>{{ case.get_crop_display }} · {{ case.reference }}</strong><span>{{ case.display_prediction }}</span><time>{{ case.created_at|date:"d M Y" }}</time></a>{% endfor %}</div>{% else %}<div class="empty"><h3>No saved crop checks yet</h3><p>Your completed analyses will appear here.</p></div>{% endif %}
+  </section>
+  <div class="dashboard-grid"><section class="card"><h3>Farm location</h3><p>{{ user.farm_location|default:"Not added" }}</p></section><section class="card"><h3>Supported crops</h3><p>Tomato · Potato · Maize</p></section><section class="card"><h3>Your privacy</h3><p>Case photos are available only through your signed-in account.</p></section></div>
+{% endblock %}
