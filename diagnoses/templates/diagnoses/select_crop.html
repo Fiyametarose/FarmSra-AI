@@ -1,12 +1,118 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% block nav_diagnose %}active{% endblock %}{% block breadcrumb %}{% trans "Diagnose Crop" %}{% endblock %}
+{% load static i18n %}
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}{% trans "Diagnose Crop" %} / {% trans "Select Crop" %}{% endblock %}
+
 {% block content %}
-  <div class="page-heading"><h1>Select a {% trans "Crop" %}</h1><p>Choose the crop you would like to check. We’ll guide you from there.</p></div>
-  <div class="steps"><strong>1 <span>Select {% trans "Crop" %}</span></strong><span>2 Upload image</span><span>3 Analysis</span><span>4 Your result</span></div>
-  <div class="crop-grid">
-    <a href="{% url 'case-upload' 'tomato' %}" class="crop-card"><div class="crop-symbol tomato">●</div><h2>Tomato</h2><p>Solanum lycopersicum</p><span>{% trans "Continue" %} →</span></a>
-    <a href="{% url 'case-upload' 'maize' %}" class="crop-card"><div class="crop-symbol maize">♒</div><h2>Maize</h2><p>Zea mays</p><span>{% trans "Continue" %} →</span></a>
-    <a href="{% url 'case-upload' 'potato' %}" class="crop-card"><div class="crop-symbol potato">● ●</div><h2>Potato</h2><p>Solanum tuberosum</p><span>{% trans "Continue" %} →</span></a>
+  <div style="max-width: 1040px; margin: 0 auto;">
+
+    <!-- Step Progress Tracker -->
+    <div class="steps-progress" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; background: var(--surface); padding: 1.25rem 2rem; border-radius: 12px; border: 1px solid var(--border);">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">1</div>
+        <span style="font-size: 0.88rem; font-weight: 700; color: var(--text);">{% trans "Select Crop" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--border); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-alt); color: var(--muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 1px solid var(--border);">2</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--muted);">{% trans "Upload Photo" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--border); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-alt); color: var(--muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 1px solid var(--border);">3</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--muted);">{% trans "Analyzing" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--border); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-alt); color: var(--muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 1px solid var(--border);">4</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--muted);">{% trans "Diagnosis Result" %}</span>
+      </div>
+    </div>
+
+    <!-- Header Section -->
+    <div style="margin-bottom: 2rem; text-align: left;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem 0;">{% trans "Select a Crop" %}</h1>
+      <p style="font-size: 1rem; color: var(--muted); margin: 0;">{% trans "Choose the crop you want to analyze today. Deep learning models are trained exclusively on these species." %}</p>
+    </div>
+
+    <!-- Crop Cards Grid -->
+    <div class="crop-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+
+      <!-- Tomato Card -->
+      <a href="{% url 'case-upload' 'tomato' %}" style="text-decoration: none; color: inherit;">
+        <div class="card crop-card" style="border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; cursor: pointer;">
+          <div style="height: 180px; overflow: hidden; position: relative;">
+            <img src="{% static 'img/crop_tomato.jpg' %}" alt="Tomato" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;">
+            <span class="badge" style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); color: white; backdrop-filter: blur(4px); font-size: 0.75rem; border-radius: 9999px; padding: 0.25rem 0.65rem;">
+              10 classes
+            </span>
+          </div>
+          <div style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem;">
+              <h2 style="font-size: 1.35rem; font-weight: 800; margin: 0; color: var(--text);">{% trans "Tomato" %}</h2>
+              <span style="font-size: 0.85rem; color: var(--brand); font-weight: 600;">{% trans "Select" %} →</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--muted); font-style: italic; margin: 0 0 1rem 0;">Solanum lycopersicum</p>
+            <p style="font-size: 0.88rem; color: var(--text); line-height: 1.4; margin: 0;">
+              {% trans "Detects early blight, late blight, leaf mold, bacterial spot, target spot, mosaic virus, and yellow leaf curl." %}
+            </p>
+          </div>
+        </div>
+      </a>
+
+      <!-- Maize Card -->
+      <a href="{% url 'case-upload' 'maize' %}" style="text-decoration: none; color: inherit;">
+        <div class="card crop-card" style="border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; cursor: pointer;">
+          <div style="height: 180px; overflow: hidden; position: relative;">
+            <img src="{% static 'img/crop_maize.jpg' %}" alt="Maize" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;">
+            <span class="badge" style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); color: white; backdrop-filter: blur(4px); font-size: 0.75rem; border-radius: 9999px; padding: 0.25rem 0.65rem;">
+              4 classes
+            </span>
+          </div>
+          <div style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem;">
+              <h2 style="font-size: 1.35rem; font-weight: 800; margin: 0; color: var(--text);">{% trans "Maize" %}</h2>
+              <span style="font-size: 0.85rem; color: var(--brand); font-weight: 600;">{% trans "Select" %} →</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--muted); font-style: italic; margin: 0 0 1rem 0;">Zea mays</p>
+            <p style="font-size: 0.88rem; color: var(--text); line-height: 1.4; margin: 0;">
+              {% trans "Detects cercospora leaf spot (gray leaf spot), common rust, northern leaf blight, and healthy foliage." %}
+            </p>
+          </div>
+        </div>
+      </a>
+
+      <!-- Potato Card -->
+      <a href="{% url 'case-upload' 'potato' %}" style="text-decoration: none; color: inherit;">
+        <div class="card crop-card" style="border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; cursor: pointer;">
+          <div style="height: 180px; overflow: hidden; position: relative;">
+            <img src="{% static 'img/crop_potato.jpg' %}" alt="Potato" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;">
+            <span class="badge" style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); color: white; backdrop-filter: blur(4px); font-size: 0.75rem; border-radius: 9999px; padding: 0.25rem 0.65rem;">
+              3 classes
+            </span>
+          </div>
+          <div style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem;">
+              <h2 style="font-size: 1.35rem; font-weight: 800; margin: 0; color: var(--text);">{% trans "Potato" %}</h2>
+              <span style="font-size: 0.85rem; color: var(--brand); font-weight: 600;">{% trans "Select" %} →</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--muted); font-style: italic; margin: 0 0 1rem 0;">Solanum tuberosum</p>
+            <p style="font-size: 0.88rem; color: var(--text); line-height: 1.4; margin: 0;">
+              {% trans "Detects early blight (Alternaria solani), late blight (Phytophthora infestans), and healthy leaves." %}
+            </p>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Supported Scope Notice -->
+    <div class="callout callout-info" style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 10px; background: var(--surface-alt); border-left: 4px solid var(--brand);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--brand); flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span style="font-size: 0.88rem; color: var(--text);">
+        <strong>{% trans "Scope notice" %}:</strong> {% trans "FarmSra AI is strictly calibrated for tomato, potato, and maize. Uploading other crops or non-leaf photos will lead to invalid diagnostic inferences." %}
+      </span>
+    </div>
+
   </div>
 {% endblock %}

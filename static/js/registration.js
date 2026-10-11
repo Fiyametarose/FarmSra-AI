@@ -2,9 +2,11 @@ const steps = [...document.querySelectorAll(".form-step")];
 const stepCopy = document.getElementById("step-copy");
 function showStep(index) {
   steps.forEach((step, i) => step.classList.toggle("hidden", i !== index));
-  stepCopy.textContent = index === 0
-    ? "Step 1 of 2 · Add your personal details to continue."
-    : "Step 2 of 2 · Personal details complete. Add your farm location.";
+  if (stepCopy) {
+    stepCopy.textContent = index === 0
+      ? (stepCopy.dataset.step1 || stepCopy.textContent)
+      : (stepCopy.dataset.step2 || stepCopy.textContent);
+  }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 document.getElementById("registration-next").addEventListener("click", () => {

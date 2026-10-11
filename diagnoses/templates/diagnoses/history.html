@@ -1,9 +1,106 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block nav_history %}active{% endblock %}{% block breadcrumb %}{% trans "History" %}{% endblock %}
+{% block nav_history %}active{% endblock %}
+{% block breadcrumb %}{% trans "Diagnosis History" %}{% endblock %}
+
 {% block content %}
-    <div class="page-heading"><h1>{% trans "History" %}</h1><p>Revisit your saved crop analyses and results.</p></div>
-    <section class="card"><div class="section-title"><h2>Saved analyses</h2><span>{{ cases|length }} check{{ cases|length|pluralize }}</span></div>
-        {% if cases %}<div class="history-table"><div class="history-head"><span>{% trans "Crop" %}</span><span>Estimated result</span><span>Checked on</span><span>{% trans "Action" %}</span></div>{% for case in cases %}<div class="history-row"><strong>{{ case.get_crop_display }} · {{ case.reference }}{% if case.registered_crop %}<br><small><a href="{% url 'crop-detail' case.registered_crop.id %}">{{ case.registered_crop.name }}</a></small>{% endif %}</strong><span>{% if case.status == 'completed' %}{{ case.display_prediction }}<small>{{ case.confidence_percent }}% uncalibrated confidence</small>{% elif case.status == 'failed' %}Analysis failed{% else %}{{ case.get_status_display }}{% endif %}</span><time>{{ case.created_at|date:"d M Y H:i" }}</time><a class="button button-secondary" href="{% url 'case-detail' case.id %}">Open case</a></div>{% endfor %}</div>{% else %}<div class="empty"><h3>No saved analyses</h3><p>Start a crop check to build your history.</p><a class="button" href="{% url 'select-crop' %}">{% trans "Start Diagnosis" %}</a></div>{% endif %}
+  <div style="max-width: 1080px; margin: 0 auto;">
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "Diagnosis History" %}</h1>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "Revisit saved leaf evaluations, model confidences, and professional review records." %}</p>
+      </div>
+      <a class="button button-primary" href="{% url 'select-crop' %}" style="padding: 0.65rem 1.25rem; font-weight: 700;">
+        ⌗ {% trans "New Diagnosis" %}
+      </a>
+    </div>
+
+    <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.2rem; font-weight: 700; margin: 0; color: var(--text);">
+          {% trans "Saved analyses" %}
+        </h2>
+        <span style="font-size: 0.85rem; color: var(--muted); font-weight: 600;">
+          {{ cases|length }} {% trans "total case" %}{{ cases|length|pluralize }}
+        </span>
+      </div>
+
+      {% if cases %}
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--muted); font-size: 0.78rem; text-transform: uppercase;">
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Crop & Case Reference" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Diagnostic Verdict" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Model Confidence" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Date & Time" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Status" %}</th>
+                <th style="padding: 0.85rem 0.75rem; text-align: right;">{% trans "Action" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for case in cases %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 1rem 0.75rem;">
+                    <strong style="color: var(--text); display: block; font-size: 0.95rem;">{{ case.get_crop_display }}</strong>
+                    <span style="font-size: 0.75rem; color: var(--muted); font-family: monospace;">#{{ case.reference }}</span>
+                    {% if case.registered_crop %}
+                      <span style="display: block; font-size: 0.75rem; color: var(--brand); margin-top: 0.2rem;">
+                        🌱 {{ case.registered_crop.name }}
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    {% if case.status == 'completed' %}
+                      <span style="font-weight: 600; color: var(--text); display: block;">{{ case.display_prediction }}</span>
+                      <small style="color: var(--muted); font-size: 0.75rem;">{{ case.model_identifier }}</small>
+                    {% elif case.status == 'failed' %}
+                      <span style="color: var(--danger); font-weight: 600;">{% trans "Inference Failed" %}</span>
+                    {% else %}
+                      <span style="color: var(--muted);">{{ case.get_status_display }}</span>
+                    {% endif %}
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    {% if case.status == 'completed' and case.model_confidence is not None %}
+                      <span class="badge badge-{% if case.model_confidence >= 0.7 %}success{% elif case.model_confidence >= 0.4 %}warning{% else %}neutral{% endif %}" style="font-size: 0.78rem; padding: 0.25rem 0.6rem; border-radius: 9999px;">
+                        {{ case.confidence_percent }}%
+                      </span>
+                    {% else %}
+                      <span style="color: var(--muted); font-size: 0.8rem;">—</span>
+                    {% endif %}
+                  </td>
+                  <td style="padding: 1rem 0.75rem; color: var(--muted); font-size: 0.82rem;">
+                    {{ case.created_at|date:"d M Y, H:i" }}
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    <span class="badge badge-{% if case.status == 'completed' %}success{% elif case.status == 'failed' %}danger{% else %}info{% endif %}" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">
+                      {{ case.status|upper }}
+                    </span>
+                  </td>
+                  <td style="padding: 1rem 0.75rem; text-align: right;">
+                    <a href="{% url 'case-detail' case.id %}" class="button button-outline" style="padding: 0.4rem 0.85rem; font-size: 0.82rem; border-radius: 6px;">
+                      {% trans "Open Case" %} →
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state" style="text-align: center; padding: 3rem 1rem;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--surface-alt); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: var(--muted);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "No saved diagnoses yet" %}</h3>
+          <p style="font-size: 0.9rem; color: var(--muted); margin: 0 0 1.25rem 0;">{% trans "Perform a leaf analysis to record your first crop health case." %}</p>
+          <a class="button button-primary" href="{% url 'select-crop' %}" style="padding: 0.65rem 1.5rem;">
+            ⌗ {% trans "Start First Diagnosis" %}
+          </a>
+        </div>
+      {% endif %}
     </section>
+
+  </div>
 {% endblock %}

@@ -8,6 +8,7 @@ urlpatterns = [
 
     # Expert dashboard and workflows
     path('expert/', views.dashboard, name='expert-dashboard'),
+    path('expert/assigned/', views.assigned_cases, name='expert-assigned-cases'),
     path('expert/referrals/<uuid:referral_id>/', views.case_detail, name='expert-case-detail'),
     path('expert/referrals/<uuid:referral_id>/review/', views.submit_review, name='expert-submit-review'),
     path('expert/referrals/<uuid:referral_id>/image/', views.case_image, name='expert-case-image'),

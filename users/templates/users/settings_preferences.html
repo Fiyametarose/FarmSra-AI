@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% block nav_settings %}active{% endblock %}
+{% block breadcrumb %}{% trans "Settings" %} / {% trans "Preferences" %}{% endblock %}
+
+{% block content %}
+  <div style="max-width: 960px; margin: 0 auto;">
+
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "Farmer Settings" %}</h1>
+      <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "Manage personal credentials, registered farm location, and application preferences." %}</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 240px 1fr; gap: 2rem; align-items: start;">
+
+      <!-- Settings Tabs Sidebar -->
+      <aside class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 0.75rem;">
+        <nav style="display: flex; flex-direction: column; gap: 0.25rem;">
+          <a href="{% url 'settings-account' %}" class="button" style="background: none; color: var(--text); border: none; text-align: left; padding: 0.75rem 1rem; border-radius: 8px;">
+            👤 {% trans "Account Details" %}
+          </a>
+          <a href="{% url 'settings-location' %}" class="button" style="background: none; color: var(--text); border: none; text-align: left; padding: 0.75rem 1rem; border-radius: 8px;">
+            📍 {% trans "Farm Location" %}
+          </a>
+          <a href="{% url 'settings-preferences' %}" class="button" style="background: var(--brand-soft); color: var(--brand); font-weight: 700; border: none; text-align: left; padding: 0.75rem 1rem; border-radius: 8px;">
+            🌐 {% trans "Preferences" %}
+          </a>
+          <a href="{% url 'settings-notifications' %}" class="button" style="background: none; color: var(--text); border: none; text-align: left; padding: 0.75rem 1rem; border-radius: 8px;">
+            🔔 {% trans "Notifications" %}
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Form Section -->
+      <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+        <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 0.35rem 0; color: var(--text);">
+          {% trans "Regional & Language Preferences" %}
+        </h2>
+        <p style="font-size: 0.88rem; color: var(--muted); margin: 0 0 1.5rem 0;">
+          {% trans "Select your primary interface language and display measurements." %}
+        </p>
+
+        <form action="{% url 'set_language' %}" method="post">
+          {% csrf_token %}
+          <input name="next" type="hidden" value="{% url 'settings-preferences' %}">
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.5rem; color: var(--text);">
+              {% trans "Interface Language" %}
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 0.65rem; max-width: 400px;">
+              {% for lang in LANGUAGES %}
+                <label style="display: flex; align-items: center; gap: 0.65rem; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid {% if lang.0 == LANGUAGE_CODE %}var(--brand){% else %}var(--border){% endif %}; background: {% if lang.0 == LANGUAGE_CODE %}var(--surface-alt){% else %}var(--surface){% endif %}; cursor: pointer;">
+                  <input type="radio" name="language" value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}checked{% endif %}>
+                  <span style="font-size: 0.92rem; font-weight: 600; color: var(--text);">{{ lang.1 }}</span>
+                  <span style="font-size: 0.78rem; color: var(--muted); margin-left: auto;">
+                    {% if lang.0 == 'en' %}English (Default){% elif lang.0 == 'am' %}አማርኛ (Ethiopia){% elif lang.0 == 'sw' %}Kiswahili (East Africa){% endif %}
+                  </span>
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div style="background: var(--surface-alt); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1.75rem; max-width: 500px;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span class="badge badge-neutral" style="font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 9999px;">
+                {% trans "System Standard" %}
+              </span>
+              <strong style="font-size: 0.88rem; color: var(--text);">
+                {% trans "Measurement Units: Metric" %}
+              </strong>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--muted); margin: 0; line-height: 1.45;">
+              {% trans "Agricultural advisories and weather observations use standard metric measurements (°C, mm precipitation, km/h wind) per regional extension practice." %}
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <button class="button button-primary" type="submit" style="padding: 0.75rem 1.75rem; font-weight: 700;">
+              {% trans "Save Language Preference" %}
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,76 +1,179 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block nav_diagnose %}active{% endblock %}
-{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">{% trans "Expert Dashboard" %}</a> / Case {{ case.reference }}{% endblock %}
+{% block nav_expert_cases %}active{% endblock %}
+{% block breadcrumb %}<a href="{% url 'expert-assigned-cases' %}" style="color: var(--muted); text-decoration: none;">{% trans "Assigned Cases" %}</a> / {% trans "Review Case" %} #{{ case.reference }}{% endblock %}
+
 {% block content %}
-    <div class="page-heading">
-        <h1>{% trans "Review Case" %}: {{ case.reference }}</h1>
-        <p>{{ case.get_crop_display }} · Submitted on {{ case.created_at|date:"d M Y" }}</p>
+  <div style="max-width: 1080px; margin: 0 auto;">
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: var(--brand-soft); color: var(--brand); font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 9999px; margin-bottom: 0.4rem;">
+          {{ case.get_crop_display }} · Case #{{ case.reference }}
+        </div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">
+          {% trans "Case Diagnostic Review" %}
+        </h1>
+        <p style="font-size: 0.92rem; color: var(--muted); margin: 0;">
+          {% trans "Submitted on" %} {{ case.created_at|date:"d M Y, H:i" }} · {% trans "Location" %}: {{ case.location|default:"Registered Farm" }}
+        </p>
+      </div>
+      <a href="{% url 'expert-assigned-cases' %}" class="button button-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+        ← {% trans "Back to Cases" %}
+      </a>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-        <div>
-            <section class="card">
-                <h2>{% trans "Crop" %} Image & Details</h2>
-                <img src="{% url 'expert-case-image' referral.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="max-width: 100%; height: auto; border-radius: 8px;">
-                {% if case.symptoms %}
-                    <p><strong>Symptoms:</strong><br><span style="white-space: pre-wrap;">{{ case.symptoms }}</span></p>
-                {% endif %}
-            </section>
+    <div style="display: grid; grid-template-columns: 1fr 1.15fr; gap: 2rem; align-items: start;">
 
-            <section class="card" style="margin-top: 2rem;">
-                <h2>AI Prediction</h2>
-                <div class="result-card" style="border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
-                    <h3>{{ case.display_prediction }}</h3>
-                    <div class="confidence">{{ case.confidence_percent }}%</div>
-                    <small>Model: {{ case.model_identifier }}</small>
-                </div>
-            </section>
-        </div>
+      <!-- Left Column: Specimen Image & AI Prediction Context -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
 
-        <div>
-            <section class="card">
-                <h2>Expert Assessment</h2>
-                {% if error %}
-                    <div class="warning">{{ error }}</div>
-                {% endif %}
+        <!-- Image Card -->
+        <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--text);">
+              {% trans "Crop Leaf Specimen" %}
+            </h2>
+            <span class="badge badge-success" style="font-size: 0.72rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">
+              {% trans "Active Farmer Consent" %}
+            </span>
+          </div>
 
-                {% if referral.state == 'reviewed' and referral.review %}
-                    <div class="result-card" style="border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
-                        <p><strong>Outcome:</strong> {{ referral.review.get_outcome_display }}</p>
-                        <p><strong>Findings:</strong><br><span style="white-space: pre-wrap;">{{ referral.review.findings }}</span></p>
-                        {% if referral.review.next_steps %}
-                            <p><strong>Next Steps:</strong><br><span style="white-space: pre-wrap;">{{ referral.review.next_steps }}</span></p>
-                        {% endif %}
-                        <small>Submitted at: {{ referral.review.submitted_at|date:"d M Y, H:i" }}</small>
-                    </div>
-                {% elif referral.state == 'assigned' %}
-                    <form action="{% url 'expert-submit-review' referral.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="outcome">Assessment Outcome *</label>
-                            <select id="outcome" name="outcome" required>
-                                <option value="" disabled selected>Select an outcome</option>
-                                <option value="agrees">Agrees with AI Prediction</option>
-                                <option value="alternative">Alternative Assessment</option>
-                                <option value="inconclusive">Inconclusive</option>
-                                <option value="more_info_needed">More Information Needed</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="findings">Professional Findings *</label>
-                            <textarea id="findings" name="findings" rows="5" required placeholder="Explain your assessment..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="next_steps">Suggested Next Steps</label>
-                            <textarea id="next_steps" name="next_steps" rows="3" placeholder="What should the farmer do next?"></textarea>
-                        </div>
-                        <button type="submit" class="button">Submit Review</button>
-                    </form>
-                {% else %}
-                    <p>This referral is no longer active.</p>
-                {% endif %}
-            </section>
-        </div>
+          <div style="border-radius: 12px; overflow: hidden; background: #000; border: 1px solid var(--border); height: 280px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+            <img src="{% url 'expert-case-image' referral.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+
+          {% if case.symptoms %}
+            <div style="background: var(--surface-alt); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem;">
+              <strong style="color: var(--text); display: block; margin-bottom: 0.25rem;">{% trans "Farmer's Observed Symptoms" %}:</strong>
+              <p style="margin: 0; color: var(--muted); line-height: 1.5; white-space: pre-wrap;">{{ case.symptoms }}</p>
+            </div>
+          {% endif %}
+        </section>
+
+        <!-- Model Inference Card -->
+        <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+          <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--muted); letter-spacing: 0.08em;">
+            {% trans "Tentative Automated Inference" %}
+          </span>
+          <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text); margin: 0.25rem 0 0.75rem 0;">
+            {{ case.display_prediction }}
+          </h3>
+
+          <div style="background: var(--surface-alt); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.85rem;">
+              <span style="color: var(--muted);">{% trans "Model Confidence" %}:</span>
+              {% if case.model_confidence is not None %}
+                <strong style="color: var(--brand);">{{ case.confidence_percent }}%</strong>
+              {% else %}
+                <strong style="color: var(--muted);">—</strong>
+              {% endif %}
+            </div>
+            <div style="height: 6px; width: 100%; background: var(--border); border-radius: 9999px; overflow: hidden; margin-bottom: 0.5rem;">
+              <div style="height: 100%; width: {{ case.confidence_percent|default:0 }}%; background: var(--brand); border-radius: 9999px;"></div>
+            </div>
+            <small style="color: var(--muted); font-size: 0.75rem;">Model: {{ case.model_identifier|default:"—" }}</small>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column: Expert Review Submission Panel -->
+      <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+        <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 0.35rem 0; color: var(--text);">
+          {% trans "Professional Assessment" %}
+        </h2>
+        <p style="font-size: 0.88rem; color: var(--muted); margin: 0 0 1.5rem 0;">
+          {% trans "Submit your expert judgment. Your assessment is shared with the farmer and permanently logged in review history." %}
+        </p>
+
+        {% if error %}
+          <div class="callout callout-danger" style="margin-bottom: 1.25rem;">
+            {{ error }}
+          </div>
+        {% endif %}
+
+        {% if referral.state == 'reviewed' and referral.review %}
+          <!-- Read-Only Completed Assessment -->
+          <div style="background: var(--surface-alt); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <span style="font-size: 0.78rem; text-transform: uppercase; color: var(--muted); font-weight: 700;">{% trans "Outcome Verdict" %}</span>
+                <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--brand); margin: 0.15rem 0 0 0;">
+                  {{ referral.review.get_outcome_display }}
+                </h3>
+              </div>
+              <span class="badge badge-success" style="font-size: 0.75rem; padding: 0.25rem 0.65rem; border-radius: 9999px;">
+                {% trans "Completed Assessment" %}
+              </span>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+              <strong style="font-size: 0.85rem; color: var(--text); display: block; margin-bottom: 0.25rem;">{% trans "Clinical Findings" %}:</strong>
+              <p style="font-size: 0.92rem; color: var(--muted); margin: 0; line-height: 1.5; white-space: pre-wrap;">{{ referral.review.findings }}</p>
+            </div>
+
+            {% if referral.review.next_steps %}
+              <div style="padding-top: 1rem; border-top: 1px solid var(--border); margin-bottom: 1rem;">
+                <strong style="font-size: 0.85rem; color: var(--text); display: block; margin-bottom: 0.25rem;">{% trans "Recommended Next Steps" %}:</strong>
+                <p style="font-size: 0.92rem; color: var(--muted); margin: 0; line-height: 1.5; white-space: pre-wrap;">{{ referral.review.next_steps }}</p>
+              </div>
+            {% endif %}
+
+            <small style="color: var(--muted); font-size: 0.78rem;">
+              {% trans "Submitted on" %}: {{ referral.review.submitted_at|date:"d M Y, H:i" }}
+            </small>
+          </div>
+
+        {% elif referral.state == 'assigned' %}
+          <!-- Active Submission Form -->
+          <form action="{% url 'expert-submit-review' referral.id %}" method="post">
+            {% csrf_token %}
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="outcome" style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.4rem; color: var(--text);">
+                {% trans "Assessment Outcome" %} <span style="color: var(--danger);">*</span>
+              </label>
+              <select id="outcome" name="outcome" required style="width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface);">
+                <option value="" disabled selected>{% trans "Select diagnostic verdict" %}</option>
+                <option value="agrees">{% trans "Agrees with AI Prediction" %}</option>
+                <option value="alternative">{% trans "Alternative Assessment (Different Disease/Pest)" %}</option>
+                <option value="inconclusive">{% trans "Inconclusive (Image quality/symptoms ambiguous)" %}</option>
+                <option value="more_info_needed">{% trans "More Information Needed" %}</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="findings" style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.4rem; color: var(--text);">
+                {% trans "Professional Findings & Rationale" %} <span style="color: var(--danger);">*</span>
+              </label>
+              <textarea id="findings" name="findings" rows="5" required placeholder="{% trans "Detail visible lesion characteristics, leaf margins, tissue discoloration, and diagnostic rationale..." %}" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); font-family: inherit; font-size: 0.9rem;"></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label for="next_steps" style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.4rem; color: var(--text);">
+                {% trans "Suggested Next Steps & Remediation" %} <small style="color: var(--muted); font-weight: 400;">({% trans "optional" %})</small>
+              </label>
+              <textarea id="next_steps" name="next_steps" rows="3" placeholder="{% trans "Advise on sanitation, cultural controls, or specific fungicide/pesticide treatments..." %}" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); font-family: inherit; font-size: 0.9rem;"></textarea>
+            </div>
+
+            <div style="background: var(--surface-alt); padding: 0.85rem; border-radius: 8px; font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem;">
+              ⓘ {% trans "Submission is final and executes transactionally. The farmer receives an instant notification." %}
+            </div>
+
+            <button type="submit" class="button button-primary" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 700; border-radius: 8px;">
+              {% trans "Submit Expert Review" %} →
+            </button>
+          </form>
+
+        {% else %}
+          <div class="callout callout-warning">
+            {% trans "This referral is no longer active or consent has been revoked by the farmer." %}
+          </div>
+        {% endif %}
+
+      </section>
+
     </div>
+  </div>
 {% endblock %}

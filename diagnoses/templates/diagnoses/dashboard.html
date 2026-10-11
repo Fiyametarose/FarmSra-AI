@@ -1,35 +1,248 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load static i18n %}
 {% block nav_dashboard %}active{% endblock %}
 {% block breadcrumb %}{% trans "Dashboard" %}{% endblock %}
+
 {% block content %}
-  <div class="page-heading"><h1>{% trans "Welcome back" %}, {{ user.first_name|default:"farmer" }}</h1><p>{% trans "A clearer view of your crop checks and what to do next." %}</p></div>
-  <div class="dashboard-grid">
-      <section class="card">
-        <div class="section-title"><h2>{% trans "Your registered crops" %}</h2><a href="{% url 'crop-list' %}">{% trans "View all" %} ({{ crop_count }}) →</a></div>
-        {% if recent_crops %}
-          <div class="case-list">{% for crop in recent_crops %}<a href="{% url 'crop-detail' crop.id %}"><strong>{{ crop.name }}</strong><span>{{ crop.get_species_display }} · {% if crop.planting_date %}{% trans "Planted" %} {{ crop.planting_date|date:"M Y" }}{% else %}{% trans "No date" %}{% endif %}</span><span class="badge">{{ crop.get_status_display }}</span></a>{% endfor %}</div>
-          <a class="button" href="{% url 'crop-add' %}" style="margin-top: 1rem;">+ {% trans "Register Crop" %}</a>
-        {% else %}
-          <div class="empty"><h3>{% trans "No crops registered" %}</h3><p>{% trans "Register your crops to keep track of their history and diagnoses." %}</p><a class="button" href="{% url 'crop-add' %}">+ {% trans "Register Crop" %}</a></div>
-        {% endif %}
-      </section>
-      <section class="card">
-        <div class="section-title"><h2>{% trans "Recent diagnoses" %}</h2><a href="{% url 'history' %}">{% trans "View history" %} →</a></div>
+  <!-- Top Botanical Welcome Banner -->
+  <div class="dashboard-banner" style="background: linear-gradient(135deg, #143d30 0%, #1e5242 100%); border-radius: 16px; padding: 2rem 2.5rem; color: white; display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; position: relative; overflow: hidden; box-shadow: 0 10px 25px rgba(20,61,48,0.15);">
+    <div style="max-width: 600px; z-index: 2;">
+      <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #a5d6a7; font-weight: 700;">{% trans "Farmer Workspace" %}</span>
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: white; margin: 0.35rem 0 0.75rem 0; letter-spacing: -0.02em;">
+        {% trans "Welcome back" %}, {{ user.first_name|default:"Farmer" }}!
+      </h1>
+      <p style="font-size: 1rem; color: rgba(255,255,255,0.85); line-height: 1.5; margin: 0 0 1.5rem 0;">
+        {% trans "Monitor your crops, analyze leaf health with AI, and access localized agricultural guidance." %}
+      </p>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <a href="{% url 'select-crop' %}" class="button" style="background: white; color: #143d30; font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 8px; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          {% trans "Start Diagnosis" %}
+        </a>
+        <a href="{% url 'crop-add' %}" class="button" style="background: rgba(255,255,255,0.15); color: white; font-weight: 600; padding: 0.75rem 1.25rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); text-decoration: none;">
+          + {% trans "Register Crop" %}
+        </a>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: flex-end; z-index: 1;">
+      <img src="{% static 'img/dashboard_botanical.png' %}" alt="Botanical Art" style="max-height: 170px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); opacity: 0.95;">
+    </div>
+  </div>
+
+  <!-- Quick Stat Cards Grid -->
+  <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    <!-- Crops Stat -->
+    <a href="{% url 'crop-list' %}" style="text-decoration: none; color: inherit;">
+      <div class="card stat-card" style="padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s, box-shadow 0.2s;">
+        <div style="width: 48px; height: 48px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <span style="font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase;">{% trans "Registered Crops" %}</span>
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text); margin: 0.15rem 0 0 0;">{{ crop_count }}</h3>
+        </div>
+      </div>
+    </a>
+
+    <!-- Diagnoses Stat -->
+    <a href="{% url 'history' %}" style="text-decoration: none; color: inherit;">
+      <div class="card stat-card" style="padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s, box-shadow 0.2s;">
+        <div style="width: 48px; height: 48px; border-radius: 10px; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+        </div>
+        <div>
+          <span style="font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase;">{% trans "Total Diagnoses" %}</span>
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text); margin: 0.15rem 0 0 0;">{{ total_diagnoses_count }}</h3>
+        </div>
+      </div>
+    </a>
+
+    <!-- Notifications Stat -->
+    <a href="{% url 'notifications:inbox' %}" style="text-decoration: none; color: inherit;">
+      <div class="card stat-card" style="padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s, box-shadow 0.2s;">
+        <div style="width: 48px; height: 48px; border-radius: 10px; background: #fff3e0; color: #e65100; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        </div>
+        <div>
+          <span style="font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase;">{% trans "Notifications" %}</span>
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text); margin: 0.15rem 0 0 0;">{{ unread_notifications_count|default:"0" }}</h3>
+        </div>
+      </div>
+    </a>
+
+    <!-- Weather Quick Status -->
+    <div class="card stat-card" style="padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface);">
+      <div style="width: 48px; height: 48px; border-radius: 10px; background: #e1f5fe; color: #0288d1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      </div>
+      <div>
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase;">{% trans "Farm Location" %}</span>
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text); margin: 0.15rem 0 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ user.town|default:user.get_country_display|default:"East Africa" }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Main Grid -->
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+
+    <!-- Left Column: Recent Health Checks & Active Crops -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+      <!-- Recent Diagnoses Table -->
+      <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+          <div>
+            <h2 style="font-size: 1.2rem; font-weight: 700; margin: 0; color: var(--text);">{% trans "Recent Health Checks" %}</h2>
+            <p style="font-size: 0.85rem; color: var(--muted); margin: 0.2rem 0 0 0;">{% trans "Review your latest crop-leaf disease diagnoses and findings." %}</p>
+          </div>
+          <a href="{% url 'history' %}" style="font-size: 0.85rem; font-weight: 600; color: var(--brand); text-decoration: none;">{% trans "View all" %} →</a>
+        </div>
+
         {% if recent_cases %}
-          <div class="case-list">{% for case in recent_cases %}<a href="{% url 'case-detail' case.id %}"><strong>{{ case.get_crop_display }} · {{ case.reference }}</strong><span>{{ case.display_prediction }}</span><time>{{ case.created_at|date:"d M Y" }}</time></a>{% endfor %}</div>
-          <a class="button" style="margin-top: 1rem;" href="{% url 'select-crop' %}">⌗ {% trans "Diagnose Crop" %}</a>
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--muted); font-size: 0.78rem; text-transform: uppercase;">
+                  <th style="padding: 0.75rem 0.5rem;">{% trans "Crop & Case Ref" %}</th>
+                  <th style="padding: 0.75rem 0.5rem;">{% trans "Diagnosis" %}</th>
+                  <th style="padding: 0.75rem 0.5rem;">{% trans "Confidence" %}</th>
+                  <th style="padding: 0.75rem 0.5rem;">{% trans "Date" %}</th>
+                  <th style="padding: 0.75rem 0.5rem; text-align: right;">{% trans "Action" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for case in recent_cases %}
+                  <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.85rem 0.5rem;">
+                      <strong style="color: var(--text); display: block;">{{ case.get_crop_display }}</strong>
+                      <span style="font-size: 0.75rem; color: var(--muted); font-family: monospace;">#{{ case.reference }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 0.5rem;">
+                      <span style="font-weight: 600; color: var(--text);">{{ case.display_prediction }}</span>
+                    </td>
+                    <td style="padding: 0.85rem 0.5rem;">
+                      {% if case.model_confidence is not None %}
+                        <span class="badge badge-{% if case.model_confidence >= 0.7 %}success{% elif case.model_confidence >= 0.4 %}warning{% else %}neutral{% endif %}" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">
+                          {{ case.confidence_percent }}%
+                        </span>
+                      {% else %}
+                        <span style="color: var(--muted); font-size: 0.8rem;">—</span>
+                      {% endif %}
+                    </td>
+                    <td style="padding: 0.85rem 0.5rem; color: var(--muted); font-size: 0.82rem;">
+                      {{ case.created_at|date:"d M Y" }}
+                    </td>
+                    <td style="padding: 0.85rem 0.5rem; text-align: right;">
+                      <a href="{% url 'case-detail' case.id %}" class="button button-outline" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: 6px;">
+                        {% trans "View" %}
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         {% else %}
-          <div class="empty"><h3>{% trans "No saved crop checks yet" %}</h3><p>{% trans "Your completed analyses will appear here." %}</p><a class="button" href="{% url 'select-crop' %}">⌗ {% trans "Start Diagnosis" %}</a></div>
+          <div class="empty-state" style="text-align: center; padding: 2.5rem 1rem;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--surface-alt); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: var(--muted);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+            </div>
+            <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0 0 0.35rem 0; color: var(--text);">{% trans "No crop checks recorded yet" %}</h3>
+            <p style="font-size: 0.88rem; color: var(--muted); margin: 0 0 1.25rem 0;">{% trans "Upload a crop leaf photograph to perform real-time AI disease analysis." %}</p>
+            <a href="{% url 'select-crop' %}" class="button button-primary" style="padding: 0.65rem 1.25rem; font-size: 0.9rem;">
+              ⌗ {% trans "Start First Diagnosis" %}
+            </a>
+          </div>
         {% endif %}
       </section>
-      <section class="card">
-        <div class="section-title"><h2>{% trans "Local Weather" %}</h2></div>
+
+      <!-- Active Crops Card List -->
+      <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+          <div>
+            <h2 style="font-size: 1.2rem; font-weight: 700; margin: 0; color: var(--text);">{% trans "Your Registered Crops" %}</h2>
+            <p style="font-size: 0.85rem; color: var(--muted); margin: 0.2rem 0 0 0;">{% trans "Crops currently monitored across your fields." %}</p>
+          </div>
+          <a href="{% url 'crop-list' %}" style="font-size: 0.85rem; font-weight: 600; color: var(--brand); text-decoration: none;">{% trans "Manage" %} ({{ crop_count }}) →</a>
+        </div>
+
+        {% if recent_crops %}
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            {% for crop in recent_crops %}
+              <a href="{% url 'crop-detail' crop.id %}" style="text-decoration: none; color: inherit;">
+                <div style="border: 1px solid var(--border); border-radius: 10px; padding: 1rem; background: var(--surface-alt); transition: border-color 0.2s;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <strong style="color: var(--text); font-size: 0.95rem;">{{ crop.name }}</strong>
+                    <span class="badge badge-success" style="font-size: 0.7rem; padding: 0.15rem 0.5rem;">{{ crop.get_status_display }}</span>
+                  </div>
+                  <div style="font-size: 0.82rem; color: var(--muted);">
+                    {{ crop.get_species_display }} · {% if crop.planting_date %}{% trans "Planted" %} {{ crop.planting_date|date:"M Y" }}{% else %}{% trans "No date" %}{% endif %}
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state" style="text-align: center; padding: 2rem 1rem;">
+            <p style="font-size: 0.88rem; color: var(--muted); margin: 0 0 1rem 0;">{% trans "Register your crops to track planting dates and health histories." %}</p>
+            <a href="{% url 'crop-add' %}" class="button button-outline" style="padding: 0.55rem 1rem; font-size: 0.85rem;">
+              + {% trans "Register Crop" %}
+            </a>
+          </div>
+        {% endif %}
+      </section>
+
+    </div>
+
+    <!-- Right Column: Weather Card & Expert Review CTA -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+      <!-- Weather Widget Card -->
+      <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--text);">{% trans "Local Weather" %}</h2>
+          <span style="font-size: 0.78rem; color: var(--muted); font-weight: 500;">Open-Meteo</span>
+        </div>
         <div id="weather-container">
-          <p>{% trans "Check current weather and forecasts to help plan your farming activities." %}</p>
-          <button class="button" onclick="loadWeather()" id="load-weather-btn">🌤 {% trans "Check Weather" %}</button>
+          <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
+            {% trans "Weather context helps assess fungal and pest risks for your registered crops." %}
+          </p>
+          <button class="button button-primary" onclick="loadWeather()" id="load-weather-btn" style="width: 100%; padding: 0.65rem; font-size: 0.88rem; font-weight: 600;">
+            🌤 {% trans "Check Weather Forecast" %}
+          </button>
         </div>
       </section>
+
+      <!-- Detailed Guidance RAG Card -->
+      <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+        <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+        </div>
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0 0 0.35rem 0; color: var(--text);">{% trans "Agricultural Knowledge" %}</h3>
+        <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1rem 0; line-height: 1.5;">
+          {% trans "Access grounded advisory material and management practices for tomato, potato, and maize." %}
+        </p>
+        <a href="{% url 'guidance-index' %}" class="button button-outline" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.85rem; font-weight: 600;">
+          {% trans "Browse Guidance Library" %} →
+        </a>
+      </section>
+
+      <!-- Expert Review CTA Card -->
+      <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+        <div style="width: 40px; height: 40px; border-radius: 8px; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0 0 0.35rem 0; color: var(--text);">{% trans "Need Expert Review?" %}</h3>
+        <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1rem 0; line-height: 1.5;">
+          {% trans "Request professional evaluation from verified agricultural specialists with strict farmer consent." %}
+        </p>
+        <a href="{% url 'agricultural-experts' %}" class="button button-outline" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.85rem; font-weight: 600;">
+          {% trans "View Extension Services" %} →
+        </a>
+      </section>
+
+    </div>
+
   </div>
 {% endblock %}
 

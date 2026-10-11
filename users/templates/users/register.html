@@ -1,40 +1,171 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans "Create account" %} — FarmSra AI{% endblock %}
+{% block title %}{% trans "Create Farmer Account" %} — FarmSra AI{% endblock %}
 {% block public_content %}
-  <section class="auth-layout register-layout">
-    <div class="auth-visual"><div class="leaf-art">☘</div><p class="eyebrow">{% trans "HEALTHIER CROPS. STRONGER FARMS." %}</p><h2>{% trans "Join FarmSra AI" %}</h2><p>{% trans "Create a farmer account to check tomato, potato, and maize leaf photos." %}</p></div>
-    <div class="auth-panel wide">
-      <h1>{% trans "Create Your Account" %}</h1><p id="step-copy">{% trans "Step 1 of 2 · Add your personal details to continue." %}</p>
-      <form method="post" class="stacked-form" id="registration-form" novalidate>{% csrf_token %}
+  <div style="min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 2.5rem 1.5rem; background: var(--bg);">
+    <div style="max-width: 640px; width: 100%; background: var(--surface); border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+
+      <!-- Stepper Indicator -->
+      <div class="steps-progress" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; position: relative;">
+        <div class="step-item active" id="step-nav-1" style="display: flex; align-items: center; gap: 0.65rem;">
+          <div class="step-circle" id="step-circle-1" style="width: 32px; height: 32px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">1</div>
+          <span style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{% trans "Personal Details" %}</span>
+        </div>
+        <div style="flex: 1; height: 2px; background: var(--border); margin: 0 1rem;" id="step-line"></div>
+        <div class="step-item" id="step-nav-2" style="display: flex; align-items: center; gap: 0.65rem;">
+          <div class="step-circle" id="step-circle-2" style="width: 32px; height: 32px; border-radius: 50%; background: var(--surface-alt); color: var(--muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; border: 1px solid var(--border);">2</div>
+          <span style="font-size: 0.88rem; font-weight: 600; color: var(--muted);" id="step-text-2">{% trans "Farm Location" %}</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <div style="display: inline-block; background: var(--brand-soft); color: var(--brand); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 4px; text-transform: uppercase; margin-bottom: 0.5rem;">
+          {% trans "Role: Farmer (Public Signup)" %}
+        </div>
+        <h1 id="step-title" style="font-size: 1.75rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "Create Farmer Account" %}</h1>
+        <p id="step-copy" data-step1="{% trans 'Step 1 of 2 · Add your personal details to continue.' %}" data-step2="{% trans 'Step 2 of 2 · Personal details complete. Add your farm location.' %}" style="font-size: 0.9rem; color: var(--muted); margin: 0;">{% trans "Step 1 of 2 · Add your personal details to continue." %}</p>
+      </div>
+
+      <form method="post" class="stacked-form" id="registration-form" novalidate>
+        {% csrf_token %}
         {{ form.non_field_errors }}
+
+        <!-- Step 1: Personal Details -->
         <div class="form-step" data-step="1">
-          <span class="account-label">{% trans "FARMER account · assigned automatically" %}</span>
-          <h3><b>1</b> Personal details · Step 1 of 2</h3>
-          <label>{% trans "Full Name" %}{{ form.full_name }}{{ form.full_name.errors }}</label>
-          <label>{% trans "Email Address" %}{{ form.email }}{{ form.email.errors }}</label>
-          <label>{% trans "Password" %}{{ form.password1 }}{{ form.password1.errors }}</label>
-          <label>{% trans "Confirm Password" %}{{ form.password2 }}{{ form.password2.errors }}</label>
-          <button class="button" type="button" id="registration-next">{% trans "Continue" %}</button>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Full Name" %}</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.full_name.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Email Address" %}</label>
+            {{ form.email }}
+            {% if form.email.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.email.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Password" %}</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.password1.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Confirm Password" %}</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.password2.errors }}</div>{% endif %}
+          </div>
+
+          <button class="button button-primary" type="button" id="registration-next" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 600; border-radius: 8px;">
+            {% trans "Continue to Farm Location" %} →
+          </button>
         </div>
+
+        <!-- Step 2: Farm Location -->
         <div class="form-step hidden" data-step="2">
-          <div class="assigned-role"><span>♙ FARMER</span><strong>{% trans "Assigned" %}</strong></div>
-          <h3><b>2</b> Farm location · Step 2 of 2</h3>
-          <p>{% trans "Choose Kenya or Ethiopia, then describe your farm location." %}</p>
-          <label>{% trans "Country" %}{{ form.country }}{{ form.country.errors }}</label>
-          <label>{% trans "Region / County" %}{{ form.region }}{{ form.region.errors }}</label>
-          <label>{% trans "Zone / Sub-county" %}{{ form.subcounty }}{{ form.subcounty.errors }}</label>
-          <label>{% trans "Woreda / Ward" %}{{ form.ward }}{{ form.ward.errors }}</label>
-          <label>{% trans "City / Town" %}{{ form.town }}{{ form.town.errors }}</label>
-          <label>{% trans "Kebele / Locality" %} <small>{% trans "(optional)" %}</small>{{ form.locality }}{{ form.locality.errors }}</label>
-          <label class="check-label">{{ form.terms_accepted }} {{ form.terms_accepted.label }}{{ form.terms_accepted.errors }}</label>
-          <button class="button button-secondary" type="button" id="registration-back">{% trans "Back" %}</button>
-          <button class="button" type="submit">→ {% trans "Create Account" %}</button>
+          <div style="background: var(--surface-alt); border-radius: 8px; padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--muted); border-left: 3px solid var(--brand);">
+            {% trans "Your registered farm location helps tailor local weather updates and disease context." %}
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Country" %}</label>
+              {{ form.country }}
+              {% if form.country.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.country.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Region / County" %}</label>
+              {{ form.region }}
+              {% if form.region.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.region.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Zone / Sub-county" %}</label>
+              {{ form.subcounty }}
+              {% if form.subcounty.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.subcounty.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Woreda / Ward" %}</label>
+              {{ form.ward }}
+              {% if form.ward.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.ward.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "City / Town" %}</label>
+              {{ form.town }}
+              {% if form.town.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.town.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">{% trans "Kebele / Locality" %} <small style="color: var(--muted); font-weight: 400;">({% trans "optional" %})</small></label>
+              {{ form.locality }}
+              {% if form.locality.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.locality.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.5rem; background: var(--surface-alt); padding: 0.75rem; border-radius: 8px;">
+            <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--text); cursor: pointer;">
+              {{ form.terms_accepted }}
+              <span>{{ form.terms_accepted.label }}</span>
+            </label>
+            {% if form.terms_accepted.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.terms_accepted.errors }}</div>{% endif %}
+          </div>
+
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <button class="button button-outline" type="button" id="registration-back" style="flex: 1; padding: 0.85rem; font-size: 0.95rem; font-weight: 600;">
+              ← {% trans "Back" %}
+            </button>
+            <button class="button button-primary" type="submit" style="flex: 2; padding: 0.85rem; font-size: 1rem; font-weight: 600;">
+              {% trans "Create Farmer Account" %} →
+            </button>
+          </div>
         </div>
+
       </form>
-      <p class="center">{% trans "Already have an account?" %} <a href="{% url 'login' %}">{% trans "Log In" %}</a></p>
+
+      <div style="text-align: center; margin-top: 2rem; font-size: 0.88rem; color: var(--muted);">
+        {% trans "Already have an account?" %} <a href="{% url 'login' %}" style="color: var(--brand); font-weight: 600; text-decoration: none;">{% trans "Log In" %}</a>
+      </div>
+
     </div>
-  </section>
+  </div>
 {% endblock %}
-{% block scripts %}<script src="{% static 'js/registration.js' %}"></script>{% endblock %}
+{% block scripts %}
+  <script src="{% static 'js/registration.js' %}"></script>
+  <script>
+    // Visual stepper sync
+    const origShowStep = window.showStep;
+    if (typeof origShowStep === 'function') {
+      window.showStep = function(index) {
+        origShowStep(index);
+        const c1 = document.getElementById('step-circle-1');
+        const c2 = document.getElementById('step-circle-2');
+        const t2 = document.getElementById('step-text-2');
+        const line = document.getElementById('step-line');
+        if (index === 0) {
+          c1.style.background = 'var(--brand)';
+          c1.style.color = 'white';
+          c1.innerHTML = '1';
+          c2.style.background = 'var(--surface-alt)';
+          c2.style.color = 'var(--muted)';
+          c2.style.border = '1px solid var(--border)';
+          t2.style.color = 'var(--muted)';
+          line.style.background = 'var(--border)';
+        } else {
+          c1.style.background = 'var(--brand)';
+          c1.style.color = 'white';
+          c1.innerHTML = '✓';
+          c2.style.background = 'var(--brand)';
+          c2.style.color = 'white';
+          c2.style.border = 'none';
+          t2.style.color = 'var(--text)';
+          line.style.background = 'var(--brand)';
+        }
+      };
+    }
+  </script>
+{% endblock %}

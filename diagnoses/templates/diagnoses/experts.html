@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block nav_experts %}active{% endblock %}
+{% block breadcrumb %}{% trans "Agricultural Experts" %}{% endblock %}
+
+{% block content %}
+  <div style="max-width: 1040px; margin: 0 auto;">
+
+    <div style="margin-bottom: 2rem;">
+      <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--brand);">
+        {% trans "Extension Services & Clinical Verification" %}
+      </span>
+      <h1 style="font-size: 2.1rem; font-weight: 800; color: var(--text); margin: 0.35rem 0 0.5rem 0; letter-spacing: -0.02em;">
+        {% trans "Agricultural Expert Review" %}
+      </h1>
+      <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">
+        {% trans "Verified secondary case assessments by agricultural officers with strict farmer consent." %}
+      </p>
+    </div>
+
+    <!-- Workflow Cards (3 Pillars) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+
+      <div class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem;">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 0.5rem 0; color: var(--text);">
+          {% trans "1. Explicit Consent" %}
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.5; margin: 0;">
+          {% trans "Cases are never automatically broadcast. You explicitly grant revocable access per case. Your name, email, and exact farm coordinates remain private." %}
+        </p>
+      </div>
+
+      <div class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem;">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 0.5rem 0; color: var(--text);">
+          {% trans "2. Human Agronomist Review" %}
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.5; margin: 0;">
+          {% trans "Authorized extension specialists independently examine the leaf image, ML prediction confidence, and observed symptoms." %}
+        </p>
+      </div>
+
+      <div class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem;">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: #e1f5fe; color: #0288d1; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 0.5rem 0; color: var(--text);">
+          {% trans "3. Verified Verdict" %}
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.5; margin: 0;">
+          {% trans "The expert confirms, refutes, or identifies inconclusive findings and delivers tailored field next steps directly to your dashboard." %}
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Active Reviews List -->
+    <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text);">{% trans "Your Case Referrals" %}</h2>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0.2rem 0 0 0;">{% trans "Review requests you have submitted to the extension network." %}</p>
+        </div>
+        <a href="{% url 'history' %}" class="button button-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+          {% trans "Diagnosis History" %} →
+        </a>
+      </div>
+
+      {% if active_referrals %}
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          {% for ref in active_referrals %}
+            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-alt); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border); flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <strong style="font-size: 1rem; color: var(--text); display: block;">
+                  {{ ref.diagnosis.get_crop_display }} · Case #{{ ref.diagnosis.reference }}
+                </strong>
+                <span style="font-size: 0.82rem; color: var(--muted);">
+                  {% trans "Diagnosis" %}: {{ ref.diagnosis.display_prediction }} · {% trans "Consented" %}: {{ ref.created_at|date:"d M Y" }}
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <span class="badge badge-{% if ref.state == 'reviewed' %}success{% else %}warning{% endif %}" style="padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.8rem;">
+                  {{ ref.get_state_display }}
+                </span>
+                <a href="{% url 'case-detail' ref.diagnosis.id %}" class="button button-primary" style="padding: 0.45rem 1rem; font-size: 0.82rem;">
+                  {% trans "View Assessment" %} →
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 2.5rem 1rem;">
+          <p style="font-size: 0.92rem; color: var(--muted); margin: 0 0 1.25rem 0;">
+            {% trans "You currently have no active referrals. To request an expert review, open any completed diagnosis result and check the consent box." %}
+          </p>
+          <a href="{% url 'history' %}" class="button button-primary" style="padding: 0.65rem 1.5rem; font-size: 0.9rem;">
+            {% trans "Browse Saved Diagnoses" %}
+          </a>
+        </div>
+      {% endif %}
+    </section>
+
+  </div>
+{% endblock %}

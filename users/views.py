@@ -81,3 +81,20 @@ def settings_location(request):
         form.save()
         return redirect("settings-location")
     return render(request, "users/settings_location.html", {"form": form})
+
+
+@farmer_required
+def settings_preferences(request):
+    if request.method == "POST":
+        lang = request.POST.get("language")
+        if lang in ["en", "sw", "am"]:
+            from django.conf import settings
+            response = redirect("settings-preferences")
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
+            return response
+    return render(request, "users/settings_preferences.html")
+
+
+@farmer_required
+def settings_notifications(request):
+    return render(request, "users/settings_notifications.html")

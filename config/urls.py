@@ -12,6 +12,8 @@ urlpatterns = [
     path("register/", user_views.register, name="register"),
     path("settings/account/", user_views.settings_account, name="settings-account"),
     path("settings/location/", user_views.settings_location, name="settings-location"),
+    path("settings/preferences/", user_views.settings_preferences, name="settings-preferences"),
+    path("settings/notifications/", user_views.settings_notifications, name="settings-notifications"),
     path(
         "workspace-unavailable/",
         user_views.workspace_unavailable,

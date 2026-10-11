@@ -1,18 +1,159 @@
 {% extends "base.html" %}
 {% load i18n %}{% load static %}
-{% block nav_diagnose %}active{% endblock %}{% block breadcrumb %}{% trans "Diagnose Crop" %}{% endblock %}
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}{% trans "Diagnose Crop" %} / {{ crop_name }} / {% trans "Upload Photo" %}{% endblock %}
+
 {% block content %}
-  <div class="page-heading"><span class="pill">{{ crop_name }}</span><h1>Upload {% trans "Crop" %} Photo</h1><p>Add a clear photo of your {{ crop_name|lower }} leaf so the model can assess visible patterns.</p></div>
-  <div class="steps"><span>✓ Select crop</span><strong>2 <span>Upload photo</span></strong><span>3 AI analysis</span><span>4 Your result</span></div>
-  <form method="post" enctype="multipart/form-data" class="upload-grid">{% csrf_token %}
-    <section class="card upload-card"><h2>{% trans "Crop" %} image <small>(required)</small></h2>{{ form.image.errors }}<label class="drop-zone" for="{{ form.image.id_for_label }}"><span id="preview-placeholder">▧<b>Choose a clear leaf photo</b><small>JPEG, PNG, {% trans "or" %} WebP · maximum 10 MB</small></span><img id="image-preview" hidden alt="Selected crop leaf preview">{{ form.image }}</label></section>
-    <section class="card"><h2>Add context <small>{% trans "(optional)" %}</small></h2>
-      <label>Link to your registered crop:{{ form.registered_crop }}{{ form.registered_crop.errors }}</label>
-      <label>What changes have you noticed?{{ form.symptoms }}{{ form.symptoms.errors }}</label>
-    </section>
-    <section class="card location-card"><h2>Case location</h2><p>Defaults to your registered farm location. Edit it if this photo was taken elsewhere.</p>{{ form.location }}{{ form.location.errors }}</section>
-    <div class="warning">ⓘ <strong>An estimate, not a confirmed diagnosis.</strong> Model results may be inaccurate. Consult an agricultural expert before treatment.</div>
-    <div class="form-actions"><a class="button button-secondary" href="{% url 'select-crop' %}">← {% trans "Back" %} to Crops</a><button class="button" type="submit">⌗ Analyze {% trans "Crop" %} Photo</button></div>
-  </form>
+  <div style="max-width: 1040px; margin: 0 auto;">
+
+    <!-- Step Progress Tracker -->
+    <div class="steps-progress" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; background: var(--surface); padding: 1.25rem 2rem; border-radius: 12px; border: 1px solid var(--border);">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">✓</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{% trans "Select Crop" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--brand); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">2</div>
+        <span style="font-size: 0.88rem; font-weight: 700; color: var(--text);">{% trans "Upload Photo" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--border); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-alt); color: var(--muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 1px solid var(--border);">3</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--muted);">{% trans "Analyzing" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--border); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-alt); color: var(--muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 1px solid var(--border);">4</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--muted);">{% trans "Diagnosis Result" %}</span>
+      </div>
+    </div>
+
+    <!-- Title Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: var(--brand-soft); color: var(--brand); font-size: 0.82rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 9999px; margin-bottom: 0.5rem; text-transform: uppercase;">
+          ● {% trans "Target Crop" %}: {{ crop_name }}
+        </div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "Upload Crop Photo" %} ({{ crop_name }})</h1>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "Take or upload a clear, focused image of an affected leaf in natural daylight." %}</p>
+      </div>
+      <a href="{% url 'select-crop' %}" class="button button-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+        ← {% trans "Change Crop" %}
+      </a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="uploadForm">
+      {% csrf_token %}
+
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.75rem; margin-bottom: 2rem;">
+
+        <!-- Left: Upload Drop-Zone Card -->
+        <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem;">
+          <h2 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--text);">
+            {% trans "Leaf Photograph" %} <span style="color: var(--danger); font-size: 0.9rem;">*</span>
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1.25rem 0;">
+            {% trans "Single leaf close-up works best. Avoid busy backgrounds or blurry camera angles." %}
+          </p>
+
+          {{ form.image.errors }}
+
+          <label class="drop-zone" for="{{ form.image.id_for_label }}" style="border: 2px dashed var(--border); border-radius: 12px; padding: 2.5rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: var(--surface-alt); transition: border-color 0.2s, background-color 0.2s; min-height: 260px; position: relative;">
+
+            <div id="preview-placeholder" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+              <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <strong style="font-size: 1.05rem; color: var(--text);">{% trans "Click to upload or drag & drop leaf photo" %}</strong>
+              <span style="font-size: 0.82rem; color: var(--muted);">JPEG, PNG, or WebP · Maximum 10 MB</span>
+              <span class="button button-outline" style="margin-top: 0.5rem; padding: 0.45rem 1rem; font-size: 0.82rem; pointer-events: none;">
+                📷 {% trans "Browse Files" %}
+              </span>
+            </div>
+
+            <img id="image-preview" hidden alt="Selected crop leaf preview" style="max-width: 100%; max-height: 280px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+
+            <div style="position: absolute; opacity: 0; width: 0; height: 0; overflow: hidden;">
+              {{ form.image }}
+            </div>
+          </label>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1rem; font-size: 0.78rem; color: var(--muted); justify-content: center;">
+            <span>✓ {% trans "224×224 normalized input" %}</span>
+            <span>✓ {% trans "Local server inference" %}</span>
+            <span>✓ {% trans "Protected private storage" %}</span>
+          </div>
+        </section>
+
+        <!-- Right: Context, Location & Symptoms Card -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+          <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--text);">
+              {% trans "Crop Context" %} <small style="color: var(--muted); font-weight: 400;">({% trans "optional" %})</small>
+            </h2>
+            <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1.25rem 0;">
+              {% trans "Associate this analysis with one of your registered crops or note field observations." %}
+            </p>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+                {% trans "Link to registered crop" %}
+              </label>
+              {{ form.registered_crop }}
+              {% if form.registered_crop.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.registered_crop.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+                {% trans "Observed Symptoms & Notes" %}
+              </label>
+              {{ form.symptoms }}
+              {% if form.symptoms.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.symptoms.errors }}</div>{% endif %}
+              <small style="color: var(--muted); font-size: 0.78rem; display: block; margin-top: 0.25rem;">
+                {% trans "e.g., Yellowing margins, dark spots, curled edges, or wilting observed over 3 days." %}
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+                {% trans "Case Location" %}
+              </label>
+              {{ form.location }}
+              {% if form.location.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.location.errors }}</div>{% endif %}
+              <small style="color: var(--muted); font-size: 0.78rem; display: block; margin-top: 0.25rem;">
+                {% trans "Defaults to your registered farm location. Adjust if collected at an off-site plot." %}
+              </small>
+            </div>
+          </section>
+
+          <!-- Disclaimer Alert -->
+          <div class="callout callout-warning" style="display: flex; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 12px; background: #fff8e1; border: 1px solid #ffe082;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f57f17" stroke-width="2" style="flex-shrink: 0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div style="font-size: 0.82rem; color: #5d4037; line-height: 1.45;">
+              <strong>{% trans "Tentative AI Assessment" %}:</strong> {% trans "Predictions represent probabilistic model confidences, never certified diagnoses. Always verify with an agricultural expert before applying chemical treatments." %}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Action Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 1.25rem 2rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+        <a class="button button-outline" href="{% url 'select-crop' %}" style="padding: 0.75rem 1.5rem; font-weight: 600;">
+          ← {% trans "Back to Crops" %}
+        </a>
+        <button class="button button-primary" type="submit" id="analyzeSubmitBtn" style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 700; border-radius: 8px;">
+          ⚡ {% trans "Analyze Leaf Photo" %} →
+        </button>
+      </div>
+
+    </form>
+  </div>
 {% endblock %}
-{% block scripts %}<script src="{% static 'js/upload.js' %}"></script>{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/upload.js' %}"></script>
+{% endblock %}

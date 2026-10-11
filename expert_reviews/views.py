@@ -99,8 +99,49 @@ def revoke_review(request, case_id):
 
 @expert_required
 def dashboard(request):
-    referrals = request.user.assigned_referrals.exclude(state=ExpertReferral.State.REVOKED).exclude(state=ExpertReferral.State.REVIEWED).order_by('-assigned_at')
-    return render(request, "expert_reviews/dashboard.html", {"referrals": referrals})
+    active_referrals = request.user.assigned_referrals.exclude(
+        state=ExpertReferral.State.REVOKED
+    ).select_related('diagnosis').order_by('-assigned_at')
+    pending_referrals = active_referrals.filter(state=ExpertReferral.State.ASSIGNED)
+    completed_reviews_count = request.user.submitted_reviews.count()
+
+    return render(
+        request,
+        "expert_reviews/dashboard.html",
+        {
+            "referrals": pending_referrals,
+            "active_referrals": active_referrals,
+            "pending_count": pending_referrals.count(),
+            "completed_count": completed_reviews_count,
+            "total_assigned_count": active_referrals.count(),
+        },
+    )
+
+
+@expert_required
+def assigned_cases(request):
+    referrals = request.user.assigned_referrals.exclude(
+        state=ExpertReferral.State.REVOKED
+    ).select_related('diagnosis').order_by('-assigned_at')
+    filter_state = request.GET.get('state', 'all')
+    if filter_state == 'pending':
+        filtered = referrals.filter(state=ExpertReferral.State.ASSIGNED)
+    elif filter_state == 'reviewed':
+        filtered = referrals.filter(state=ExpertReferral.State.REVIEWED)
+    else:
+        filtered = referrals
+
+    return render(
+        request,
+        "expert_reviews/assigned_cases.html",
+        {
+            "referrals": filtered,
+            "filter_state": filter_state,
+            "total_count": referrals.count(),
+            "pending_count": referrals.filter(state=ExpertReferral.State.ASSIGNED).count(),
+            "reviewed_count": referrals.filter(state=ExpertReferral.State.REVIEWED).count(),
+        },
+    )
 
 
 @expert_required

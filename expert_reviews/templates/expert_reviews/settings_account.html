@@ -1,33 +1,174 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block nav_expert_settings %}active{% endblock %}
-{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">{% trans "Expert Dashboard" %}</a> / Account {% trans "Settings" %}{% endblock %}
+{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">{% trans "Expert workspace" %}</a> / {% trans "Settings" %}{% endblock %}
+
 {% block content %}
-    <div class="page-heading">
-        <h1>Account {% trans "Settings" %}</h1>
-        <p>Manage your expert profile.</p>
+<div style="max-width: 1040px; margin: 0 auto;">
+  <form method="post" action="{% url 'expert-settings' %}" id="expert-settings-form">
+    {% csrf_token %}
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <p style="font-size: 0.8rem; color: var(--muted); margin: 0 0 0.25rem 0;">{% trans "Demo workspace · fictional cases and professional profiles" %}</p>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "Settings" %}</h1>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "Manage your account and preferences. Authorization remains administrator-managed." %}</p>
+      </div>
+      <div>
+        <button type="submit" class="button button-primary" style="padding: 0.75rem 1.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem;">
+          ✓ {% trans "Save Changes" %}
+        </button>
+      </div>
     </div>
 
-    <section class="card" style="max-width: 600px;">
-        <form method="post" action="{% url 'expert-settings' %}">
-            {% csrf_token %}
-            {% if form.non_field_errors %}
-                <div class="warning">{{ form.non_field_errors }}</div>
-            {% endif %}
+    <!-- Setting Navigation Tabs -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; flex-wrap: wrap;">
+      <span class="button" style="background: var(--brand-soft); color: var(--brand); font-weight: 700; border-radius: 20px; padding: 0.4rem 1.25rem; font-size: 0.88rem;">{% trans "Account" %}</span>
+      <span class="button button-secondary" style="background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 20px; padding: 0.4rem 1.25rem; font-size: 0.88rem; cursor: default;">{% trans "Professional Information" %}</span>
+      <span class="button button-secondary" style="background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 20px; padding: 0.4rem 1.25rem; font-size: 0.88rem; cursor: default;">{% trans "Service Areas" %}</span>
+      <span class="button button-secondary" style="background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 20px; padding: 0.4rem 1.25rem; font-size: 0.88rem; cursor: default;">{% trans "Preferences" %}</span>
+    </div>
 
-            <div class="form-group">
-                <label for="{{ form.full_name.id_for_label }}">{% trans "Full Name" %}</label>
-                {{ form.full_name }}
-                {% if form.full_name.errors %}<div class="form-error">{{ form.full_name.errors }}</div>{% endif %}
+    <div style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 0.25rem 0; color: var(--text);">{% trans "Account" %}</h2>
+      <p style="font-size: 0.88rem; color: var(--muted); margin: 0;">{% trans "Keep your contact information up to date and protect your account." %}</p>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="callout callout-danger" style="margin-bottom: 1.5rem;">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <!-- 2 Column Profile & Security Section -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+
+      <!-- Profile Information Card -->
+      <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 1.25rem 0; color: var(--text);">{% trans "Profile information" %}</h3>
+
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border);">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+            {{ request.user.full_name|default:request.user.email|slice:":2"|upper }}
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size: 1rem; color: var(--text);">{{ request.user.full_name|default:request.user.email }}</div>
+            <div style="font-size: 0.8rem; color: var(--muted);">{% trans "Agricultural Expert · professional profile" %}</div>
+            <span class="badge" style="background: #e8f5e9; color: #1b5e20; font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; display: inline-block; margin-top: 0.25rem;">
+              ✓ {% trans "Verified expert · demo" %}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="{{ form.full_name.id_for_label }}" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+            {% trans "Full name" %}
+          </label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted);">👤</span>
+            <input type="text" name="full_name" id="{{ form.full_name.id_for_label }}" value="{{ form.full_name.value|default_if_none:'' }}" class="input" style="padding-left: 2.3rem; width: 100%; border-radius: 8px;" required>
+          </div>
+          {% if form.full_name.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.full_name.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="{{ form.email.id_for_label }}" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+            {% trans "Email address" %}
+          </label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted);">✉️</span>
+            <input type="email" name="email" id="{{ form.email.id_for_label }}" value="{{ form.email.value|default_if_none:'' }}" class="input" style="padding-left: 2.3rem; width: 100%; border-radius: 8px;" required>
+          </div>
+          {% if form.email.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.email.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+          <label for="expert_phone" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+            {% trans "Phone number (optional)" %}
+          </label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted);">📞</span>
+            <input type="tel" id="expert_phone" class="input" style="padding-left: 2.3rem; width: 100%; border-radius: 8px;" placeholder="{% trans 'Add an optional phone number' %}" value="{{ request.user.phone_number|default:'' }}" readonly>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--muted);">{% trans "Managed by organization admin." %}</span>
+        </div>
+      </section>
+
+      <!-- Password & Security Card -->
+      <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 0.35rem 0; color: var(--text);">{% trans "Password & security" %}</h3>
+        <p style="font-size: 0.82rem; color: var(--muted); margin: 0 0 1.25rem 0;">{% trans "Use a strong, unique password. Leave these fields blank if you are not changing it." %}</p>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+            {% trans "Current password" %}
+          </label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted);">🔒</span>
+            <input type="password" class="input" style="padding-left: 2.3rem; width: 100%; border-radius: 8px;" placeholder="{% trans 'Enter current password' %}" disabled>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+            {% trans "New password" %}
+          </label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted);">🔒</span>
+            <input type="password" class="input" style="padding-left: 2.3rem; width: 100%; border-radius: 8px;" placeholder="{% trans 'At least 8 characters' %}" disabled>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: var(--text);">
+            {% trans "Confirm new password" %}
+          </label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted);">🔒</span>
+            <input type="password" class="input" style="padding-left: 2.3rem; width: 100%; border-radius: 8px;" placeholder="{% trans 'Re-enter new password' %}" disabled>
+          </div>
+        </div>
+
+        <p style="font-size: 0.78rem; color: var(--muted); margin: 0; line-height: 1.4;">
+          {% trans "Password credentials for expert accounts are managed by institutional administrators." %}
+        </p>
+      </section>
+    </div>
+
+    <!-- Access & Authorization Card -->
+    <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; margin-bottom: 1.5rem;">
+      <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 1rem 0; color: var(--text);">{% trans "Your expert access" %}</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <div>
+          <div style="font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.25rem;">
+            {% trans "Agricultural Expert · read only" %}
+          </div>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0;">
+            {% trans "Assigned, consented cases only · Tomato, Maize, Potato" %}
+          </p>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.25rem;">
+              {% trans "Oromia · authorized service areas" %}
             </div>
-
-            <div class="form-group">
-                <label for="{{ form.email.id_for_label }}">{% trans "Email Address" %}</label>
-                {{ form.email }}
-                {% if form.email.errors %}<div class="form-error">{{ form.email.errors }}</div>{% endif %}
-            </div>
-
-            <button type="submit" class="button">Save Changes</button>
-        </form>
+            <p style="font-size: 0.85rem; color: var(--muted); margin: 0;">
+              {% trans "East Shewa / West Shewa / Arsi · administrator-approved" %}
+            </p>
+          </div>
+          <span class="badge" style="background: var(--surface-alt); color: var(--muted); border: 1px solid var(--border); font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 4px; white-space: nowrap;">
+            {% trans "Read only" %}
+          </span>
+        </div>
+      </div>
     </section>
+
+    <!-- Disclaimer / Consent Note -->
+    <div style="display: flex; align-items: center; gap: 0.6rem; background: var(--surface-alt); border: 1px solid var(--border); padding: 0.85rem 1.25rem; border-radius: 10px; font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem;">
+      <span style="color: var(--brand); font-size: 1.1rem;">🛡️</span>
+      <span>{% trans "Verification, role permissions, and authorized service areas are read only. Only an administrator can approve authorization changes." %}</span>
+    </div>
+
+  </form>
+</div>
 {% endblock %}

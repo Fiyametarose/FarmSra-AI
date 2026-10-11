@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from users.models import User
+from expert_reviews.models import ExpertReferral
 
 from .forms import DiagnosisUploadForm
 from .inference import InferenceError, ModelUnavailableError, predict
@@ -47,10 +48,12 @@ def dashboard(request):
     )[:3]
     recent_crops = request.user.registered_crops.all()[:3]
     crop_count = request.user.registered_crops.count()
+    total_diagnoses_count = request.user.diagnosis_cases.count()
     return render(request, "diagnoses/dashboard.html", {
         "recent_cases": recent_cases,
         "recent_crops": recent_crops,
         "crop_count": crop_count,
+        "total_diagnoses_count": total_diagnoses_count,
     })
 
 
@@ -177,3 +180,49 @@ def case_image(request, case_id):
     response["Content-Disposition"] = "inline"
     response["X-Content-Type-Options"] = "nosniff"
     return response
+
+
+@farmer_required
+def case_guidance(request, case_id):
+    case = owned_case(request, case_id)
+    advisory = getattr(case, "advisory", None)
+    return render(
+        request,
+        "diagnoses/guidance.html",
+        {
+            "case": case,
+            "advisory": advisory,
+        },
+    )
+
+
+@farmer_required
+def guidance_index(request):
+    latest_with_adv = request.user.diagnosis_cases.filter(
+        advisory__isnull=False
+    ).order_by("-created_at").first()
+    if latest_with_adv:
+        return redirect("case-guidance", case_id=latest_with_adv.id)
+    latest_completed = request.user.diagnosis_cases.filter(
+        status=DiagnosisCase.Status.COMPLETED
+    ).order_by("-created_at").first()
+    if latest_completed:
+        return redirect("case-detail", case_id=latest_completed.id)
+    return redirect("select-crop")
+
+
+@farmer_required
+def agricultural_experts(request):
+    active_referrals = (
+        ExpertReferral.objects.filter(diagnosis__farmer=request.user)
+        .exclude(state=ExpertReferral.State.REVOKED)
+        .select_related("diagnosis", "assigned_expert")
+        .order_by("-created_at")
+    )
+    return render(
+        request,
+        "diagnoses/experts.html",
+        {
+            "active_referrals": active_referrals,
+        },
+    )

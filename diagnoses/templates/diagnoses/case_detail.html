@@ -1,99 +1,302 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block nav_diagnose %}active{% endblock %}{% block breadcrumb %}{% trans "Saved Case" %}{% endblock %}
-{% block content %}
-    <div class="page-heading"><a class="button button-secondary float-right" href="{% url 'history' %}">{% trans "View History" %}</a><h1>{% if case.status == 'completed' %}{% trans "Diagnosis Result" %}{% else %}{% trans "Crop" %} {% trans "Check" %}{% endif %}</h1><p>{{ case.get_crop_display }} · {{ case.reference }} · {{ case.created_at|date:"d M Y" }}{% if case.registered_crop %} · <a href="{% url 'crop-detail' case.registered_crop.id %}">{{ case.registered_crop.name }}</a>{% endif %}</p></div>
-    {% if case.status == 'completed' %}
-        <section class="result-card card"><img src="{% url 'case-image' case.id %}" alt="Uploaded {{ case.get_crop_display }} leaf"><div><span class="pill">{% trans "AI-estimated condition" %}</span><h2>{% trans "Possible" %} {{ case.display_prediction }}</h2><p>{% trans "This is the model's top visual-pattern match for the uploaded leaf." %}</p><hr><small>{% trans "UNCALIBRATED MODEL CONFIDENCE" %}</small><div class="confidence">{{ case.confidence_percent }}%</div><small>{% trans "Model:" %} {{ case.model_identifier }}</small></div></section>
-        {% if case.is_spider_mite %}<div class="warning"><strong>{% trans "Outside disease-specific scope:" %}</strong> {% trans "The model predicted two-spotted spider mites, a pest. The actual model result is preserved, but disease-specific guidance is not provided." %}</div>{% elif case.is_uncertain %}<div class="warning"><strong>{% trans "Uncertain result:" %}</strong> {% trans "Confidence is below the provisional 70% threshold. Try another clear leaf photo or seek expert review." %}</div>{% endif %}
-        <div class="warning">ⓘ <strong>{% trans "Estimated result, not a confirmed diagnosis." %}</strong> {% trans "Confidence is not disease severity or guaranteed accuracy." %}</div>
-    {% elif case.status == 'failed' %}<section class="card failure"><h2>{% trans "Analysis could not be completed" %}</h2><p>{{ case.failure_message }}</p><p>{% trans "Your case and image remain saved. You can return later or start another crop check." %}</p></section>
-    {% else %}<section class="card"><h2>{% trans "Analysis is not complete" %}</h2><a class="button" href="{% url 'case-analyzing' case.id %}">{% trans "Continue analysis" %}</a></section>{% endif %}
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}{% trans "Diagnose Crop" %} / {{ case.get_crop_display }} / {% trans "Diagnosis Result" %}{% endblock %}
 
-    {% if case.is_eligible_for_advisory %}
-        <section class="card">
-            <h2>{% trans "Agricultural Guidance" %}</h2>
-            {% if case.advisory %}
-                {% if case.advisory.is_generated %}
-                    <span class="pill">{% trans "AI-generated from sources" %}</span>
-                {% else %}
-                    <span class="pill">{% trans "Retrieved Sources" %}</span>
-                {% endif %}
-                <div style="white-space: pre-wrap; margin-top: 1rem;">{{ case.advisory.content }}</div>
-                {% if case.advisory.retrieved_sources %}
-                    <hr>
-                    <h3>{% trans "References" %}</h3>
-                    <ul>
-                    {% for source in case.advisory.retrieved_sources %}
-                        <li style="margin-bottom: 0.5rem;">
-                            <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.title }}</a> ({{ source.publisher }})
-                            {% if source.date %} - {{ source.date }}{% endif %}
-                            {% if source.chunk_id %}
-                                <br><small><strong>{% trans "Source" %} {{ source.chunk_id }}</strong>:<br>
-                                <em>"{{ source.text }}"</em></small>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-                <p class="warning" style="margin-top: 1rem;">ⓘ <strong>{% trans "Note:" %}</strong> {% trans "Advice may be specific to other regions. Consult local extension services for specific treatment dosages." %}</p>
-            {% else %}
-                <p>{% trans "Request evidence-backed agricultural guidance for this diagnosis." %}</p>
-                <form action="{% url 'generate-advisory' case.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="button">{% trans "Retrieve Guidance" %}</button>
-                </form>
-            {% endif %}
-        </section>
+{% block content %}
+  <div style="max-width: 1040px; margin: 0 auto;">
+
+    <!-- Step Progress Tracker -->
+    <div class="steps-progress" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; background: var(--surface); padding: 1.25rem 2rem; border-radius: 12px; border: 1px solid var(--border);">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">✓</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{% trans "Select Crop" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--brand); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">✓</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{% trans "Upload Photo" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--brand); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">✓</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{% trans "Analyzing" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--brand); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">4</div>
+        <span style="font-size: 0.88rem; font-weight: 700; color: var(--text);">{% trans "Diagnosis Result" %}</span>
+      </div>
+    </div>
+
+    <!-- Header Section -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: var(--brand-soft); color: var(--brand); font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 9999px; margin-bottom: 0.4rem;">
+          {{ case.get_crop_display }} · Case #{{ case.reference }}
+        </div>
+        <h1 style="font-size: 2.1rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">
+          {% if case.status == 'completed' %}{% trans "Diagnosis Result" %}{% else %}{% trans "Crop Health Case" %}{% endif %}
+        </h1>
+        <p style="font-size: 0.92rem; color: var(--muted); margin: 0;">
+          {{ case.created_at|date:"d M Y, H:i" }} · {% trans "Location" %}: {{ case.location|default:"Registered Farm" }}
+          {% if case.registered_crop %} · {% trans "Crop" %}: <a href="{% url 'crop-detail' case.registered_crop.id %}" style="color: var(--brand); font-weight: 600;">{{ case.registered_crop.name }}</a>{% endif %}
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <a class="button button-outline" href="{% url 'history' %}" style="padding: 0.55rem 1rem; font-size: 0.88rem;">
+          {% trans "View History" %}
+        </a>
+        <a class="button button-primary" href="{% url 'select-crop' %}" style="padding: 0.55rem 1.25rem; font-size: 0.88rem;">
+          + {% trans "New Check" %}
+        </a>
+      </div>
+    </div>
+
+    {% if case.status == 'completed' %}
+
+      <!-- Primary Result Split Card -->
+      <section class="card" style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 2.5rem; padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 2rem; align-items: center;">
+
+        <!-- Left: Uploaded Leaf Image -->
+        <div style="border-radius: 12px; overflow: hidden; background: #000; border: 1px solid var(--border); height: 320px; display: flex; align-items: center; justify-content: center; position: relative;">
+          <img src="{% url 'case-image' case.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="width: 100%; height: 100%; object-fit: cover;">
+          <div style="position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: white; padding: 0.25rem 0.65rem; border-radius: 6px; font-size: 0.75rem;">
+            {% trans "Analyzed Leaf Specimen" %}
+          </div>
+        </div>
+
+        <!-- Right: Diagnostic Classification Findings -->
+        <div>
+          <div style="display: inline-block; background: var(--brand-soft); color: var(--brand); font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 9999px; text-transform: uppercase; margin-bottom: 0.75rem;">
+            {% trans "Tentative AI Assessment" %}
+          </div>
+          <h2 style="font-size: 2.1rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem 0; letter-spacing: -0.02em;">
+            {{ case.display_prediction }}
+          </h2>
+          <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.5rem 0; line-height: 1.5;">
+            {% trans "Top visual match identified by the convolutional neural network for this" %} {{ case.get_crop_display|lower }} {% trans "leaf." %}
+          </p>
+
+          <!-- Confidence Meter -->
+          <div style="background: var(--surface-alt); padding: 1.25rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+              <span style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--muted);">
+                {% trans "Model Prediction Confidence" %}
+              </span>
+              {% if case.model_confidence is not None %}
+                <strong style="font-size: 1.5rem; font-weight: 800; color: {% if case.model_confidence >= 0.7 %}var(--brand){% elif case.model_confidence >= 0.4 %}#f57c00{% else %}var(--danger){% endif %};">
+                  {{ case.confidence_percent }}%
+                </strong>
+              {% else %}
+                <span style="color: var(--muted); font-size: 0.95rem; font-weight: 600;">—</span>
+              {% endif %}
+            </div>
+
+            <!-- Meter Bar -->
+            <div style="height: 8px; width: 100%; background: var(--border); border-radius: 9999px; overflow: hidden; margin-bottom: 0.75rem;">
+              <div style="height: 100%; width: {{ case.confidence_percent|default:0 }}%; background: {% if case.model_confidence and case.model_confidence >= 0.7 %}var(--brand){% elif case.model_confidence and case.model_confidence >= 0.4 %}#f57c00{% else %}var(--danger){% endif %}; border-radius: 9999px; transition: width 0.5s ease-out;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted);">
+              <span>{% trans "Architecture" %}: MobileNetV2</span>
+              <span>{% trans "Model" %}: {{ case.model_identifier|default:"—" }}</span>
+            </div>
+          </div>
+
+          {% if case.is_spider_mite %}
+            <div class="callout callout-warning" style="margin-bottom: 1rem; font-size: 0.85rem;">
+              <strong>{% trans "Outside disease scope" %}:</strong> {% trans "The model predicted two-spotted spider mites (pest infestation). Output preserved, but pathological disease guidance is not applicable." %}
+            </div>
+          {% elif case.is_uncertain %}
+            <div class="callout callout-warning" style="margin-bottom: 1rem; font-size: 0.85rem;">
+              <strong>{% trans "Uncertain classification" %}:</strong> {% trans "Confidence is below the provisional 70% threshold. Re-examine symptoms or seek verification from an agricultural expert." %}
+            </div>
+          {% endif %}
+
+          <div style="font-size: 0.82rem; color: var(--muted); line-height: 1.45;">
+            ⓘ <strong>{% trans "Evaluation notice" %}:</strong> {% trans "Model confidence represents probabilistic classification certainty, never disease severity in the field." %}
+          </div>
+        </div>
+
+      </section>
+
+    {% elif case.status == 'failed' %}
+      <section class="card callout-danger" style="padding: 2rem; border-radius: 16px; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 0.5rem 0;">{% trans "Analysis could not be completed" %}</h2>
+        <p style="font-size: 0.95rem; margin: 0 0 1rem 0;">{{ case.failure_message }}</p>
+        <p style="font-size: 0.88rem; color: var(--muted);">{% trans "Your case record and image remain saved. You can try uploading a clearer photograph." %}</p>
+      </section>
+    {% else %}
+      <section class="card" style="padding: 2rem; border-radius: 16px; margin-bottom: 2rem; text-align: center;">
+        <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 0.5rem 0;">{% trans "Analysis is still pending" %}</h2>
+        <a class="button button-primary" href="{% url 'case-analyzing' case.id %}" style="margin-top: 1rem;">{% trans "Continue Analysis" %} →</a>
+      </section>
     {% endif %}
 
-    <section class="card">
-        <h2>{% trans "Expert Review" %}</h2>
-        {% if active_referral %}
-            <p><strong>{% trans "Status:" %}</strong> {{ active_referral.get_state_display }}</p>
-            {% if active_referral.state == 'reviewed' and active_referral.review %}
-                <div class="result-card" style="margin-top: 1rem; border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
-                    <h3>{% trans "Review by Expert" %} {{ active_referral.review.expert.email }}</h3>
-                    <p><strong>{% trans "Outcome:" %}</strong> {{ active_referral.review.get_outcome_display }}</p>
-                    <p><strong>{% trans "Findings:" %}</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.findings }}</span></p>
-                    {% if active_referral.review.next_steps %}
-                        <p><strong>{% trans "Next Steps:" %}</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.next_steps }}</span></p>
-                    {% endif %}
-                </div>
-            {% endif %}
-            <form action="{% url 'revoke-review' case.id %}" method="post" style="margin-top: 1rem;">
-                {% csrf_token %}
-                <button type="submit" class="button button-danger">{% trans "Revoke Consent" %}</button>
-            </form>
-        {% else %}
-            <p>{% trans "You can share this case with an agricultural expert for a secondary assessment. The expert will see your crop details, image, and the AI's prediction." %}</p>
-            <form action="{% url 'request-review' case.id %}" method="post">
-                {% csrf_token %}
-                <div style="margin-bottom: 1rem;">
-                    <label>
-                        <input type="checkbox" required name="consent" value="on">
-                        {% trans "I consent to sharing my crop, leaf image, AI prediction, confidence, symptoms, and relevant advisory with an agricultural expert for review. My name, email, and exact location will not be shared." %}
-                    </label>
-                </div>
-                <button type="submit" class="button">{% trans "Request Expert Review" %}</button>
-            </form>
-        {% endif %}
+    <!-- Agricultural Guidance Section -->
+    {% if case.is_eligible_for_advisory %}
+      <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+            </div>
+            <div>
+              <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0; color: var(--text);">{% trans "Agricultural Advisory Guidance" %}</h2>
+              <span style="font-size: 0.82rem; color: var(--muted);">{% trans "Grounded evidence retrieved from regional research literature" %}</span>
+            </div>
+          </div>
+          {% if case.advisory %}
+            <a href="{% url 'case-guidance' case.id %}" class="button button-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+              {% trans "Full Guidance View" %} →
+            </a>
+          {% endif %}
+        </div>
 
-        {% if revoked_referrals %}
-            <h3 style="margin-top: 2rem;">{% trans "Previous Reviews" %}</h3>
-            {% for ref in revoked_referrals %}
-                <div class="result-card" style="margin-top: 1rem; border: 1px solid var(--border); padding: 1rem; border-radius: 8px; opacity: 0.8;">
-                    <h4>{% trans "Review by Expert" %} {{ ref.review.expert.email }} <span class="pill" style="float: right;">{% trans "Consent Revoked" %}</span></h4>
-                    <p><strong>{% trans "Outcome:" %}</strong> {{ ref.review.get_outcome_display }}</p>
-                    <p><strong>{% trans "Findings:" %}</strong><br><span style="white-space: pre-wrap;">{{ ref.review.findings }}</span></p>
-                    {% if ref.review.next_steps %}
-                        <p><strong>{% trans "Next Steps:" %}</strong><br><span style="white-space: pre-wrap;">{{ ref.review.next_steps }}</span></p>
+        {% if case.advisory %}
+          <div style="background: var(--surface-alt); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); font-size: 0.95rem; line-height: 1.65; color: var(--text); white-space: pre-wrap; margin-bottom: 1.5rem;">{{ case.advisory.content }}</div>
+
+          {% if case.advisory.retrieved_sources %}
+            <div style="padding-top: 1rem; border-top: 1px solid var(--border);">
+              <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 0.75rem 0; color: var(--text);">
+                {% trans "Retrieved Research Citations & Sources" %}
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for source in case.advisory.retrieved_sources %}
+                  <div style="font-size: 0.85rem; background: var(--surface); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="font-weight: 600; color: var(--text); margin-bottom: 0.25rem;">
+                      {{ source.title }}
+                      {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer" style="color: var(--brand); margin-left: 0.5rem;">[Source Link ↗]</a>{% endif %}
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--muted);">
+                      {{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}
+                    </div>
+                    {% if source.text %}
+                      <div style="margin-top: 0.5rem; font-size: 0.82rem; color: var(--text); background: var(--surface-alt); padding: 0.5rem; border-radius: 4px; font-style: italic;">
+                        "{{ source.text }}"
+                      </div>
                     {% endif %}
-                    <small>{% trans "Submitted:" %} {{ ref.review.submitted_at|date:"d M Y, H:i" }} | {% trans "Revoked:" %} {{ ref.revoked_at|date:"d M Y, H:i" }}</small>
-                </div>
-            {% endfor %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+        {% else %}
+          <div style="text-align: center; padding: 2rem 1rem; background: var(--surface-alt); border-radius: 12px; border: 1px dashed var(--border);">
+            <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.25rem 0;">
+              {% trans "Generate tailored agricultural recommendations and verified treatments for this diagnosis." %}
+            </p>
+            <form action="{% url 'generate-advisory' case.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="button button-primary" style="padding: 0.75rem 1.75rem; font-size: 0.95rem; font-weight: 700;">
+                ⚡ {% trans "Retrieve Grounded Guidance" %}
+              </button>
+            </form>
+          </div>
         {% endif %}
+      </section>
+    {% endif %}
+
+    <!-- Expert Review Section -->
+    <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <div style="width: 40px; height: 40px; border-radius: 8px; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0; color: var(--text);">{% trans "Professional Agricultural Review" %}</h2>
+          <span style="font-size: 0.82rem; color: var(--muted);">{% trans "Secondary assessment by verified extension officers with farmer consent" %}</span>
+        </div>
+      </div>
+
+      {% if active_referral %}
+        <div style="background: var(--surface-alt); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div>
+              <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--muted); font-weight: 600;">{% trans "Review Status" %}:</span>
+              <strong style="margin-left: 0.35rem; color: var(--text);">{{ active_referral.get_state_display }}</strong>
+            </div>
+            <span class="badge badge-{% if active_referral.state == 'reviewed' %}success{% else %}warning{% endif %}" style="padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.8rem;">
+              {{ active_referral.state|upper }}
+            </span>
+          </div>
+
+          {% if active_referral.state == 'reviewed' and active_referral.review %}
+            <div style="background: var(--surface); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border); margin-top: 1rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--brand);">
+                  {% trans "Review by Expert" %}: {{ active_referral.review.get_outcome_display }}
+                </h3>
+                <span style="font-size: 0.8rem; color: var(--muted);">{{ active_referral.review.submitted_at|date:"d M Y, H:i" }}</span>
+              </div>
+
+              <div style="margin-bottom: 1rem;">
+                <strong style="font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 0.25rem;">{% trans "Clinical Findings & Observations" %}:</strong>
+                <p style="font-size: 0.92rem; color: var(--text); line-height: 1.5; margin: 0; white-space: pre-wrap;">{{ active_referral.review.findings }}</p>
+              </div>
+
+              {% if active_referral.review.next_steps %}
+                <div style="padding-top: 0.75rem; border-top: 1px solid var(--border);">
+                  <strong style="font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 0.25rem;">{% trans "Recommended Next Steps" %}:</strong>
+                  <p style="font-size: 0.92rem; color: var(--text); line-height: 1.5; margin: 0; white-space: pre-wrap;">{{ active_referral.review.next_steps }}</p>
+                </div>
+              {% endif %}
+            </div>
+          {% else %}
+            <p style="font-size: 0.88rem; color: var(--muted); margin: 0;">
+              {% trans "Your case has been consented and queued for assignment to a verified agricultural specialist." %}
+            </p>
+          {% endif %}
+        </div>
+
+        <form action="{% url 'revoke-review' case.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="button button-outline" style="color: var(--danger); border-color: var(--danger); font-size: 0.85rem; padding: 0.5rem 1rem;">
+            🚫 {% trans "Revoke Consent & Access" %}
+          </button>
+        </form>
+
+      {% else %}
+        <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin: 0 0 1.5rem 0;">
+          {% trans "You can share this case with a verified agricultural extension officer for a secondary review. Only this specific case, image, case location, and symptoms are shared. Your personal account details remain private." %}
+        </p>
+
+        <form action="{% url 'request-review' case.id %}" method="post">
+          {% csrf_token %}
+          <div style="background: var(--surface-alt); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
+            <label style="display: flex; gap: 0.75rem; font-size: 0.85rem; color: var(--text); cursor: pointer; align-items: flex-start;">
+              <input type="checkbox" required name="consent" value="on" style="margin-top: 0.2rem;">
+              <span>
+                {% trans "I grant explicit, revocable consent to share my crop, leaf photograph, case location, AI prediction, confidence, and symptoms with a verified agricultural expert for secondary evaluation. I understand I can revoke this consent at any time." %}
+              </span>
+            </label>
+          </div>
+          <button type="submit" class="button button-primary" style="padding: 0.75rem 1.5rem; font-weight: 700; font-size: 0.95rem;">
+            {% trans "Request Expert Review" %} →
+          </button>
+        </form>
+      {% endif %}
+
+      {% if revoked_referrals %}
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--muted); margin: 0 0 1rem 0;">
+            {% trans "Prior Revoked Reviews" %}
+          </h3>
+          {% for ref in revoked_referrals %}
+            <div style="background: var(--surface-alt); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 0.75rem; opacity: 0.75;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
+                <strong>{% trans "Review by Expert" %}</strong>
+                <span class="badge" style="background: #9e9e9e; color: white; font-size: 0.7rem; border-radius: 9999px; padding: 0.15rem 0.5rem;">{% trans "Consent Revoked" %}</span>
+              </div>
+              <p style="font-size: 0.85rem; margin: 0; color: var(--text);">{{ ref.review.findings }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
     </section>
 
-    <div class="form-actions"><a class="button" href="{% url 'select-crop' %}">{% trans "Check Another Crop" %}</a></div>
+  </div>
 {% endblock %}

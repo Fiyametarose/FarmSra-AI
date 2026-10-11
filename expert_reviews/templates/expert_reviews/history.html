@@ -1,57 +1,95 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block nav_diagnose %}active{% endblock %}
-{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">{% trans "Expert Dashboard" %}</a> / {% trans "History" %}{% endblock %}
+{% block nav_expert_history %}active{% endblock %}
+{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}" style="color: var(--muted); text-decoration: none;">{% trans "Expert Dashboard" %}</a> / {% trans "Review History" %}{% endblock %}
+
 {% block content %}
-    <div class="page-heading">
-        <h1>{% trans "Review History" %}</h1>
-        <p>Cases you have previously reviewed.</p>
+  <div style="max-width: 1080px; margin: 0 auto;">
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "Review History" %}</h1>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "Permanent record of your submitted specialist evaluations, outcomes, and findings." %}</p>
+      </div>
+      <a href="{% url 'expert-assigned-cases' %}" class="button button-primary" style="font-size: 0.88rem; padding: 0.55rem 1.25rem; font-weight: 700;">
+        {% trans "Assigned Cases" %} →
+      </a>
     </div>
 
-    <section class="card">
-        <h2>Submitted Reviews</h2>
-        {% if reviews %}
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr style="border-bottom: 2px solid var(--border); text-align: left;">
-                            <th style="padding: 0.5rem;">Date Reviewed</th>
-                            <th style="padding: 0.5rem;">{% trans "Crop" %}</th>
-                            <th style="padding: 0.5rem;">Outcome</th>
-                            <th style="padding: 0.5rem;">{% trans "Action" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for review in reviews %}
-                        <tr style="border-bottom: 1px solid var(--border);">
-                            <td style="padding: 0.5rem;">{{ review.submitted_at|date:"d M Y, H:i" }}</td>
-                            <td style="padding: 0.5rem;">
-                                {% if review.referral.state != 'revoked' %}
-                                    {{ review.referral.diagnosis.get_crop_display }}
-                                {% else %}
-                                    <span style="color: gray; font-size: 0.85rem;">[Hidden]</span>
-                                {% endif %}
-                            </td>
-                            <td style="padding: 0.5rem;">
-                                {{ review.get_outcome_display }}
-                                {% if review.referral.state == 'revoked' %}
-                                    <br><span class="pill" style="font-size: 0.75rem;">Consent Revoked</span>
-                                {% endif %}
-                            </td>
-                            <td style="padding: 0.5rem;">
-                                {% if review.referral.state != 'revoked' %}
-                                    <a class="button button-secondary" href="{% url 'expert-case-detail' review.referral.id %}">View Case</a>
-                                {% else %}
-                                    <span style="color: gray; font-size: 0.85rem;">Access Revoked</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% else %}
-            <p>You have not submitted any reviews yet.</p>
-        {% endif %}
+    <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text);">
+          {% trans "Submitted Expert Assessments" %}
+        </h2>
+        <span style="font-size: 0.85rem; color: var(--muted); font-weight: 600;">
+          {{ reviews|length }} {% trans "review" %}{{ reviews|length|pluralize }}
+        </span>
+      </div>
+
+      {% if reviews %}
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--muted); font-size: 0.78rem; text-transform: uppercase;">
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Date Reviewed" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Crop & Case" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Expert Outcome Verdict" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Access Status" %}</th>
+                <th style="padding: 0.85rem 0.75rem; text-align: right;">{% trans "Action" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for review in reviews %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 1rem 0.75rem; color: var(--muted); font-size: 0.85rem;">
+                    {{ review.submitted_at|date:"d M Y, H:i" }}
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    {% if review.referral.state != 'revoked' %}
+                      <strong style="color: var(--text); display: block;">{{ review.referral.diagnosis.get_crop_display }}</strong>
+                      <span style="font-size: 0.75rem; color: var(--muted); font-family: monospace;">#{{ review.referral.diagnosis.reference }}</span>
+                    {% else %}
+                      <span style="color: var(--muted); font-style: italic;">[{% trans "Crop Data Hidden" %}]</span>
+                    {% endif %}
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    <strong style="color: var(--brand);">{{ review.get_outcome_display }}</strong>
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    {% if review.referral.state == 'revoked' %}
+                      <span class="badge" style="background: #e0e0e0; color: #616161; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 9999px;">
+                        {% trans "Consent Revoked" %}
+                      </span>
+                    {% else %}
+                      <span class="badge badge-success" style="font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 9999px;">
+                        {% trans "Active Record" %}
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td style="padding: 1rem 0.75rem; text-align: right;">
+                    {% if review.referral.state != 'revoked' %}
+                      <a class="button button-outline" href="{% url 'expert-case-detail' review.referral.id %}" style="padding: 0.4rem 0.85rem; font-size: 0.82rem; border-radius: 6px;">
+                        {% trans "View Assessment" %} →
+                      </a>
+                    {% else %}
+                      <span style="color: var(--muted); font-size: 0.8rem; font-style: italic;">{% trans "Access Revoked" %}</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--surface-alt); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: var(--muted);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "No completed reviews yet" %}</h3>
+          <p style="font-size: 0.9rem; color: var(--muted); margin: 0;">{% trans "Once you assess assigned cases, they will be archived here in your permanent clinical audit log." %}</p>
+        </div>
+      {% endif %}
     </section>
+
+  </div>
 {% endblock %}

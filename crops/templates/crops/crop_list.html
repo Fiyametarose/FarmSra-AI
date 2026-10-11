@@ -2,31 +2,72 @@
 {% load i18n %}
 {% block nav_my_crops %}active{% endblock %}
 {% block breadcrumb %}{% trans "My Crops" %}{% endblock %}
+
 {% block content %}
-<div class="page-heading">
-  <a class="button float-right" href="{% url 'crop-add' %}">+ {% trans "Register Crop" %}</a>
-  <h1>{% trans "My Crops" %}</h1>
-  <p>Manage your registered crops and view their details.</p>
-</div>
-<div class="dashboard-grid">
-{% if crops %}
-  {% for crop in crops %}
-  <section class="card">
-    <div class="section-title">
-      <h2>{{ crop.name }}</h2>
-      <a href="{% url 'crop-detail' crop.id %}">View details →</a>
+  <div style="max-width: 1080px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "My Crops" %}</h1>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "Manage your registered fields, monitor planting dates, and link health diagnoses." %}</p>
+      </div>
+      <a class="button button-primary" href="{% url 'crop-add' %}" style="padding: 0.65rem 1.25rem; font-weight: 700;">
+        + {% trans "Register New Crop" %}
+      </a>
     </div>
-    <p><strong>Species:</strong> {{ crop.get_species_display }}</p>
-    <p><strong>Status:</strong> <span class="badge">{{ crop.get_status_display }}</span></p>
-    {% if crop.planting_date %}<p><strong>{% trans "Planted" %}:</strong> {{ crop.planting_date }}</p>{% endif %}
-  </section>
-  {% endfor %}
-{% else %}
-  <section class="card empty" style="grid-column: 1 / -1;">
-    <h3>{% trans "No crops registered" %}</h3>
-    <p>Register a crop to keep track of its history and diagnoses.</p>
-    <a class="button" href="{% url 'crop-add' %}">+ {% trans "Register Crop" %}</a>
-  </section>
-{% endif %}
-</div>
+
+    {% if crops %}
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        {% for crop in crops %}
+          <div class="card crop-card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div>
+                  <span class="badge" style="background: var(--brand-soft); color: var(--brand); font-size: 0.75rem; border-radius: 9999px; padding: 0.2rem 0.6rem; font-weight: 700; text-transform: uppercase;">
+                    {{ crop.get_species_display }}
+                  </span>
+                  <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text); margin: 0.35rem 0 0 0;">{{ crop.name }}</h2>
+                </div>
+                <span class="badge badge-success" style="font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 9999px;">
+                  {{ crop.get_status_display }}
+                </span>
+              </div>
+
+              <div style="font-size: 0.88rem; color: var(--muted); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span>📅</span>
+                  <span>{% if crop.planting_date %}{% trans "Planted" %}: {{ crop.planting_date|date:"d M Y" }}{% else %}{% trans "Planting date not recorded" %}{% endif %}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span>📍</span>
+                  <span>{{ crop.location_description|default:user.town|default:"Farm Location" }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+              <a href="{% url 'crop-detail' crop.id %}" class="button button-outline" style="flex: 1; text-align: center; padding: 0.5rem; font-size: 0.85rem; font-weight: 600;">
+                {% trans "Details" %} →
+              </a>
+              <a href="{% url 'case-upload' crop.species %}" class="button button-primary" style="flex: 1; text-align: center; padding: 0.5rem; font-size: 0.85rem; font-weight: 600;">
+                ⌗ {% trans "Diagnose" %}
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card empty-state" style="text-align: center; padding: 3.5rem 1.5rem; border-radius: 16px; border: 1px dashed var(--border); background: var(--surface);">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem 0;">{% trans "No crops registered yet" %}</h2>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.5rem 0; max-width: 480px; margin-left: auto; margin-right: auto;">
+          {% trans "Register your tomato, potato, or maize crops to organize field records and track diagnostic history over time." %}
+        </p>
+        <a class="button button-primary" href="{% url 'crop-add' %}" style="padding: 0.75rem 1.75rem; font-weight: 700;">
+          + {% trans "Register Your First Crop" %}
+        </a>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

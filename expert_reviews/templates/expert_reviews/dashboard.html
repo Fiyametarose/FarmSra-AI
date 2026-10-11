@@ -1,39 +1,150 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block nav_diagnose %}active{% endblock %}
+{% block nav_expert_dashboard %}active{% endblock %}
 {% block breadcrumb %}{% trans "Expert Dashboard" %}{% endblock %}
+
 {% block content %}
-    <div class="page-heading">
-        <a class="button button-secondary float-right" href="{% url 'expert-history' %}">{% trans "View Review History" %}</a>
-        <h1>{% trans "Expert Dashboard" %}</h1>
-        <p>{% trans "Assigned cases awaiting your review." %}</p>
+  <div style="max-width: 1080px; margin: 0 auto;">
+
+    <!-- Header Banner -->
+    <div style="background: linear-gradient(135deg, #143d30 0%, #1e5242 100%); border-radius: 16px; padding: 2rem 2.5rem; color: white; display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; box-shadow: 0 10px 25px rgba(20,61,48,0.15);">
+      <div>
+        <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #a5d6a7; font-weight: 700;">
+          {% trans "Agricultural Specialist Workspace" %}
+        </span>
+        <h1 style="font-size: 2.1rem; font-weight: 800; color: white; margin: 0.35rem 0 0.5rem 0; letter-spacing: -0.02em;">
+          {% trans "Welcome" %}, {{ user.get_full_name|default:user.email }}
+        </h1>
+        <p style="font-size: 0.95rem; color: rgba(255,255,255,0.85); margin: 0;">
+          {% trans "Review consented farmer leaf specimens, evaluate model inferences, and provide clinical agricultural findings." %}
+        </p>
+      </div>
+      <a href="{% url 'expert-history' %}" class="button" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.65rem 1.25rem; font-weight: 600; text-decoration: none; border-radius: 8px;">
+        {% trans "Review History" %} →
+      </a>
     </div>
 
-    <section class="card">
-        <h2>{% trans "Assigned Referrals" %}</h2>
-        {% if referrals %}
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr style="border-bottom: 2px solid var(--border); text-align: left;">
-                            <th style="padding: 0.5rem;">{% trans "Date Assigned" %}</th>
-                            <th style="padding: 0.5rem;">{% trans "Crop" %}</th>
-                            <th style="padding: 0.5rem;">{% trans "Action" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for referral in referrals %}
-                        <tr style="border-bottom: 1px solid var(--border);">
-                            <td style="padding: 0.5rem;">{{ referral.assigned_at|date:"d M Y, H:i" }}</td>
-                            <td style="padding: 0.5rem;">{{ referral.diagnosis.get_crop_display }}</td>
-                            <td style="padding: 0.5rem;"><a class="button button-secondary" href="{% url 'expert-case-detail' referral.id %}">{% trans "Review Case" %}</a></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% else %}
-            <p>{% trans "You have no pending case assignments at this time." %}</p>
-        {% endif %}
+    <!-- Stat Cards Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+      <a href="{% url 'expert-assigned-cases' %}" style="text-decoration: none; color: inherit;">
+        <div class="card stat-card" style="padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface);">
+          <div style="width: 48px; height: 48px; border-radius: 10px; background: #fff3e0; color: #e65100; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase;">{% trans "Pending Review" %}</span>
+            <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text); margin: 0.15rem 0 0 0;">{{ pending_count }}</h3>
+          </div>
+        </div>
+      </a>
+
+      <a href="{% url 'expert-history' %}" style="text-decoration: none; color: inherit;">
+        <div class="card stat-card" style="padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface);">
+          <div style="width: 48px; height: 48px; border-radius: 10px; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase;">{% trans "Completed Reviews" %}</span>
+            <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text); margin: 0.15rem 0 0 0;">{{ completed_count }}</h3>
+          </div>
+        </div>
+      </a>
+
+      <a href="{% url 'expert-assigned-cases' %}" style="text-decoration: none; color: inherit;">
+        <div class="card stat-card" style="padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface);">
+          <div style="width: 48px; height: 48px; border-radius: 10px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase;">{% trans "Total Assigned" %}</span>
+            <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text); margin: 0.15rem 0 0 0;">{{ total_assigned_count }}</h3>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Cases Awaiting Assessment Table -->
+    <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text);">
+            {% trans "Cases Awaiting Your Assessment" %}
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0.2rem 0 0 0;">
+            {% trans "Farmer-consented cases assigned by administrator to your specialist queue." %}
+          </p>
+        </div>
+        <a href="{% url 'expert-assigned-cases' %}" style="font-size: 0.85rem; font-weight: 600; color: var(--brand); text-decoration: none;">
+          {% trans "View all assigned" %} →
+        </a>
+      </div>
+
+      {% if referrals %}
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--muted); font-size: 0.78rem; text-transform: uppercase;">
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Case Reference & Crop" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Tentative AI Inference" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Confidence" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Assigned On" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Status" %}</th>
+                <th style="padding: 0.85rem 0.75rem; text-align: right;">{% trans "Action" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for referral in referrals %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 1rem 0.75rem;">
+                    <strong style="color: var(--text); display: block; font-size: 0.95rem;">
+                      {{ referral.diagnosis.get_crop_display }}
+                    </strong>
+                    <span style="font-size: 0.75rem; color: var(--muted); font-family: monospace;">
+                      #{{ referral.diagnosis.reference }}
+                    </span>
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    <span style="font-weight: 600; color: var(--text);">
+                      {{ referral.diagnosis.display_prediction }}
+                    </span>
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    {% if referral.diagnosis.model_confidence is not None %}
+                      <span class="badge badge-{% if referral.diagnosis.model_confidence >= 0.7 %}success{% elif referral.diagnosis.model_confidence >= 0.4 %}warning{% else %}neutral{% endif %}" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">
+                        {{ referral.diagnosis.confidence_percent }}%
+                      </span>
+                    {% else %}
+                      <span style="color: var(--muted); font-size: 0.8rem;">—</span>
+                    {% endif %}
+                  </td>
+                  <td style="padding: 1rem 0.75rem; color: var(--muted); font-size: 0.82rem;">
+                    {{ referral.assigned_at|date:"d M Y, H:i" }}
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    <span class="badge badge-warning" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">
+                      {{ referral.get_state_display }}
+                    </span>
+                  </td>
+                  <td style="padding: 1rem 0.75rem; text-align: right;">
+                    <a class="button button-primary" href="{% url 'expert-case-detail' referral.id %}" style="padding: 0.45rem 1rem; font-size: 0.82rem; font-weight: 600;">
+                      {% trans "Review Case" %} →
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--surface-alt); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: var(--muted);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "No pending assignments" %}</h3>
+          <p style="font-size: 0.9rem; color: var(--muted); margin: 0;">{% trans "You currently have no cases awaiting review. When cases are assigned, they will appear here." %}</p>
+        </div>
+      {% endif %}
     </section>
+
+  </div>
 {% endblock %}

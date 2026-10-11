@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block nav_expert_cases %}active{% endblock %}
+{% block breadcrumb %}{% trans "Assigned Cases" %}{% endblock %}
+
+{% block content %}
+  <div style="max-width: 1080px; margin: 0 auto;">
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "Assigned Cases" %}</h1>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "All crop cases currently routed to your queue for secondary diagnostic assessment." %}</p>
+      </div>
+      <a href="{% url 'expert-history' %}" class="button button-outline" style="font-size: 0.88rem; padding: 0.55rem 1rem;">
+        {% trans "View Past Reviews" %} →
+      </a>
+    </div>
+
+    <!-- Privacy & Access Banner -->
+    <div class="callout callout-info" style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 12px; background: var(--surface-alt); border-left: 4px solid var(--brand); margin-bottom: 2rem;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--brand); flex-shrink: 0;"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span style="font-size: 0.88rem; color: var(--text);">
+        <strong>{% trans "Privacy Protocol" %}:</strong> {% trans "Leaf images and case parameters are accessible only while active farmer consent remains in place. Unauthorized sharing is strictly prohibited." %}
+      </span>
+    </div>
+
+    <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 1.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text);">
+          {% trans "Active Case Assignments" %}
+        </h2>
+        <span style="font-size: 0.85rem; color: var(--muted); font-weight: 600;">
+          {{ referrals|length }} {% trans "case" %}{{ referrals|length|pluralize }}
+        </span>
+      </div>
+
+      {% if referrals %}
+        <div style="overflow-x: auto;">
+          <table class="data-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--muted); font-size: 0.78rem; text-transform: uppercase;">
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Case Reference & Crop" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Tentative AI Inference" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Model Confidence" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "Assigned On" %}</th>
+                <th style="padding: 0.85rem 0.75rem;">{% trans "State" %}</th>
+                <th style="padding: 0.85rem 0.75rem; text-align: right;">{% trans "Action" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for referral in referrals %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 1rem 0.75rem;">
+                    <strong style="color: var(--text); display: block; font-size: 0.95rem;">
+                      {{ referral.diagnosis.get_crop_display }}
+                    </strong>
+                    <span style="font-size: 0.75rem; color: var(--muted); font-family: monospace;">
+                      #{{ referral.diagnosis.reference }}
+                    </span>
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    <span style="font-weight: 600; color: var(--text);">
+                      {{ referral.diagnosis.display_prediction }}
+                    </span>
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    {% if referral.diagnosis.model_confidence is not None %}
+                      <span class="badge badge-{% if referral.diagnosis.model_confidence >= 0.7 %}success{% elif referral.diagnosis.model_confidence >= 0.4 %}warning{% else %}neutral{% endif %}" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">
+                        {{ referral.diagnosis.confidence_percent }}%
+                      </span>
+                    {% else %}
+                      <span style="color: var(--muted); font-size: 0.8rem;">—</span>
+                    {% endif %}
+                  </td>
+                  <td style="padding: 1rem 0.75rem; color: var(--muted); font-size: 0.82rem;">
+                    {{ referral.assigned_at|date:"d M Y, H:i" }}
+                  </td>
+                  <td style="padding: 1rem 0.75rem;">
+                    <span class="badge badge-{% if referral.state == 'reviewed' %}success{% else %}warning{% endif %}" style="font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">
+                      {{ referral.get_state_display }}
+                    </span>
+                  </td>
+                  <td style="padding: 1rem 0.75rem; text-align: right;">
+                    <a class="button button-primary" href="{% url 'expert-case-detail' referral.id %}" style="padding: 0.45rem 1rem; font-size: 0.82rem; font-weight: 600;">
+                      {% trans "Open Case" %} →
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--surface-alt); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: var(--muted);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text); margin: 0 0 0.35rem 0;">{% trans "No assigned cases" %}</h3>
+          <p style="font-size: 0.9rem; color: var(--muted); margin: 0;">{% trans "Your queue is clear. New cases will appear here when assigned by the administrator." %}</p>
+        </div>
+      {% endif %}
+    </section>
+
+  </div>
+{% endblock %}

@@ -555,3 +555,1214 @@ msgstr ""
 msgid "Case Reassigned"
 msgstr "Kesi Imekabidhiwa Tena"
 
+msgid "1. Explicit Consent"
+msgstr "1. Idhini ya Wazi"
+
+msgid "2. Human Agronomist Review"
+msgstr "2. Ukaguzi wa Mtaalamu wa Kilimo"
+
+msgid "224×224 normalized input"
+msgstr "Picha ya kawaida ya 224×224"
+
+msgid "3. Verified Verdict"
+msgstr "3. Uamuzi Uliothibitishwa"
+
+msgid "Access Revoked"
+msgstr "Ufikiaji Umebatilishwa"
+
+msgid "Access Status"
+msgstr "Hali ya Ufikiaji"
+
+msgid ""
+"Access grounded advisory material and management practices for tomato, "
+"potato, and maize."
+msgstr ""
+"Pata miongozo thabiti ya ushauri na mbinu za usimamizi kwa nyanya, viazi "
+"mviringo, na mahindi."
+
+msgid "Account"
+msgstr "Akaunti"
+
+msgid "Account Details"
+msgstr "Maelezo ya Akaunti"
+
+msgid "Active"
+msgstr "Inafanya kazi"
+
+msgid "Active Case Assignments"
+msgstr "Kesi Zinazoendelea Kupangiwa"
+
+msgid "Active Farmer Consent"
+msgstr "Idhini Hai ya Mkulima"
+
+msgid "Active Record"
+msgstr "Kumbukumbu Hai"
+
+msgid "Add an optional phone number"
+msgstr "Weka nambari ya simu (hiari)"
+
+msgid "Administrator-managed credentials"
+msgstr "Vitambulisho vinavyosimamiwa na msimamizi"
+
+msgid ""
+"Advise on sanitation, cultural controls, or specific fungicide/pesticide "
+"treatments..."
+msgstr ""
+"Toa ushauri kuhusu usafi wa shamba, udhibiti wa kitamaduni, au dawa maalum "
+"za ukungu na wadudu..."
+
+msgid "Advisory guidance has not yet been retrieved for this case."
+msgstr "Mwongozo wa ushauri bado haujapatikana kwa kesi hii."
+
+msgid "Agrees with AI Prediction"
+msgstr "Inakubaliana na Utabiri wa AI"
+
+msgid "Agricultural Advisory Guidance"
+msgstr "Mwongozo wa Ushauri wa Kilimo"
+
+msgid "Agricultural Expert Review"
+msgstr "Ukaguzi wa Mtaalamu wa Kilimo"
+
+msgid "Agricultural Expert · professional profile"
+msgstr "Mtaalamu wa Kilimo · wasifu wa kitaalamu"
+
+msgid "Agricultural Expert · read only"
+msgstr "Mtaalamu wa Kilimo · ya kusoma tu"
+
+msgid "Agricultural Experts"
+msgstr "Wataalamu wa Kilimo"
+
+msgid "Agricultural Knowledge"
+msgstr "Ujuzi wa Kilimo"
+
+msgid "Agricultural Specialist Workspace"
+msgstr "Sehemu ya Kazi ya Mtaalamu wa Kilimo"
+
+msgid ""
+"Agricultural advisories and weather observations use standard metric "
+"measurements (°C, mm precipitation, km/h wind) per regional extension "
+"practice."
+msgstr ""
+"Miongozo ya kilimo na ripoti za hali ya hewa hutumia vipimo sanifu vya "
+"metriki (°C, mm za mvua, km/h za upepo) kulingana na utaratibu wa kikanda wa"
+" ugani."
+
+msgid "Agronomic Recommendations & Management"
+msgstr "Mapendekezo ya Kilimo na Usimamizi"
+
+msgid ""
+"All crop cases currently routed to your queue for secondary diagnostic "
+"assessment."
+msgstr ""
+"Kesi zote za mazao zilizoelekezwa kwenye foleni yako kwa ajili ya tathmini "
+"ya pili ya uchunguzi."
+
+msgid ""
+"All operational updates are delivered directly to your authenticated in-app "
+"notifications inbox. You receive immediate alerts when an administrator "
+"assigns your consented case to an agronomist, or when a specialist submits "
+"completed assessment findings."
+msgstr ""
+"Taarifa zote za utendaji hutumwa moja kwa moja kwenye kikasha chako cha "
+"arifa ndani ya programu. Unapokea arifa papo hapo msimamizi anapopangia "
+"mtaalamu kesi yako uliyoidhinisha, au mtaalamu anapowasilisha matokeo ya "
+"tathmini."
+
+msgid "Alternative Assessment (Different Disease/Pest)"
+msgstr "Tathmini Mbadala (Ugonjwa/Mdudu Tofauti)"
+
+msgid "An expert has completed their review of your crop case."
+msgstr "Mtaalamu amekamilisha ukaguzi wa kesi ya zao lako."
+
+msgid ""
+"Analysis has been running longer than expected. You can restart the process."
+msgstr ""
+"Uchambuzi umechukua muda mrefu kuliko ilivyotarajiwa. Unaweza kuanzisha "
+"mchakato upya."
+
+msgid "Analysis in Progress..."
+msgstr "Uchambuzi Unaendelea..."
+
+msgid "Analysis is still pending"
+msgstr "Uchambuzi bado unasubiriwa"
+
+msgid "Analyze Leaf Photo"
+msgstr "Chambua Picha ya Jani"
+
+msgid "Analyzed Leaf Specimen"
+msgstr "Sampuli ya Jani Iliyochambuliwa"
+
+msgid "Analyzing"
+msgstr "Inachambua"
+
+msgid "Architecture"
+msgstr "Muundo wa Mfumo"
+
+msgid "Assessment Outcome"
+msgstr "Matokeo ya Tathmini"
+
+msgid "Assigned On"
+msgstr "Ilikabidhiwa Tarehe"
+
+msgid "Assigned, consented cases only · Tomato, Maize, Potato"
+msgstr ""
+"Kesi zilizoidhinishwa na kupangwa pekee · Nyanya, Mahindi, Viazi Mviringo"
+
+msgid ""
+"Associate this analysis with one of your registered crops or note field "
+"observations."
+msgstr ""
+"Husisha uchambuzi huu na mojawapo ya mazao yako yaliyosajiliwa au weka "
+"maelezo ya shambani."
+
+msgid "At least 8 characters"
+msgstr "Herufi 8 au zaidi"
+
+msgid ""
+"Authorized extension specialists independently examine the leaf image, ML "
+"prediction confidence, and observed symptoms."
+msgstr ""
+"Wataalamu wa ugani walioidhinishwa huchunguza kwa uhuru picha ya jani, "
+"uhakika wa utabiri wa ML, na dalili zilizoonwa."
+
+msgid "Back to Case"
+msgstr "Rudi Kwenye Kesi"
+
+msgid "Back to Cases"
+msgstr "Rudi Kwenye Kesi"
+
+msgid "Back to Crops"
+msgstr "Rudi Kwenye Mazao"
+
+msgid "Browse Files"
+msgstr "Vinjari Faili"
+
+msgid "Browse Guidance Library"
+msgstr "Vinjari Maktaba ya Miongozo"
+
+msgid "Browse Saved Diagnoses"
+msgstr "Vinjari Uchunguzi Uliohifadhiwa"
+
+msgid "Case Diagnostic Review"
+msgstr "Ukaguzi wa Uchunguzi wa Kesi"
+
+msgid "Case Location"
+msgstr "Eneo la Kesi"
+
+msgid "Case Reference & Crop"
+msgstr "Nambari ya Kesi na Zao"
+
+msgid ""
+"Case-specific guidance retrieves verbatim excerpts from embedded regional "
+"agronomic publications using Chroma vector search, providing genuine "
+"citations without fabricated model hallucinations."
+msgstr ""
+"Mwongozo mahususi wa kesi hutoa dondoo halisi kutoka kwa machapisho ya "
+"kilimo ya kikanda kwa kutumia utafutaji wa vekta wa Chroma, ukitoa nukuu za "
+"kweli bila ubunifu bandia wa muundo."
+
+msgid "Cases Awaiting Your Assessment"
+msgstr "Kesi Zinazosubiri Tathmini Yako"
+
+msgid ""
+"Cases are never automatically broadcast. You explicitly grant revocable "
+"access per case. Your name, email, and exact farm coordinates remain "
+"private."
+msgstr ""
+"Kesi hazitangazwi kiotomatiki kamwe. Unatoa idhini inayoweza kubatilishwa "
+"kwa kila kesi. Jina lako, barua pepe, na viwianishi halisi vya shamba "
+"vinabaki kuwa siri."
+
+msgid "Change Crop"
+msgstr "Badilisha Zao"
+
+msgid "Check Weather Forecast"
+msgstr "Angalia Utabiri wa Hali ya Hewa"
+
+msgid ""
+"Choose the crop you want to analyze today. Deep learning models are trained "
+"exclusively on these species."
+msgstr ""
+"Chagua zao unalotaka kuchambua leo. Miundo ya kujifunza kwa kina imefunzwa "
+"mahususi kwa spishi hizi tu."
+
+msgid "Chroma RAG Grounded"
+msgstr "Imethibitishwa na Chroma RAG"
+
+msgid "Classifying Leaf Health..."
+msgstr "Inaainisha Afya ya Jani..."
+
+msgid "Click to upload or drag & drop leaf photo"
+msgstr "Bofya ili kupakia au kokota na uweke picha ya jani"
+
+msgid "Clinical Findings"
+msgstr "Matokeo ya Kitabibu"
+
+msgid "Clinical Findings & Observations"
+msgstr "Matokeo ya Kitabibu na Uchunguzi"
+
+msgid "Completed Assessment"
+msgstr "Tathmini Iliyokamilika"
+
+msgid "Completed Reviews"
+msgstr "Ukaguzi Uliokamilika"
+
+msgid "Confidence"
+msgstr "Uhakika"
+
+msgid ""
+"Confidence is below the provisional 70% threshold. Re-examine symptoms or "
+"seek verification from an agricultural expert."
+msgstr ""
+"Uhakika uko chini ya kiwango cha mpito cha 70%. Chunguza tena dalili au "
+"tafuta uthibitisho kutoka kwa mtaalamu wa kilimo."
+
+msgid "Confirm new password"
+msgstr "Thibitisha nenosiri jipya"
+
+msgid "Consented"
+msgstr "Imeidhinishwa"
+
+msgid "Continue Analysis"
+msgstr "Endelea na Uchambuzi"
+
+msgid "Continue to Farm Location"
+msgstr "Endelea hadi Eneo la Shamba"
+
+msgid "Create Farmer Account"
+msgstr "Fungua Akaunti ya Mkulima"
+
+msgid "Crop & Case"
+msgstr "Zao na Kesi"
+
+msgid "Crop & Case Ref"
+msgstr "Rejea ya Zao na Kesi"
+
+msgid "Crop & Case Reference"
+msgstr "Rejea ya Zao na Kesi"
+
+msgid "Crop Context"
+msgstr "Muktadha wa Zao"
+
+msgid "Crop Data Hidden"
+msgstr "Data ya Zao Imefichwa"
+
+msgid "Crop Health Case"
+msgstr "Kesi ya Afya ya Zao"
+
+msgid "Crop Leaf Specimen"
+msgstr "Sampuli ya Jani la Zao"
+
+msgid "Crops currently monitored across your fields."
+msgstr "Mazao yanayofuatiliwa sasa kwenye mashamba yako."
+
+msgid "Current password"
+msgstr "Nenosiri la sasa"
+
+msgid "Date"
+msgstr "Tarehe"
+
+msgid "Date & Time"
+msgstr "Tarehe na Saa"
+
+msgid "Date Reviewed"
+msgstr "Tarehe Iliyokaguliwa"
+
+msgid ""
+"Defaults to your registered farm location. Adjust if collected at an off-"
+"site plot."
+msgstr ""
+"Hutumia eneo lako la shamba lililosajiliwa. Rekebisha ikiwa sampuli ilitoka "
+"shamba lingine."
+
+msgid "Demo workspace · fictional cases and professional profiles"
+msgstr "Sehemu ya majaribio · kesi za mfano na wasifu wa kitaalamu"
+
+msgid ""
+"Detail visible lesion characteristics, leaf margins, tissue discoloration, "
+"and diagnostic rationale..."
+msgstr ""
+"Eleza sifa za vidonda vinavyoonekana, kingo za majani, kubadilika kwa rangi "
+"ya tishu, na sababu za kiuchunguzi..."
+
+msgid "Detailed Agricultural Guidance"
+msgstr "Mwongozo wa Kina wa Kilimo"
+
+msgid "Detailed Guidance"
+msgstr "Mwongozo wa Kina"
+
+msgid "Details"
+msgstr "Maelezo"
+
+msgid ""
+"Detects cercospora leaf spot (gray leaf spot), common rust, northern leaf "
+"blight, and healthy foliage."
+msgstr ""
+"Hutambua doa la jani la cercospora, kutu ya kawaida, ugonjwa wa kuungua kwa "
+"jani wa kaskazini, na majani yenye afya."
+
+msgid ""
+"Detects early blight (Alternaria solani), late blight (Phytophthora "
+"infestans), and healthy leaves."
+msgstr ""
+"Hutambua ukungu wa mapema (Alternaria solani), ukungu wa kuchelewa "
+"(Phytophthora infestans), na majani yenye afya."
+
+msgid ""
+"Detects early blight, late blight, leaf mold, bacterial spot, target spot, "
+"mosaic virus, and yellow leaf curl."
+msgstr ""
+"Hutambua ukungu wa mapema, ukungu wa kuchelewa, ukungu wa majani, doa la "
+"bakteria, doa lengwa, virusi vya mosaic, na kujikunja kwa majani ya manjano."
+
+msgid "Diagnose"
+msgstr "Chunguza"
+
+msgid "Diagnosis"
+msgstr "Uchunguzi"
+
+msgid "Diagnosis History"
+msgstr "Historia ya Uchunguzi"
+
+msgid "Diagnostic Verdict"
+msgstr "Uamuzi wa Uchunguzi"
+
+msgid "Don't have an account yet?"
+msgstr "Bado huna akaunti?"
+
+msgid "East Shewa / West Shewa / Arsi · administrator-approved"
+msgstr ""
+"Shewa Mashariki / Shewa Magharibi / Arsi · iliyoidhinishwa na msimamizi"
+
+msgid "Email address"
+msgstr "Barua pepe"
+
+msgid "Empowering farmers across East Africa with AI diagnostics."
+msgstr "Kuwezesha wakulima kote Afrika Mashariki kwa uchunguzi wa AI."
+
+msgid "Enter current password"
+msgstr "Weka nenosiri la sasa"
+
+msgid ""
+"Evaluating leaf pigmentation, lesion patterns, and structural anomalies "
+"against trained MobileNetV2 models."
+msgstr ""
+"Kutathmini mabadiliko ya rangi ya jani, mifumo ya vidonda, na hitilafu za "
+"kimaumbile dhidi ya miundo ya MobileNetV2 iliyofunzwa."
+
+msgid "Evaluation notice"
+msgstr "Taarifa ya tathmini"
+
+msgid ""
+"Evidence-backed management practices, biological controls, and research "
+"literature for East African crops."
+msgstr ""
+"Mbinu za usimamizi zinazoungwa mkono na ushahidi, udhibiti wa kibiolojia, na"
+" machapisho ya utafiti kwa mazao ya Afrika Mashariki."
+
+msgid "Expert Outcome Verdict"
+msgstr "Uamuzi wa Matokeo ya Mtaalamu"
+
+msgid "Expert Review Updates"
+msgstr "Taarifa za Ukaguzi wa Mtaalamu"
+
+msgid "Expert workspace"
+msgstr "Sehemu ya kazi ya mtaalamu"
+
+msgid "Extension Services & Clinical Verification"
+msgstr "Huduma za Ugani na Uthibitishaji wa Kitabibu"
+
+msgid "Farm Location"
+msgstr "Eneo la Shamba"
+
+msgid ""
+"FarmSra AI is strictly calibrated for tomato, potato, and maize. Uploading "
+"other crops or non-leaf photos will lead to invalid diagnostic inferences."
+msgstr ""
+"FarmSra AI imerekebishwa mahususi kwa ajili ya nyanya, viazi mviringo, na "
+"mahindi pekee. Kupakia mazao mengine au picha zisizo za majani kutasababisha"
+" makadirio yasiyo sahihi ya kiuchunguzi."
+
+msgid "Farmer Settings"
+msgstr "Mipangilio ya Mkulima"
+
+msgid "Farmer Workspace"
+msgstr "Sehemu ya Kazi ya Mkulima"
+
+msgid "Farmer revoked consent for this assigned case."
+msgstr "Mkulima amebatilisha idhini kwa kesi hii iliyopangwa."
+
+msgid "Farmer's Observed Symptoms"
+msgstr "Dalili Zilizoonwa na Mkulima"
+
+msgid ""
+"Farmer-consented cases assigned by administrator to your specialist queue."
+msgstr ""
+"Kesi zilizoidhinishwa na wakulima na kupangwa na msimamizi kwenye foleni "
+"yako ya kitaalamu."
+
+msgid ""
+"Farmers and verified agricultural experts access their workspaces here."
+msgstr ""
+"Wakulima na wataalamu wa kilimo waliothibitishwa huingia kwenye sehemu zao "
+"za kazi hapa."
+
+msgid "Full Guidance View"
+msgstr "Muonekano Kamili wa Mwongozo"
+
+msgid "Full name"
+msgstr "Jina kamili"
+
+msgid ""
+"Generate tailored agricultural recommendations and verified treatments for "
+"this diagnosis."
+msgstr ""
+"Tengeneza mapendekezo maalum ya kilimo na matibabu yaliyothibitishwa kwa "
+"ajili ya uchunguzi huu."
+
+msgid "Go to Notification Inbox"
+msgstr "Nenda Kwenye Kikasha cha Arifa"
+
+msgid "Grounded evidence retrieved from regional research literature"
+msgstr ""
+"Ushahidi thabiti uliopatikana kutoka kwa machapisho ya utafiti wa kikanda"
+
+msgid "Grounded to Saved Case"
+msgstr "Imeegemezwa Kwenye Kesi Iliyohifadhiwa"
+
+msgid ""
+"I grant explicit, revocable consent to share my crop, leaf photograph, case "
+"location, AI prediction, confidence, and symptoms with a verified "
+"agricultural expert for secondary evaluation. I understand I can revoke this"
+" consent at any time."
+msgstr ""
+"Ninatoa idhini ya wazi, inayoweza kubatilishwa, ya kushiriki zao langu, "
+"picha ya jani, eneo la kesi, utabiri wa AI, kiwango cha uhakika, na dalili "
+"na mtaalamu wa kilimo aliyethibitishwa kwa tathmini ya pili. Ninaelewa kuwa "
+"ninaweza kubatilisha idhini hii wakati wowote."
+
+msgid "In-App Notification Center"
+msgstr "Kituo cha Arifa Ndani ya Programu"
+
+msgid "Inconclusive (Image quality/symptoms ambiguous)"
+msgstr "Haijulikani Wazi (Ubora wa picha/dalili hazieleweki)"
+
+msgid "Inference Failed"
+msgstr "Uchakataji Umeshindikana"
+
+msgid ""
+"Information on how system alerts and agricultural extension notifications "
+"are delivered."
+msgstr ""
+"Taarifa kuhusu jinsi arifa za mfumo na za ugani wa kilimo zinavyowasilishwa."
+
+msgid "Interface Language"
+msgstr "Lugha ya Mfumo"
+
+msgid "Keep your contact information up to date and protect your account."
+msgstr ""
+"Weka taarifa zako za mawasiliano zikiwa za kisasa na uilinde akaunti yako."
+
+msgid "Knowledge Library & RAG Advisory"
+msgstr "Maktaba ya Maarifa na Ushauri wa RAG"
+
+msgid "Leaf Photograph"
+msgstr "Picha ya Jani"
+
+msgid ""
+"Leaf images and case parameters are accessible only while active farmer "
+"consent remains in place. Unauthorized sharing is strictly prohibited."
+msgstr ""
+"Picha za majani na vigezo vya kesi hufikiwa tu wakati idhini hai ya mkulima "
+"ipo. Kushiriki bila idhini ni marufuku kabisa."
+
+msgid "Leaf input normalized to 224×224 RGB [0–255]"
+msgstr "Picha ya jani imesanifishwa kuwa 224×224 RGB [0–255]"
+
+msgid "Link to registered crop"
+msgstr "Unganisha na zao lililosajiliwa"
+
+msgid "Local server inference"
+msgstr "Uchakataji wa ndani kwenye seva"
+
+msgid "Location"
+msgstr "Eneo"
+
+msgid "Maize"
+msgstr "Mahindi"
+
+msgid "Maize Pathologies"
+msgstr "Magonjwa ya Mahindi"
+
+msgid "Manage"
+msgstr "Simamia"
+
+msgid ""
+"Manage personal credentials, registered farm location, and application "
+"preferences."
+msgstr ""
+"Simamia vitambulisho binafsi, eneo la shamba lililosajiliwa, na mapendeleo "
+"ya programu."
+
+msgid ""
+"Manage your account and preferences. Authorization remains administrator-"
+"managed."
+msgstr ""
+"Simamia akaunti yako na mapendeleo. Idhini ya uthibitishaji inasimamiwa na "
+"msimamizi."
+
+msgid ""
+"Manage your registered fields, monitor planting dates, and link health "
+"diagnoses."
+msgstr ""
+"Simamia mashamba yako yaliyosajiliwa, fuatilia tarehe za kupanda, na "
+"unganisha uchunguzi wa afya."
+
+msgid "Managed by organization admin."
+msgstr "Inasimamiwa na msimamizi wa shirika."
+
+msgid "Mark All as Read"
+msgstr "Weka Zote Kuwa Zimesomwa"
+
+msgid "Measurement Units: Metric"
+msgstr "Vipimo: Metriki"
+
+msgid "MobileNetV2 feature extraction & probability calculation"
+msgstr "Uchimbaji wa vipengele na ukokotoaji wa uwezekano kupitia MobileNetV2"
+
+msgid "Model"
+msgstr "Muundo"
+
+msgid "Model Confidence"
+msgstr "Uhakika wa Muundo"
+
+msgid "Model Prediction Confidence"
+msgstr "Uhakika wa Utabiri wa Muundo"
+
+msgid ""
+"Model confidence represents probabilistic classification certainty, never "
+"disease severity in the field."
+msgstr ""
+"Uhakika wa muundo unawakilisha uhakika wa kiuwezekano wa uainishaji, si "
+"ukali wa ugonjwa shambani kamwe."
+
+msgid ""
+"Model inference is computed locally on the server without sending private "
+"crop photographs to external third-party clouds."
+msgstr ""
+"Uchakataji wa muundo unafanyika ndani ya seva bila kutuma picha za kibinafsi"
+" za mazao kwenye wingu la watu wengine."
+
+msgid ""
+"Monitor your crops, analyze leaf health with AI, and access localized "
+"agricultural guidance."
+msgstr ""
+"Fuatilia mazao yako, chambua afya ya majani kwa AI, na upate miongozo ya "
+"kilimo ya eneo lako."
+
+msgid "More Information Needed"
+msgstr "Taarifa Zaidi Zinahitajika"
+
+msgid "Multi-lingual guidance in English, Amharic & Swahili"
+msgstr "Mwongozo wa lugha nyingi kwa Kiingereza, Kiamhari na Kiswahili"
+
+msgid "Need Expert Review?"
+msgstr "Unahitaji Ukaguzi wa Mtaalamu?"
+
+msgid "New Check"
+msgstr "Uchunguzi Mpya"
+
+msgid "New Diagnosis"
+msgstr "Uchunguzi Mpya"
+
+msgid "New password"
+msgstr "Nenosiri jipya"
+
+msgid "No assigned cases"
+msgstr "Hakuna kesi zilizopangwa"
+
+msgid "No completed reviews yet"
+msgstr "Bado hakuna ukaguzi uliokamilika"
+
+msgid "No crop checks recorded yet"
+msgstr "Bado hakuna ukaguzi wa mazao uliorekodiwa"
+
+msgid "No crops registered yet"
+msgstr "Bado hakuna mazao yaliyosajiliwa"
+
+msgid "No notifications"
+msgstr "Hakuna arifa"
+
+msgid "No pending assignments"
+msgstr "Hakuna kazi zinazosubiri"
+
+msgid "No saved diagnoses yet"
+msgstr "Bado hakuna uchunguzi uliohifadhiwa"
+
+msgid "Notification Delivery"
+msgstr "Uwasilishaji wa Arifa"
+
+msgid "Observed Symptoms & Notes"
+msgstr "Dalili Zilizoonwa na Maelezo"
+
+msgid ""
+"Once you assess assigned cases, they will be archived here in your permanent"
+" clinical audit log."
+msgstr ""
+"Mara tu unapotathmini kesi ulizopangiwa, zitahifadhiwa hapa kwenye "
+"kumbukumbu yako ya kudumu ya ukaguzi wa kitabibu."
+
+msgid "Open Case"
+msgstr "Fungua Kesi"
+
+msgid "Optional verified agricultural expert review"
+msgstr "Ukaguzi wa hiari wa mtaalamu wa kilimo aliyethibitishwa"
+
+msgid "Oromia · authorized service areas"
+msgstr "Oromia · maeneo ya huduma yaliyoidhinishwa"
+
+msgid "Outcome Verdict"
+msgstr "Uamuzi wa Matokeo"
+
+msgid "Outside disease scope"
+msgstr "Nje ya wigo wa magonjwa"
+
+msgid "Password & security"
+msgstr "Nenosiri na usalama"
+
+msgid ""
+"Password credentials for expert accounts are managed by institutional "
+"administrators."
+msgstr ""
+"Vitambulisho vya nenosiri kwa akaunti za wataalamu vinasimamiwa na "
+"wasimamizi wa taasisi."
+
+msgid "Pending Review"
+msgstr "Inasubiri Ukaguzi"
+
+msgid "Perform a leaf analysis to record your first crop health case."
+msgstr ""
+"Fanya uchambuzi wa jani ili kurekodi kesi yako ya kwanza ya afya ya zao."
+
+msgid ""
+"Permanent record of your submitted specialist evaluations, outcomes, and "
+"findings."
+msgstr ""
+"Kumbukumbu ya kudumu ya tathmini, matokeo, na maamuzi ya kitaalamu "
+"uliyowasilisha."
+
+msgid "Personal Details"
+msgstr "Maelezo Binafsi"
+
+msgid "Phone number (optional)"
+msgstr "Nambari ya simu (hiari)"
+
+msgid ""
+"Photo-based crop-health estimates calibrated with agricultural research."
+msgstr ""
+"Makadirio ya afya ya mazao kwa picha yaliyorekebishwa kwa utafiti wa kilimo."
+
+msgid "Planting date not recorded"
+msgstr "Tarehe ya kupanda haijarekodiwa"
+
+msgid "Potato"
+msgstr "Viazi Mviringo"
+
+msgid "Potato Pathologies"
+msgstr "Magonjwa ya Viazi"
+
+msgid ""
+"Predictions represent probabilistic model confidences, never certified "
+"diagnoses. Always verify with an agricultural expert before applying "
+"chemical treatments."
+msgstr ""
+"Utabiri unawakilisha uhakika wa kiuwezekano wa muundo, si uchunguzi "
+"uliothibitishwa kamwe. Daima thibitisha na mtaalamu wa kilimo kabla ya "
+"kutumia kemikali."
+
+msgid "Preferences"
+msgstr "Mapendeleo"
+
+msgid "Prior Revoked Reviews"
+msgstr "Ukaguzi Uliobatilishwa Hapo Awali"
+
+msgid "Privacy Protocol"
+msgstr "Itifaki ya Faragha"
+
+msgid "Professional Agricultural Review"
+msgstr "Ukaguzi wa Kitaalamu wa Kilimo"
+
+msgid "Professional Assessment"
+msgstr "Tathmini ya Kitaalamu"
+
+msgid "Professional Findings & Rationale"
+msgstr "Matokeo ya Kitaalamu na Sababu"
+
+msgid "Professional Information"
+msgstr "Taarifa za Kitaalamu"
+
+msgid "Profile information"
+msgstr "Taarifa za wasifu"
+
+msgid "Protected private storage"
+msgstr "Hifadhi salama ya faragha"
+
+msgid "RAG Integration Note"
+msgstr "Dokezo la Ushirikiano wa RAG"
+
+msgid "Re-enter new password"
+msgstr "Rudia kuingiza nenosiri jipya"
+
+msgid "Read only"
+msgstr "Ya kusoma tu"
+
+msgid "Real-time crop leaf disease analysis"
+msgstr "Uchambuzi wa papo hapo wa magonjwa ya majani ya mazao"
+
+msgid "Recent Health Checks"
+msgstr "Uchunguzi wa Afya wa Hivi Karibuni"
+
+msgid "Recommended Next Steps"
+msgstr "Hatua Zinazopendekezwa Zinazofuata"
+
+msgid "Refresh Status"
+msgstr "Ohuisha Hali"
+
+msgid "Regional & Language Preferences"
+msgstr "Mapendeleo ya Kikanda na Lugha"
+
+msgid "Register"
+msgstr "Jisajili"
+
+msgid "Register New Crop"
+msgstr "Sajili Zao Jipya"
+
+msgid "Register Your First Crop"
+msgstr "Sajili Zao Lako la Kwanza"
+
+msgid "Register your crops to track planting dates and health histories."
+msgstr ""
+"Sajili mazao yako ili kufuatilia tarehe za kupanda na historia ya afya."
+
+msgid ""
+"Register your tomato, potato, or maize crops to organize field records and "
+"track diagnostic history over time."
+msgstr ""
+"Sajili mazao yako ya nyanya, viazi mviringo, au mahindi ili kupanga "
+"kumbukumbu za shambani na kufuatilia historia ya uchunguzi kwa muda."
+
+msgid "Registered Crops"
+msgstr "Mazao Yaliyosajiliwa"
+
+msgid "Registered Farm Location"
+msgstr "Eneo la Shamba Lililosajiliwa"
+
+msgid "Registered Farmer"
+msgstr "Mkulima Aliyesajiliwa"
+
+msgid ""
+"Request professional evaluation from verified agricultural specialists with "
+"strict farmer consent."
+msgstr ""
+"Omba tathmini ya kitaalamu kutoka kwa wataalamu wa kilimo waliothibitishwa "
+"kwa idhini thabiti ya mkulima."
+
+msgid "Restart Interrupted Analysis"
+msgstr "Anzisha Tena Uchambuzi Uliokatizwa"
+
+msgid "Retrieve Grounded Guidance"
+msgstr "Pata Mwongozo Uliothibitishwa"
+
+msgid "Retrieved Agricultural Citations"
+msgstr "Nukuu za Kilimo Zilizopatikana"
+
+msgid "Retrieved Material"
+msgstr "Nyenzo Zilizopatikana"
+
+msgid "Retrieved Research Citations & Sources"
+msgstr "Nukuu za Utafiti na Vyanzo Vilivyopatikana"
+
+msgid "Retrieving localized Chroma RAG agricultural advisory"
+msgstr "Inaleta ushauri wa kilimo wa Chroma RAG wa eneo husika"
+
+msgid "Review Status"
+msgstr "Hali ya Ukaguzi"
+
+msgid ""
+"Review consented farmer leaf specimens, evaluate model inferences, and "
+"provide clinical agricultural findings."
+msgstr ""
+"Kagua sampuli za majani za wakulima zilizoidhinishwa, tathmini makadirio ya "
+"muundo, na utoe matokeo ya kitaalamu ya kilimo."
+
+msgid "Review requests you have submitted to the extension network."
+msgstr "Kagua maombi uliyowasilisha kwenye mtandao wa ugani."
+
+msgid "Review your latest crop-leaf disease diagnoses and findings."
+msgstr ""
+"Kagua uchunguzi na matokeo yako ya hivi karibuni ya magonjwa ya majani ya "
+"mazao."
+
+msgid ""
+"Revisit saved leaf evaluations, model confidences, and professional review "
+"records."
+msgstr ""
+"Pitia tena tathmini za majani zilizohifadhiwa, viwango vya uhakika wa "
+"muundo, na kumbukumbu za ukaguzi wa kitaalamu."
+
+msgid "Revoke Consent & Access"
+msgstr "Batilisha Idhini na Ufikiaji"
+
+msgid "Role"
+msgstr "Wadhifa"
+
+msgid "Role: Farmer (Public Signup)"
+msgstr "Wadhifa: Mkulima (Usajili wa Umma)"
+
+msgid "Running Deep Learning Inference"
+msgstr "Inaendesha Uchakataji wa Kujifunza kwa Kina"
+
+msgid "Save Account Changes"
+msgstr "Hifadhi Mabadiliko ya Akaunti"
+
+msgid "Save Changes"
+msgstr "Hifadhi Mabadiliko"
+
+msgid "Save Language Preference"
+msgstr "Hifadhi Mapendeleo ya Lugha"
+
+msgid "Save Location Changes"
+msgstr "Hifadhi Mabadiliko ya Eneo"
+
+msgid "Saved analyses"
+msgstr "Uchambuzi uliohifadhiwa"
+
+msgid "Scope notice"
+msgstr "Taarifa ya wigo"
+
+msgid ""
+"Secondary assessment by verified extension officers with farmer consent"
+msgstr ""
+"Tathmini ya pili na maafisa wa ugani waliothibitishwa kwa idhini ya mkulima"
+
+msgid "Select"
+msgstr "Chagua"
+
+msgid "Select Crop"
+msgstr "Chagua Zao"
+
+msgid "Select a Crop"
+msgstr "Chagua Zao"
+
+msgid "Select diagnostic verdict"
+msgstr "Chagua uamuzi wa uchunguzi"
+
+msgid "Select your primary interface language and display measurements."
+msgstr "Chagua lugha yako kuu ya mfumo na vipimo vya kuonyesha."
+
+msgid "Service Areas"
+msgstr "Maeneo ya Huduma"
+
+msgid "Shared Login"
+msgstr "Kuingia kwa Pamoja"
+
+msgid "Sign out"
+msgstr "Ondoka"
+
+msgid ""
+"Single leaf close-up works best. Avoid busy backgrounds or blurry camera "
+"angles."
+msgstr ""
+"Picha ya karibu ya jani moja inafaa zaidi. Epuka mandhari yenye mambo mengi "
+"au picha zisizo wazi."
+
+msgid "Standard"
+msgstr "Kawaida"
+
+msgid "Start First Diagnosis"
+msgstr "Anza Uchunguzi wa Kwanza"
+
+msgid "State"
+msgstr "Hali"
+
+msgid "Status"
+msgstr "Hali"
+
+msgid "Step 2 of 2 · Personal details complete. Add your farm location."
+msgstr ""
+"Hatua 2 ya 2 · Taarifa binafsi zimekamilika. Weka eneo la shamba lako."
+
+msgid ""
+"Submission is final and executes transactionally. The farmer receives an "
+"instant notification."
+msgstr ""
+"Uwasilishaji ni wa mwisho na unakamilika moja kwa moja. Mkulima hupokea "
+"arifa papo hapo."
+
+msgid "Submit Expert Review"
+msgstr "Wasilisha Ukaguzi wa Mtaalamu"
+
+msgid ""
+"Submit your expert judgment. Your assessment is shared with the farmer and "
+"permanently logged in review history."
+msgstr ""
+"Wasilisha uamuzi wako wa kitaalamu. Tathmini yako inashirikiwa na mkulima na"
+" kurekodiwa kabisa kwenye historia ya ukaguzi."
+
+msgid "Submitted Expert Assessments"
+msgstr "Tathmini za Kitaalamu Zilizowasilishwa"
+
+msgid "Submitted on"
+msgstr "Iliwasilishwa mnamo"
+
+msgid "Suggested Next Steps & Remediation"
+msgstr "Hatua Zinazopendekezwa na Urekebishaji"
+
+msgid "Supported Crops"
+msgstr "Mazao Yanayotumika"
+
+msgid "System Standard"
+msgstr "Kiwango cha Mfumo"
+
+msgid "System updates, assignment alerts, and expert assessment records."
+msgstr ""
+"Taarifa za mfumo, arifa za upangaji kazi, na kumbukumbu za tathmini za "
+"wataalamu."
+
+msgid ""
+"Take or upload a clear, focused image of an affected leaf in natural "
+"daylight."
+msgstr ""
+"Piga au pakia picha wazi ya jani lililoathirika kwenye mwanga wa asili wa "
+"mchana."
+
+msgid "Target Crop"
+msgstr "Zao Lengwa"
+
+msgid "Tentative AI Assessment"
+msgstr "Tathmini ya Awali ya AI"
+
+msgid "Tentative AI Inference"
+msgstr "Makadirio ya Awali ya AI"
+
+msgid "Tentative Automated Inference"
+msgstr "Makadirio ya Awali ya Kiotomatiki"
+
+msgid ""
+"The expert confirms, refutes, or identifies inconclusive findings and "
+"delivers tailored field next steps directly to your dashboard."
+msgstr ""
+"Mtaalamu anathibitisha, anapinga, au anabainisha matokeo yasiyojulikana na "
+"kutoa hatua zinazofuata za shambani moja kwa moja kwenye dashibodi yako."
+
+msgid ""
+"The model predicted two-spotted spider mites (pest infestation). Output "
+"preserved, but pathological disease guidance is not applicable."
+msgstr ""
+"Muundo ulitabiri sarafu wekundu wenye madoa mawili (uvamizi wa wadudu). "
+"Matokeo yamehifadhiwa, lakini mwongozo wa magonjwa ya kibaolojia hautumiki."
+
+msgid ""
+"This default location populates weather inquiries and crop diagnosis field "
+"context."
+msgstr ""
+"Eneo hili chaguomsingi hutumika kwa maswali ya hali ya hewa na muktadha wa "
+"shambani wa uchunguzi wa mazao."
+
+msgid ""
+"This referral is no longer active or consent has been revoked by the farmer."
+msgstr "Rufaa hii haifanyi kazi tena au idhini imebatilishwa na mkulima."
+
+msgid "Tomato"
+msgstr "Nyanya"
+
+msgid "Tomato Pathologies"
+msgstr "Magonjwa ya Nyanya"
+
+msgid ""
+"Top visual match identified by the convolutional neural network for this"
+msgstr "Ulinganifu mkuu wa picha uliotambuliwa na mtandao wa neural kwa"
+
+msgid "Total Assigned"
+msgstr "Jumla Iliyopangwa"
+
+msgid "Total Diagnoses"
+msgstr "Jumla ya Uchunguzi"
+
+msgid "Uncertain classification"
+msgstr "Uainishaji usio na uhakika"
+
+msgid ""
+"Update your display name and email address. Public role is permanently set "
+"to Farmer."
+msgstr ""
+"Sasisha jina lako la kuonyesha na anwani ya barua pepe. Wadhifa wa umma "
+"umewekwa kudumu kama Mkulima."
+
+msgid "Upload Crop Photo"
+msgstr "Pakia Picha ya Zao"
+
+msgid "Upload Photo"
+msgstr "Pakia Picha"
+
+msgid ""
+"Upload a crop leaf photograph to perform real-time AI disease analysis."
+msgstr ""
+"Pakia picha ya jani la zao ili kufanya uchambuzi wa magonjwa wa AI wa papo "
+"hapo."
+
+msgid ""
+"Use a strong, unique password. Leave these fields blank if you are not "
+"changing it."
+msgstr ""
+"Tumia nenosiri imara na la kipekee. Acha sehemu hizi wazi ikiwa "
+"huzibadilishi."
+
+msgid ""
+"Verification, role permissions, and authorized service areas are read only. "
+"Only an administrator can approve authorization changes."
+msgstr ""
+"Uthibitishaji, ruhusa za majukumu, na maeneo ya huduma yaliyoidhinishwa ni "
+"ya kusoma tu. Msimamizi pekee ndiye anayeweza kuidhinisha mabadiliko ya "
+"mamlaka."
+
+msgid "Verified expert · demo"
+msgstr "Mtaalamu aliyethibitishwa · mfano"
+
+msgid ""
+"Verified secondary case assessments by agricultural officers with strict "
+"farmer consent."
+msgstr ""
+"Tathmini za pili zilizothibitishwa za kesi na maafisa wa kilimo kwa idhini "
+"thabiti ya mkulima."
+
+msgid "View"
+msgstr "Tazama"
+
+msgid "View Assessment"
+msgstr "Tazama Tathmini"
+
+msgid "View Extension Services"
+msgstr "Tazama Huduma za Ugani"
+
+msgid "View Past Reviews"
+msgstr "Tazama Ukaguzi Uliopita"
+
+msgid "View all assigned"
+msgstr "Tazama zote zilizopangwa"
+
+msgid ""
+"Weather context helps assess fungal and pest risks for your registered "
+"crops."
+msgstr ""
+"Muktadha wa hali ya hewa husaidia kutathmini hatari za ukungu na wadudu kwa "
+"mazao yako yaliyosajiliwa."
+
+msgid "Welcome"
+msgstr "Karibu"
+
+msgid ""
+"Whenever an agricultural officer completes a secondary review of your crop "
+"diagnosis, a persistent link is generated in your inbox allowing you to "
+"review the specialist's findings, confirmed diagnosis, and field "
+"recommendations."
+msgstr ""
+"Kila afisa wa kilimo anapokamilisha ukaguzi wa pili wa uchunguzi wa zao "
+"lako, kiungo cha kudumu hutengenezwa kwenye kikasha chako kinachokuruhusu "
+"kukagua matokeo ya mtaalamu, uchunguzi uliothibitishwa, na mapendekezo ya "
+"shambani."
+
+msgid ""
+"You can share this case with a verified agricultural extension officer for a"
+" secondary review. Only this specific case, image, case location, and "
+"symptoms are shared. Your personal account details remain private."
+msgstr ""
+"Unaweza kushiriki kesi hii na afisa wa ugani wa kilimo aliyethibitishwa kwa "
+"ajili ya ukaguzi wa pili. Kesi hii mahususi tu, picha, eneo la kesi, na "
+"dalili ndizo zinazoshirikiwa. Taarifa zako binafsi za akaunti zinabaki kuwa "
+"siri."
+
+msgid ""
+"You currently have no active referrals. To request an expert review, open "
+"any completed diagnosis result and check the consent box."
+msgstr ""
+"Huna rufaa yoyote inayofanya kazi kwa sasa. Ili kuomba ukaguzi wa mtaalamu, "
+"fungua matokeo yoyote ya uchunguzi yaliyokamilika na uweke alama kwenye "
+"kisanduku cha idhini."
+
+msgid ""
+"You currently have no cases awaiting review. When cases are assigned, they "
+"will appear here."
+msgstr ""
+"Kwa sasa huna kesi zinazosubiri ukaguzi. Kesi zitakapopangwa, zitaonekana "
+"hapa."
+
+msgid "You have been assigned a new case for review."
+msgstr "Umepangiwa kesi mpya ya kukagua."
+
+msgid ""
+"You're all caught up! New case updates and expert reviews will appear here."
+msgstr ""
+"Uko sawa kabisa! Taarifa mpya za kesi na ukaguzi wa wataalamu zitaonekana "
+"hapa."
+
+msgid "Your Case Referrals"
+msgstr "Rufaa Zako za Kesi"
+
+msgid "Your Registered Crops"
+msgstr "Mazao Yako Yaliyosajiliwa"
+
+msgid ""
+"Your case has been consented and queued for assignment to a verified "
+"agricultural specialist."
+msgstr ""
+"Kesi yako imeidhinishwa na kuwekwa kwenye foleni ili kupangiwa mtaalamu wa "
+"kilimo aliyethibitishwa."
+
+msgid ""
+"Your case record and image remain saved. You can try uploading a clearer "
+"photograph."
+msgstr ""
+"Kumbukumbu ya kesi yako na picha vinabaki vimehifadhiwa. Unaweza kujaribu "
+"kupakia picha iliyo wazi zaidi."
+
+msgid "Your crop case was assigned to an agricultural expert."
+msgstr "Kesi ya zao lako ilipangiwa mtaalamu wa kilimo."
+
+msgid "Your expert access"
+msgstr "Ufikiaji wako wa kitaalamu"
+
+msgid ""
+"Your queue is clear. New cases will appear here when assigned by the "
+"administrator."
+msgstr ""
+"Foleni yako haina kitu. Kesi mpya zitaonekana hapa zikipangwa na msimamizi."
+
+msgid ""
+"Your registered farm location helps tailor local weather updates and disease"
+" context."
+msgstr ""
+"Eneo lako la shamba lililosajiliwa husaidia kubinafsisha taarifa za hali ya "
+"hewa na muktadha wa magonjwa."
+
+msgid "case"
+msgstr "kesi"
+
+msgid ""
+"e.g., Yellowing margins, dark spots, curled edges, or wilting observed over "
+"3 days."
+msgstr ""
+"k.m., Kingo za manjano, madoa meusi, kingo zilizojikunja, au kunyauka "
+"kulikoonekana kwa siku 3."
+
+msgid "leaf."
+msgstr "jani."
+
+msgid "optional"
+msgstr "hiari"
+
+msgid "review"
+msgstr "ukaguzi"
+
+msgid "total case"
+msgstr "jumla ya kesi"

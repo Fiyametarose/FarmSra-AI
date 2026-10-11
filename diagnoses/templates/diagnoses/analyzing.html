@@ -2,63 +2,110 @@
 {% load i18n %}
 
 {% block nav_diagnose %}active{% endblock %}
-{% block breadcrumb %}{% trans "Diagnose Crop" %}{% endblock %}
+{% block breadcrumb %}{% trans "Diagnose Crop" %} / {{ case.get_crop_display }} / {% trans "Analyzing" %}{% endblock %}
 
 {% block content %}
-  <div class="page-heading">
-    <h1>Analyzing Your {% trans "Crop" %}</h1>
-    <p>
-      We’re examining your {{ case.get_crop_display|lower }} photo for visible
-      crop-health patterns.
-    </p>
-  </div>
+  <div style="max-width: 960px; margin: 0 auto;">
 
-  <div class="steps">
-    <span>✓ Select crop</span>
-    <span>✓ Upload photo</span>
-    <strong>3 <span>AI analysis</span></strong>
-    <span>4 Your result</span>
-  </div>
-
-  <section class="card analyzing-card">
-    <img
-      src="{% url 'case-image' case.id %}"
-      alt="Uploaded {{ case.get_crop_display }} leaf"
-    >
-    <div>
-      <div class="spinner"></div>
-      <span class="eyebrow">ANALYZING YOUR PHOTO</span>
-      <h2>
-        {% if should_submit %}Starting analysis…{% else %}Analysis in progress…{% endif %}
-      </h2>
-      <p>Your saved result will be ready shortly.</p>
+    <!-- Step Progress Tracker -->
+    <div class="steps-progress" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; background: var(--surface); padding: 1.25rem 2rem; border-radius: 12px; border: 1px solid var(--border);">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">✓</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{% trans "Select Crop" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--brand); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">✓</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text);">{% trans "Upload Photo" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--brand); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem;">3</div>
+        <span style="font-size: 0.88rem; font-weight: 700; color: var(--text);">{% trans "Analyzing" %}</span>
+      </div>
+      <div style="flex: 1; height: 2px; background: var(--border); margin: 0 1rem;"></div>
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--surface-alt); color: var(--muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82rem; border: 1px solid var(--border);">4</div>
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--muted);">{% trans "Diagnosis Result" %}</span>
+      </div>
     </div>
-  </section>
 
-  <div class="warning">
-    ⓘ Photo-based results are estimates, not confirmed diagnoses.
+    <!-- Main Analyzing Card -->
+    <div class="card" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 2.5rem; padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.04); align-items: center; margin-bottom: 2rem;">
+
+      <!-- Uploaded Leaf Visual -->
+      <div style="border-radius: 12px; overflow: hidden; background: #000; border: 1px solid var(--border); height: 320px; display: flex; align-items: center; justify-content: center;">
+        <img src="{% url 'case-image' case.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+
+      <!-- Analysis Status Panel -->
+      <div>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
+          <div class="spinner" style="width: 32px; height: 32px; border: 3px solid var(--brand-soft); border-top-color: var(--brand); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand); font-weight: 700;">
+            {% trans "Running Deep Learning Inference" %}
+          </span>
+        </div>
+
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem 0; letter-spacing: -0.02em;">
+          {% if should_submit %}{% trans "Classifying Leaf Health..." %}{% else %}{% trans "Analysis in Progress..." %}{% endif %}
+        </h1>
+        <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.5rem 0; line-height: 1.5;">
+          {% trans "Evaluating leaf pigmentation, lesion patterns, and structural anomalies against trained MobileNetV2 models." %}
+        </p>
+
+        <!-- Pipeline Status Steps -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; background: var(--surface-alt); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--brand); font-weight: 600;">
+            <span>✓</span>
+            <span>{% trans "Leaf input normalized to 224×224 RGB [0–255]" %}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--text); font-weight: 600;">
+            <span style="color: var(--brand);">⟳</span>
+            <span>{% trans "MobileNetV2 feature extraction & probability calculation" %}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--muted);">
+            <span>○</span>
+            <span>{% trans "Retrieving localized Chroma RAG agricultural advisory" %}</span>
+          </div>
+        </div>
+
+        {% if recovery_available %}
+          <form method="post" action="{% url 'case-recover' case.id %}" style="margin-top: 1.5rem;">
+            {% csrf_token %}
+            <p style="font-size: 0.85rem; color: var(--danger); margin-bottom: 0.5rem;">
+              {% trans "Analysis has been running longer than expected. You can restart the process." %}
+            </p>
+            <button class="button button-outline" type="submit">
+              {% trans "Restart Interrupted Analysis" %}
+            </button>
+          </form>
+        {% elif not should_submit %}
+          <div style="margin-top: 1.5rem;">
+            <a class="button button-outline" href="{% url 'case-analyzing' case.id %}">
+              {% trans "Refresh Status" %}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- Notice -->
+    <div class="callout callout-info" style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 10px; background: var(--surface-alt); border-left: 4px solid var(--brand);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--brand); flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span style="font-size: 0.85rem; color: var(--text);">
+        {% trans "Model inference is computed locally on the server without sending private crop photographs to external third-party clouds." %}
+      </span>
+    </div>
+
+    {% if should_submit %}
+      <form id="process-form" method="post" action="{% url 'case-process' case.id %}">
+        {% csrf_token %}
+      </form>
+    {% endif %}
+
   </div>
-
-  {% if should_submit %}
-    <form id="process-form" method="post" action="{% url 'case-process' case.id %}">
-      {% csrf_token %}
-    </form>
-  {% elif recovery_available %}
-    <form method="post" action="{% url 'case-recover' case.id %}">
-      {% csrf_token %}
-      <p>
-        This analysis has been processing for more than {{ stale_minutes }} minutes
-        and may have been interrupted.
-      </p>
-      <button class="button button-secondary" type="submit">
-        Restart interrupted analysis
-      </button>
-    </form>
-  {% else %}
-    <a class="button button-secondary" href="{% url 'case-analyzing' case.id %}">
-      Refresh status
-    </a>
-  {% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -66,7 +113,7 @@
     <script>
       window.setTimeout(() => {
         document.getElementById("process-form").submit();
-      }, 350);
+      }, 500);
     </script>
   {% endif %}
 {% endblock %}

@@ -1,18 +1,52 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load static i18n %}
 {% block title %}FarmSra AI — {% trans "Understand Your Crop's Health" %}{% endblock %}
 {% block public_content %}
-  <section class="hero">
-    <div class="hero-copy">
-      <span class="eyebrow">● {% trans "AI for healthier crops and stronger farmers" %}</span>
-      <h1>Understand Your <em>{% trans "Crop" %}'s Health</em></h1>
-      <p>{% trans "FarmSra AI helps farmers identify possible crop problems from a leaf photo and keep a secure history of their results." %}</p>
-      <div class="button-row">
-        <a class="button" href="{% url 'register' %}">→ {% trans "Create Account" %}</a>
-        <a class="button button-secondary" href="{% url 'login' %}">{% trans "Log In" %}</a>
+  <section class="welcome-container" style="max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem;">
+    <div class="welcome-hero-grid" style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3.5rem; align-items: center;">
+      <div class="hero-copy">
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--brand-soft); color: var(--brand); font-size: 0.85rem; font-weight: 600; padding: 0.35rem 0.85rem; border-radius: 9999px; margin-bottom: 1.25rem;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--brand);"></span>
+          {% trans "AI for healthier crops and stronger farmers" %}
+        </div>
+        <h1 style="font-size: 3.25rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; color: var(--text); margin-bottom: 1.25rem;">
+          Understand Your <br><span style="color: var(--brand); font-style: italic;">Crop's Health</span>
+        </h1>
+        <p style="font-size: 1.125rem; color: var(--muted); line-height: 1.6; margin-bottom: 2rem; max-width: 520px;">
+          {% trans "FarmSra AI helps farmers identify possible crop problems from a leaf photo and keep a secure history of their results." %}
+        </p>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2.5rem; flex-wrap: wrap;">
+          <a class="button button-primary" href="{% url 'register' %}" style="padding: 0.85rem 1.75rem; font-size: 1rem; font-weight: 600; border-radius: 8px;">
+            {% trans "Create Account" %} →
+          </a>
+          <a class="button button-outline" href="{% url 'login' %}" style="padding: 0.85rem 1.75rem; font-size: 1rem; font-weight: 600; border-radius: 8px;">
+            {% trans "Log In" %}
+          </a>
+        </div>
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>{% trans "AI-powered insights" %}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>{% trans "Saved case history" %}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>{% trans "Private farmer data" %}</span>
+          </div>
+        </div>
       </div>
-      <div class="feature-row"><span>⚡ {% trans "AI-powered insights" %}</span><span>✓ {% trans "Saved case history" %}</span><span>♙ {% trans "Private farmer data" %}</span></div>
+
+      <div class="hero-visual-card" style="position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid var(--border);">
+        <img src="{% static 'img/hero_welcome.jpg' %}" alt="Crop Field" style="width: 100%; height: 480px; object-fit: cover; display: block;">
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; background: linear-gradient(to top, rgba(20, 61, 48, 0.95) 0%, rgba(20, 61, 48, 0.6) 70%, transparent 100%); color: white;">
+          <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: #a5d6a7;">{% trans "Supported Crops" %}</span>
+          <h3 style="font-size: 1.4rem; font-weight: 700; margin: 0.35rem 0 0.5rem 0; color: white;">Tomato · Potato · Maize</h3>
+          <p style="font-size: 0.88rem; color: rgba(255,255,255,0.85); margin: 0;">{% trans "Photo-based crop-health estimates calibrated with agricultural research." %}</p>
+        </div>
+      </div>
     </div>
-    <div class="hero-visual"><div class="leaf-art">☘</div><h2>Your farm,<br>in clearer focus.</h2><p>{% trans "Photo-based crop-health estimates for tomato, potato, and maize." %}</p></div>
   </section>
 {% endblock %}

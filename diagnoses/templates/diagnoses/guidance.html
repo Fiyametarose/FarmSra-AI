@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block nav_guidance %}active{% endblock %}
+{% block breadcrumb %}{% trans "Detailed Guidance" %}{% endblock %}
+
+{% block content %}
+  <div style="max-width: 1040px; margin: 0 auto;">
+
+    <div style="margin-bottom: 2rem;">
+      <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--brand);">
+        {% trans "Knowledge Library & RAG Advisory" %}
+      </span>
+      <h1 style="font-size: 2.1rem; font-weight: 800; color: var(--text); margin: 0.35rem 0 0.5rem 0; letter-spacing: -0.02em;">
+        {% trans "Detailed Agricultural Guidance" %}
+      </h1>
+      <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">
+        {% trans "Evidence-backed management practices, biological controls, and research literature for East African crops." %}
+      </p>
+    </div>
+
+    {% if case %}
+      <!-- Specific Case Guidance Banner -->
+      <div class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--muted);">{% trans "Grounded to Saved Case" %}</span>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text); margin: 0.2rem 0;">
+            {{ case.get_crop_display }} · {{ case.display_prediction }}
+          </h2>
+          <span style="font-size: 0.85rem; color: var(--muted);">Case #{{ case.reference }}{% if case.model_confidence is not None %} · {{ case.confidence_percent }}% {% trans "Model Confidence" %}{% endif %}</span>
+        </div>
+        <a href="{% url 'case-detail' case.id %}" class="button button-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+          ← {% trans "Back to Case" %}
+        </a>
+      </div>
+
+      {% if advisory %}
+        <!-- Advisory Content Section -->
+        <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+              </div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text);">
+                {% trans "Agronomic Recommendations & Management" %}
+              </h2>
+            </div>
+            <span class="badge badge-success" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
+              {% if advisory.is_generated %}{% trans "Chroma RAG Grounded" %}{% else %}{% trans "Retrieved Material" %}{% endif %}
+            </span>
+          </div>
+
+          <div style="font-size: 0.95rem; line-height: 1.7; color: var(--text); background: var(--surface-alt); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border); white-space: pre-wrap; margin-bottom: 1.5rem;">{{ advisory.content }}</div>
+
+          {% if advisory.retrieved_sources %}
+            <div style="padding-top: 1.25rem; border-top: 1px solid var(--border);">
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--text); margin: 0 0 1rem 0;">
+                {% trans "Retrieved Agricultural Citations" %}
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for source in advisory.retrieved_sources %}
+                  <div style="background: var(--surface); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.85rem;">
+                    <div style="font-weight: 700; color: var(--text); margin-bottom: 0.2rem;">
+                      {{ source.title }}
+                      {% if source.url %}
+                        <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer" style="color: var(--brand); margin-left: 0.5rem; font-size: 0.8rem;">[Source ↗]</a>
+                      {% endif %}
+                    </div>
+                    <div style="color: var(--muted); font-size: 0.78rem; margin-bottom: 0.4rem;">
+                      {{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}
+                    </div>
+                    {% if source.text %}
+                      <div style="font-size: 0.82rem; color: var(--text); background: var(--surface-alt); padding: 0.5rem; border-radius: 4px; font-style: italic;">
+                        "{{ source.text }}"
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </section>
+
+      {% else %}
+        <div class="card" style="text-align: center; padding: 3rem 1.5rem; border-radius: 14px; border: 1px dashed var(--border);">
+          <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.25rem 0;">
+            {% trans "Advisory guidance has not yet been retrieved for this case." %}
+          </p>
+          <form action="{% url 'generate-advisory' case.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="button button-primary" style="padding: 0.75rem 1.75rem; font-weight: 700;">
+              ⚡ {% trans "Retrieve Grounded Guidance" %}
+            </button>
+          </form>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <!-- General Crop Knowledge Catalog -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+
+        <!-- Tomato Guide -->
+        <div class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+          <span class="badge" style="background: #ffebee; color: #c62828; font-size: 0.75rem; border-radius: 9999px; padding: 0.2rem 0.6rem; font-weight: 700;">SOLANACEAE</span>
+          <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text); margin: 0.5rem 0 0.25rem 0;">{% trans "Tomato Pathologies" %}</h2>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1rem 0;">Solanum lycopersicum</p>
+          <ul style="font-size: 0.85rem; color: var(--text); padding-left: 1.25rem; line-height: 1.6; margin: 0 0 1.25rem 0;">
+            <li><strong>Early Blight (Alternaria solani):</strong> Concentric rings, lower leaf yellowing. Prevent with drip irrigation.</li>
+            <li><strong>Late Blight (Phytophthora infestans):</strong> Water-soaked dark lesions, rapid foliar collapse in cool, humid weather.</li>
+            <li><strong>Leaf Mold (Passalora fulva):</strong> Olive-green fungal velvety growth on lower leaf surfaces.</li>
+            <li><strong>Yellow Leaf Curl:</strong> Begomovirus transmitted by Bemisia tabaci whiteflies. Upward curling and stunting.</li>
+          </ul>
+        </div>
+
+        <!-- Maize Guide -->
+        <div class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+          <span class="badge" style="background: #fff8e1; color: #f57f17; font-size: 0.75rem; border-radius: 9999px; padding: 0.2rem 0.6rem; font-weight: 700;">POACEAE</span>
+          <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text); margin: 0.5rem 0 0.25rem 0;">{% trans "Maize Pathologies" %}</h2>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1rem 0;">Zea mays</p>
+          <ul style="font-size: 0.85rem; color: var(--text); padding-left: 1.25rem; line-height: 1.6; margin: 0 0 1.25rem 0;">
+            <li><strong>Gray Leaf Spot (Cercospora zeae-maydis):</strong> Rectangular parallel lesions delimited by leaf veins.</li>
+            <li><strong>Common Rust (Puccinia sorghi):</strong> Golden-brown to cinnamon powdery pustules on both leaf surfaces.</li>
+            <li><strong>Northern Leaf Blight (Exserohilum turcicum):</strong> Cigar-shaped elliptical gray-green lesions.</li>
+          </ul>
+        </div>
+
+        <!-- Potato Guide -->
+        <div class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
+          <span class="badge" style="background: #e8f5e9; color: #2e7d32; font-size: 0.75rem; border-radius: 9999px; padding: 0.2rem 0.6rem; font-weight: 700;">TUBEROUS SOLANACEAE</span>
+          <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text); margin: 0.5rem 0 0.25rem 0;">{% trans "Potato Pathologies" %}</h2>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1rem 0;">Solanum tuberosum</p>
+          <ul style="font-size: 0.85rem; color: var(--text); padding-left: 1.25rem; line-height: 1.6; margin: 0 0 1.25rem 0;">
+            <li><strong>Early Blight (Alternaria solani):</strong> Target-spot brown lesions with chlorotic halos, favored by alternating wet/dry cycles.</li>
+            <li><strong>Late Blight (Phytophthora infestans):</strong> Oomycete causing rapid rot of foliar canopy and tuber blight.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="callout callout-info" style="border-radius: 12px; padding: 1.25rem; background: var(--surface-alt); border-left: 4px solid var(--brand);">
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--text);">{% trans "RAG Integration Note" %}</h4>
+        <p style="font-size: 0.88rem; color: var(--muted); margin: 0;">
+          {% trans "Case-specific guidance retrieves verbatim excerpts from embedded regional agronomic publications using Chroma vector search, providing genuine citations without fabricated model hallucinations." %}
+        </p>
+      </div>
+    {% endif %}
+
+  </div>
+{% endblock %}
