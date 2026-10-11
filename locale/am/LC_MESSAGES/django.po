@@ -1719,3 +1719,6 @@ msgstr "የሰብል ቅጠሎች"
 
 msgid "Crop field"
 msgstr "የሰብል ማሳ"
+msgid "classes"
+msgstr "ክፍሎች"
+

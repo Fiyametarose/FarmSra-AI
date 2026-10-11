@@ -1835,3 +1835,6 @@ msgstr "Majani ya mazao"
 
 msgid "Crop field"
 msgstr "Shamba la mazao"
+msgid "classes"
+msgstr "madarasa"
+

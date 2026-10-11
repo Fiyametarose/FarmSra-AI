@@ -42,6 +42,23 @@ class FarmerRegistrationForm(BaseUserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        styled_fields = (
+            "full_name",
+            "email",
+            "password1",
+            "password2",
+            "country",
+            "region",
+            "subcounty",
+            "ward",
+            "town",
+            "locality",
+        )
+        for field_name in styled_fields:
+            field = self.fields[field_name]
+            field.widget.attrs["class"] = " ".join(
+                filter(None, (field.widget.attrs.get("class"), "form-control"))
+            )
         for field_name in ("country", "region", "subcounty", "ward", "town"):
             self.fields[field_name].required = True
 

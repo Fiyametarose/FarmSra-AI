@@ -16,6 +16,10 @@ document.getElementById("registration-next").addEventListener("click", () => {
 document.getElementById("registration-back").addEventListener("click", () => showStep(0));
 if (document.querySelector(".errorlist")) {
   const locationNames = ["country", "region", "subcounty", "ward", "town", "locality", "terms_accepted"];
-  const hasLocationError = locationNames.some((name) => document.getElementById(`id_${name}`)?.closest("label")?.querySelector(".errorlist"));
+  const hasLocationError = locationNames.some((name) => {
+    const field = document.getElementById(`id_${name}`);
+    const container = field?.closest(".form-group") || field?.closest("div");
+    return Boolean(container?.querySelector(".errorlist"));
+  });
   if (hasLocationError) showStep(1);
 }

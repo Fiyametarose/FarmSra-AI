@@ -1718,6 +1718,7 @@ textarea.form-control {
 }
 
 .form-grid-two { grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+#registration-form .form-step.hidden { display: none; }
 .settings-form-row { margin-bottom: 1.25rem; }
 .settings-form-row-last { margin-bottom: 1.5rem; }
 .upload-layout-spacing { margin-bottom: 2rem; }

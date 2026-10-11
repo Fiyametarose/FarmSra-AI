@@ -1,6 +1,8 @@
 {% load static i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
+{% trans "Open navigation" as open_navigation_label %}
+{% trans "Close navigation" as close_navigation_label %}
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
@@ -215,7 +217,7 @@
           sidebar.classList.toggle('open', open);
           backdrop.classList.toggle('active', open);
           toggle.setAttribute('aria-expanded', String(open));
-          toggle.setAttribute('aria-label', open ? "{% trans 'Close navigation' %}" : "{% trans 'Open navigation' %}");
+          toggle.setAttribute('aria-label', open ? "{{ close_navigation_label|escapejs }}" : "{{ open_navigation_label|escapejs }}");
         };
 
         toggle.addEventListener('click', () => setSidebarOpen(!sidebar.classList.contains('open')));

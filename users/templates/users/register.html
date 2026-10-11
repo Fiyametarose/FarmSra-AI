@@ -57,7 +57,7 @@
             {% if form.password2.errors %}<div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">{{ form.password2.errors }}</div>{% endif %}
           </div>
 
-          <button class="button button-primary" type="button" id="registration-next" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 600; border-radius: 8px;">
+          <button class="button btn-primary" type="button" id="registration-next" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 600; border-radius: 8px;">
             {% trans "Continue to Farm Location" %} →
           </button>
         </div>
@@ -116,10 +116,10 @@
           </div>
 
           <div style="display: flex; gap: 1rem; align-items: center;">
-            <button class="button button-outline" type="button" id="registration-back" style="flex: 1; padding: 0.85rem; font-size: 0.95rem; font-weight: 600;">
+            <button class="button btn-secondary" type="button" id="registration-back" style="flex: 1; padding: 0.85rem; font-size: 0.95rem; font-weight: 600;">
               ← {% trans "Back" %}
             </button>
-            <button class="button button-primary" type="submit" style="flex: 2; padding: 0.85rem; font-size: 1rem; font-weight: 600;">
+            <button class="button btn-primary" type="submit" style="flex: 2; padding: 0.85rem; font-size: 1rem; font-weight: 600;">
               {% trans "Create Farmer Account" %} →
             </button>
           </div>

@@ -15,7 +15,7 @@ The application is a Django 5.2 modular monolith using Django templates, vanilla
 
 ## Local setup
 
-Requirements include Python 3.13, Docker with Compose, and enough memory and disk space for TensorFlow and the local model files.
+Requirements include Python 3.13, PostgreSQL, and enough memory and disk space for TensorFlow and the local model files. Docker is optional; Docker Compose is the recommended way to start PostgreSQL, but a locally installed PostgreSQL server also works.
 
 1. Create and activate a virtual environment, then install dependencies:
 
@@ -27,13 +27,19 @@ Requirements include Python 3.13, Docker with Compose, and enough memory and dis
 
 2. Copy `.env.example` to `.env` and replace the example values. Do not commit `.env` or `.django-secret`.
 
-3. Start PostgreSQL:
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+3. Start PostgreSQL with Docker Compose (recommended):
 
    ```powershell
    docker compose up -d db
    ```
 
    The provided configuration exposes PostgreSQL on `127.0.0.1:5433`. The Django defaults match the database name and user in `compose.yaml`; the password comes from `.env`.
+
+   To use a locally installed PostgreSQL server instead, create the database and user yourself and set `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, and `POSTGRES_PORT` in `.env`. Use the port on which your server listens, commonly `5432`; the project default is `5433` for the Compose service.
 
 4. Apply migrations and run the development server:
 
@@ -42,9 +48,17 @@ Requirements include Python 3.13, Docker with Compose, and enough memory and dis
    python manage.py runserver
    ```
 
+5. Create an administrator account when needed:
+
+   ```powershell
+   python manage.py createsuperuser
+   ```
+
+   Sign in at `/admin/`, create or edit a user, and set the existing role field to **Expert** to create an agricultural expert account. Public registration remains farmer-only.
+
 ## Models and guidance data
 
-Place the trusted `.keras` weights locally at the paths documented in `docs/reference/MODEL_INTEGRATION.md`:
+The three trained `.keras` model weights are distributed separately and are not included in the Git repository. Extract `FarmSra-AI-Models.zip` into the project root, preserving the `model_artifacts/` directory structure documented in `docs/reference/MODEL_INTEGRATION.md`:
 
 ```text
 model_artifacts/tomato/tomato_mobilenetv2_final.keras
