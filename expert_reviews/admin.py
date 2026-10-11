@@ -58,6 +58,40 @@ class ExpertReferralAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+    def save_model(self, request, obj, form, change):
+        old_expert_id = None
+        old_state = None
+        if obj.pk:
+            try:
+                old_instance = ExpertReferral.objects.get(pk=obj.pk)
+                old_expert_id = old_instance.assigned_expert_id
+                old_state = old_instance.state
+            except ExpertReferral.DoesNotExist:
+                pass
+        super().save_model(request, obj, form, change)
+        new_expert = obj.assigned_expert
+        expert_changed = (new_expert is not None and new_expert.id != old_expert_id)
+        became_assigned = (old_state != ExpertReferral.State.ASSIGNED and obj.state == ExpertReferral.State.ASSIGNED and new_expert is not None)
+
+        if expert_changed or became_assigned:
+            from notifications.models import Notification
+            from uuid import uuid4
+
+            assignment_event_key = f"referral_{obj.id}_assignment_{uuid4().hex}"
+            Notification.objects.get_or_create(
+                recipient=new_expert,
+                event_type=Notification.EventType.EXPERT_ASSIGNED,
+                event_key=assignment_event_key,
+                defaults={'metadata': {'referral_id': str(obj.id), 'diagnosis_id': str(obj.diagnosis.id)}}
+            )
+            if obj.diagnosis.farmer:
+                Notification.objects.get_or_create(
+                    recipient=obj.diagnosis.farmer,
+                    event_type=Notification.EventType.FARMER_ASSIGNED,
+                    event_key=assignment_event_key,
+                    defaults={'metadata': {'referral_id': str(obj.id), 'diagnosis_id': str(obj.diagnosis.id)}}
+                )
+
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.state in [ExpertReferral.State.REVOKED, ExpertReferral.State.REVIEWED]:
             return self.readonly_fields + ('state', 'assigned_expert')

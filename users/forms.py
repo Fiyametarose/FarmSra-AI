@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm as BaseUserChangeForm
 from django.contrib.auth.forms import UserCreationForm as BaseUserCreationForm
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from .models import User
 
@@ -21,7 +22,7 @@ class UserChangeForm(BaseUserChangeForm):
 class FarmerRegistrationForm(BaseUserCreationForm):
     full_name = forms.CharField(max_length=300)
     terms_accepted = forms.BooleanField(
-        label="I understand that AI results are estimates, not confirmed diagnoses."
+        label=_("I understand that AI results are estimates, not confirmed diagnoses.")
     )
 
     class Meta:
@@ -47,7 +48,7 @@ class FarmerRegistrationForm(BaseUserCreationForm):
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
         if User.objects.filter(email__iexact=email).exists():
-            raise ValidationError("An account with this email address already exists.")
+            raise ValidationError(_("An account with this email address already exists."))
         return email
 
     def save(self, commit=True):
@@ -84,9 +85,9 @@ class EmailAuthenticationForm(forms.Form):
                 self.request, email=email.strip().lower(), password=password
             )
             if self.user_cache is None:
-                raise ValidationError("Enter a valid email address and password.")
+                raise ValidationError(_("Enter a valid email address and password."))
             if not self.user_cache.is_active:
-                raise ValidationError("This account is inactive.")
+                raise ValidationError(_("This account is inactive."))
         return cleaned_data
 
     def get_user(self):
@@ -107,7 +108,7 @@ class FarmerAccountForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
         if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
-            raise ValidationError("An account with this email address already exists.")
+            raise ValidationError(_("An account with this email address already exists."))
         return email
 
     def save(self, commit=True):

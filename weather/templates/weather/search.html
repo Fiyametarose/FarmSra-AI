@@ -1,0 +1,11 @@
+{% load i18n %}
+<div style="padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
+    {% if error %}
+    <div style="color: var(--error); margin-bottom: 0.5rem;">{% trans error %}</div>
+    {% endif %}
+    <p>{% trans "Please enter a city or town name to check the weather:" %}</p>
+    <div style="display: flex; gap: 0.5rem;">
+        <input type="text" id="weather-search-input" class="input" placeholder="{% trans 'e.g. Nairobi' %}">
+        <button class="button" onclick="searchWeather()">{% trans "Search" %}</button>
+    </div>
+</div>

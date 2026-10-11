@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block nav_my_crops %}active{% endblock %}
-{% block breadcrumb %}My Crops{% endblock %}
+{% block breadcrumb %}{% trans "My Crops" %}{% endblock %}
 {% block content %}
 <div class="page-heading">
-  <a class="button float-right" href="{% url 'crop-add' %}">+ Register Crop</a>
-  <h1>My Crops</h1>
+  <a class="button float-right" href="{% url 'crop-add' %}">+ {% trans "Register Crop" %}</a>
+  <h1>{% trans "My Crops" %}</h1>
   <p>Manage your registered crops and view their details.</p>
 </div>
 <div class="dashboard-grid">
@@ -17,14 +18,14 @@
     </div>
     <p><strong>Species:</strong> {{ crop.get_species_display }}</p>
     <p><strong>Status:</strong> <span class="badge">{{ crop.get_status_display }}</span></p>
-    {% if crop.planting_date %}<p><strong>Planted:</strong> {{ crop.planting_date }}</p>{% endif %}
+    {% if crop.planting_date %}<p><strong>{% trans "Planted" %}:</strong> {{ crop.planting_date }}</p>{% endif %}
   </section>
   {% endfor %}
 {% else %}
   <section class="card empty" style="grid-column: 1 / -1;">
-    <h3>No crops registered</h3>
+    <h3>{% trans "No crops registered" %}</h3>
     <p>Register a crop to keep track of its history and diagnoses.</p>
-    <a class="button" href="{% url 'crop-add' %}">+ Register Crop</a>
+    <a class="button" href="{% url 'crop-add' %}">+ {% trans "Register Crop" %}</a>
   </section>
 {% endif %}
 </div>

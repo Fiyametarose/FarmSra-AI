@@ -9,6 +9,7 @@ from django.db import IntegrityError
 from users.models import User
 from diagnoses.models import DiagnosisCase
 from .models import ExpertReferral, ExpertReview
+from notifications.models import Notification
 
 
 class ExpertReviewsTests(TestCase):
@@ -437,3 +438,64 @@ class ExpertReviewsTests(TestCase):
         self.assertEqual(response.status_code, 403)
         response = self.client.post(reverse("admin:expert_reviews_expertreview_delete", args=[review.id]), {"post": "yes"})
         self.assertEqual(response.status_code, 403)
+
+    def test_expert_reassignment_notifications(self):
+        referral = ExpertReferral.objects.create(
+            diagnosis=self.case,
+            state=ExpertReferral.State.REQUESTED
+        )
+        self.client.login(email="admin@example.com", password="testpassword")
+
+        # 1. Initial assignment to expert
+        response = self.client.post(reverse("admin:expert_reviews_expertreferral_change", args=[referral.id]), {
+            "state": ExpertReferral.State.REQUESTED,
+            "assigned_expert": self.expert.id
+        })
+        self.assertEqual(response.status_code, 302)
+        referral.refresh_from_db()
+        self.assertEqual(referral.assigned_expert, self.expert)
+        self.assertEqual(referral.state, ExpertReferral.State.ASSIGNED)
+
+        # Expert notification created
+        expert_notes = Notification.objects.filter(recipient=self.expert, event_type=Notification.EventType.EXPERT_ASSIGNED)
+        self.assertEqual(expert_notes.count(), 1)
+        # Farmer notification created
+        farmer_notes = Notification.objects.filter(recipient=self.farmer, event_type=Notification.EventType.FARMER_ASSIGNED)
+        self.assertEqual(farmer_notes.count(), 1)
+
+        # 2. Saving again without changing expert should NOT create duplicate notifications
+        response = self.client.post(reverse("admin:expert_reviews_expertreferral_change", args=[referral.id]), {
+            "state": ExpertReferral.State.ASSIGNED,
+            "assigned_expert": self.expert.id
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Notification.objects.filter(recipient=self.expert, event_type=Notification.EventType.EXPERT_ASSIGNED).count(), 1)
+        self.assertEqual(Notification.objects.filter(recipient=self.farmer, event_type=Notification.EventType.FARMER_ASSIGNED).count(), 1)
+
+        # 3. Reassign to expert2
+        response = self.client.post(reverse("admin:expert_reviews_expertreferral_change", args=[referral.id]), {
+            "state": ExpertReferral.State.ASSIGNED,
+            "assigned_expert": self.expert2.id
+        })
+        self.assertEqual(response.status_code, 302)
+        referral.refresh_from_db()
+        self.assertEqual(referral.assigned_expert, self.expert2)
+
+        # New expert2 notified
+        self.assertEqual(Notification.objects.filter(recipient=self.expert2, event_type=Notification.EventType.EXPERT_ASSIGNED).count(), 1)
+        # Farmer notified of update
+        self.assertEqual(Notification.objects.filter(recipient=self.farmer, event_type=Notification.EventType.FARMER_ASSIGNED).count(), 2)
+
+        # 4. Check inbox: expert 1's old notification should NOT show actionable link
+        self.client.login(email="expert@example.com", password="testpassword")
+        response = self.client.get(reverse("notifications:inbox"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context["notifications"][0].is_reassigned)
+        self.assertFalse(response.context["notifications"][0].is_actionable)
+
+        # Expert 2's notification SHOULD be actionable
+        self.client.login(email="expert2@example.com", password="testpassword")
+        response = self.client.get(reverse("notifications:inbox"))
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["notifications"][0].is_reassigned)
+        self.assertTrue(response.context["notifications"][0].is_actionable)

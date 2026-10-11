@@ -1,0 +1,557 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-01 00:00+0000\n"
+"PO-Revision-Date: 2023-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "Dashibodi"
+
+msgid "My Crops"
+msgstr "Mimea Yangu"
+
+msgid "Diagnose Crop"
+msgstr "Chunguza Mmea"
+
+msgid "History"
+msgstr "Historia"
+
+msgid "Settings"
+msgstr "Mipangilio"
+
+msgid "Welcome back"
+msgstr "Karibu tena"
+
+msgid "Your registered crops"
+msgstr "Mimea yako iliyosajiliwa"
+
+msgid "Recent diagnoses"
+msgstr "Uchunguzi wa hivi karibuni"
+
+msgid "Local Weather"
+msgstr "Hali ya Hewa ya Ndani"
+
+msgid "Notifications"
+msgstr "Arifa"
+
+msgid "Assigned Cases"
+msgstr "Kesi Zilizopangwa"
+
+msgid "Review History"
+msgstr "Historia ya Mapitio"
+
+msgid "Workspace"
+msgstr "Sehemu ya kazi"
+
+msgid "Check Weather"
+msgstr "Angalia Hali ya Hewa"
+
+msgid "Get the current weather for your registered town."
+msgstr "Pata hali ya hewa ya sasa kwa mji wako."
+
+msgid "Loading..."
+msgstr "Inapakia..."
+
+msgid "Failed to load weather."
+msgstr "Imeshindwa kupakia hali ya hewa."
+
+msgid "Understand Your Crop's Health"
+msgstr "Elewa Afya ya Mmea Wako"
+
+msgid "AI for healthier crops and stronger farmers"
+msgstr "AI kwa mimea yenye afya"
+
+msgid ""
+"FarmSra AI helps farmers identify possible crop problems from a leaf photo "
+"and keep a secure history of their results."
+msgstr ""
+"FarmSra AI inasaidia wakulima kutambua matatizo ya mimea kupitia picha."
+
+msgid "Create Account"
+msgstr "Tengeneza Akaunti"
+
+msgid "Log in"
+msgstr "Ingia"
+
+msgid "Log In"
+msgstr "Ingia"
+
+msgid "AI-powered insights"
+msgstr "Uchambuzi wa AI"
+
+msgid "Saved case history"
+msgstr "Historia iliyohifadhiwa"
+
+msgid "Private farmer data"
+msgstr "Data binafsi"
+
+msgid "Your farm, in clearer focus."
+msgstr "Shamba lako, kwa mtazamo wazi."
+
+msgid "Photo-based crop-health estimates for tomato, potato, and maize."
+msgstr "Uchunguzi kwa picha kwa nyanya, viazi, na mahindi."
+
+msgid "Expert Dashboard"
+msgstr "Dashibodi ya Mtaalam"
+
+msgid "View Review History"
+msgstr "Tazama Historia ya Mapitio"
+
+msgid "Assigned cases awaiting your review."
+msgstr "Kesi zilizopangwa zinazosubiri mapitio yako."
+
+msgid "Assigned Referrals"
+msgstr "Rufaa Zilizopangwa"
+
+msgid "Date Assigned"
+msgstr "Tarehe Iliyopangwa"
+
+msgid "Crop"
+msgstr "Mmea"
+
+msgid "Action"
+msgstr "Hatua"
+
+msgid "Review Case"
+msgstr "Kagua Kesi"
+
+msgid "You have no pending case assignments at this time."
+msgstr "Huna kesi zozote zinazosubiri kwa sasa."
+
+msgid "A clearer view of your crop checks and what to do next."
+msgstr "Mtazamo wazi wa uchunguzi wa mmea wako."
+
+msgid "View all"
+msgstr "Tazama yote"
+
+msgid "Planted"
+msgstr "Imepandwa"
+
+msgid "No date"
+msgstr "Hakuna tarehe"
+
+msgid "Register Crop"
+msgstr "Sajili Mmea"
+
+msgid "No crops registered"
+msgstr "Hakuna mimea iliyosajiliwa"
+
+msgid "Register your crops to keep track of their history and diagnoses."
+msgstr "Sajili mimea yako ili kufuatilia historia yake."
+
+msgid "View history"
+msgstr "Tazama historia"
+
+msgid "No saved crop checks yet"
+msgstr "Hakuna uchunguzi uliohifadhiwa"
+
+msgid "Your completed analyses will appear here."
+msgstr "Uchambuzi uliokamilika utaonekana hapa."
+
+msgid "Start Diagnosis"
+msgstr "Anza Uchunguzi"
+
+msgid ""
+"Understand your crops and revisit saved results whenever you need them."
+msgstr "Elewa mimea yako na tembelea matokeo yaliyohifadhiwa unapoyahitaji."
+
+msgid "Welcome Back"
+msgstr "Karibu Tena"
+
+msgid "Log in to continue to FarmSra AI."
+msgstr "Ingia ili uendelee na FarmSra AI."
+
+msgid "Email Address"
+msgstr "Anuani ya Barua Pepe"
+
+msgid "Password"
+msgstr "Nenosiri"
+
+msgid "or"
+msgstr "au"
+
+msgid "Create account"
+msgstr "Tengeneza Akaunti"
+
+msgid "Back to welcome"
+msgstr "Rudi mwanzo"
+
+msgid "HEALTHIER CROPS. STRONGER FARMS."
+msgstr "MIMEA YENYE AFYA. MASHAMBA IMARA."
+
+msgid "Join FarmSra AI"
+msgstr "Jiunge na FarmSra AI"
+
+msgid ""
+"Create a farmer account to check tomato, potato, and maize leaf photos."
+msgstr ""
+"Tengeneza akaunti ya mkulima kuchunguza picha za nyanya, viazi, na mahindi."
+
+msgid "Create Your Account"
+msgstr "Tengeneza Akaunti Yako"
+
+msgid "Step 1 of 2 · Add your personal details to continue."
+msgstr "Hatua ya 1 ya 2 · Weka taarifa zako binafsi ili kuendelea."
+
+msgid "FARMER account · assigned automatically"
+msgstr "Akaunti ya MKULIMA · inapewa moja kwa moja"
+
+msgid "1 Personal details · Step 1 of 2"
+msgstr "1 Taarifa binafsi · Hatua ya 1 ya 2"
+
+msgid "Full Name"
+msgstr "Jina Kamili"
+
+msgid "Confirm Password"
+msgstr "Thibitisha Nenosiri"
+
+msgid "Continue"
+msgstr "Endelea"
+
+msgid "Assigned"
+msgstr "Iliyopangwa"
+
+msgid "2 Farm location · Step 2 of 2"
+msgstr "2 Eneo la shamba · Hatua ya 2 ya 2"
+
+msgid "Choose Kenya or Ethiopia, then describe your farm location."
+msgstr "Chagua Kenya au Ethiopia, kisha elezea eneo la shamba lako."
+
+msgid "Country"
+msgstr "Nchi"
+
+msgid "Region / County"
+msgstr "Mkoa / Kaunti"
+
+msgid "Zone / Sub-county"
+msgstr "Kanda / Kaunti Ndogo"
+
+msgid "Woreda / Ward"
+msgstr "Wadi"
+
+msgid "City / Town"
+msgstr "Mji / Jiji"
+
+msgid "Kebele / Locality"
+msgstr "Eneo"
+
+msgid "(optional)"
+msgstr "(sio lazima)"
+
+msgid "Back"
+msgstr "Rudi"
+
+msgid "Already have an account?"
+msgstr "Tayari una akaunti?"
+
+msgid ""
+"Check current weather and forecasts to help plan your farming activities."
+msgstr ""
+"Angalia hali ya hewa ya sasa na utabiri ili kusaidia kupanga shughuli zako "
+"za kilimo."
+
+msgid "Humidity:"
+msgstr "Unyevunyevu:"
+
+msgid "Wind:"
+msgstr "Upepo:"
+
+msgid "Precip:"
+msgstr "Mvua:"
+
+msgid "3-Day Forecast"
+msgstr "Utabiri wa Siku 3"
+
+msgid "Weather data provided by"
+msgstr "Data ya hali ya hewa imetolewa na"
+
+msgid "Weather currently unavailable for"
+msgstr "Hali ya hewa haipatikani kwa sasa kwa"
+
+msgid "Try another city"
+msgstr "Jaribu mji mwingine"
+
+msgid "You have been assigned a new case."
+msgstr "Umepewa kesi mpya."
+
+msgid "Your request has been assigned to an expert."
+msgstr "Ombi lako limekabidhiwa kwa mtaalamu."
+
+msgid "An expert has reviewed your case."
+msgstr "Mtaalamu amekagua kesi yako."
+
+msgid "Consent was revoked for a case you were assigned."
+msgstr "Idhini imebatilishwa kwa kesi uliyopewa."
+
+msgid "Mark All Read"
+msgstr "Weka Zote Zimesomwa"
+
+msgid "Mark Read"
+msgstr "Weka Imesomwa"
+
+msgid "View Case"
+msgstr "Tazama Kesi"
+
+msgid "You have no notifications."
+msgstr "Huna arifa zozote."
+
+msgid "Consent Revoked"
+msgstr "Idhini Imebatilishwa"
+
+msgid "Expert Assigned"
+msgstr "Mtaalamu Amekabidhiwa"
+
+msgid "Request Assigned"
+msgstr "Ombi Limekabidhiwa"
+
+msgid "Review Submitted"
+msgstr "Tathmini Imewasilishwa"
+
+msgid "Multiple locations found. Please select your location:"
+msgstr "Maeneo mengi yamepatikana. Tafadhali chagua eneo lako:"
+
+msgid "No matching locations found."
+msgstr "Hakuna maeneo yanayolingana yaliyopatikana."
+
+msgid "Please enter a city or town name to check the weather:"
+msgstr "Tafadhali ingiza jina la jiji au mji ili kuangalia hali ya hewa:"
+
+msgid "Search again"
+msgstr "Tafuta tena"
+
+msgid "Searching..."
+msgstr "Inatafuta..."
+
+msgid "Search"
+msgstr "Tafuta"
+
+msgid "Failed to search."
+msgstr "Imeshindwa kutafuta."
+
+msgid "e.g. Nairobi"
+msgstr "k.m. Nairobi"
+
+msgid "your location"
+msgstr "eneo lako"
+
+msgid "English"
+msgstr "Kiingereza"
+
+msgid "Swahili"
+msgstr "Kiswahili"
+
+msgid "Amharic"
+msgstr "Kiamhari"
+
+msgid ""
+"I consent to sharing my crop, leaf image, AI prediction, confidence, "
+"symptoms, and relevant advisory with an agricultural expert for review. My "
+"name, email, and exact location will not be shared."
+msgstr ""
+"Ninakubali kushiriki zao langu, picha ya jani, utabiri wa AI, ujasiri, "
+"dalili, na ushauri unaohusika na mtaalamu wa kilimo kwa ukaguzi. Jina langu,"
+" barua pepe, na eneo langu kamili halitashirikiwa."
+
+msgid "Explicit consent is required to request an expert review."
+msgstr "Idhini ya wazi inahitajika ili kuomba ukaguzi wa mtaalamu."
+
+msgid ""
+"You can share this case with an agricultural expert for a secondary "
+"assessment. The expert will see your crop details, image, and the AI's "
+"prediction."
+msgstr ""
+"Unaweza kushiriki kesi hii na mtaalamu wa kilimo kwa tathmini ya pili. "
+"Mtaalamu ataona maelezo ya zao lako, picha, na utabiri wa AI."
+
+msgid "Request Expert Review"
+msgstr "Omba Ukaguzi wa Mtaalamu"
+
+msgid "Revoke Consent"
+msgstr "Batilisha Idhini"
+
+msgid "AI-estimated condition"
+msgstr "Hali iliyokadiriwa na AI"
+
+msgid "Possible"
+msgstr "Inawezekana"
+
+msgid "This is the model's top visual-pattern match for the uploaded leaf."
+msgstr ""
+"Huu ndio muundo mkuu wa kuona unaolingana na modeli kwa jani lililopakiwa."
+
+msgid "UNCALIBRATED MODEL CONFIDENCE"
+msgstr "UJASIRI WA MODELI USIOPIMWA"
+
+msgid "Model:"
+msgstr "Modeli:"
+
+msgid "Estimated result, not a confirmed diagnosis."
+msgstr "Matokeo yaliyokadiriwa, si utambuzi uliothibitishwa."
+
+msgid "Confidence is not disease severity or guaranteed accuracy."
+msgstr "Ujasiri si ukali wa ugonjwa au usahihi uliohakikishwa."
+
+msgid "Outside disease-specific scope:"
+msgstr "Nje ya wigo maalum wa ugonjwa:"
+
+msgid ""
+"The model predicted two-spotted spider mites, a pest. The actual model "
+"result is preserved, but disease-specific guidance is not provided."
+msgstr ""
+"Modeli ilitabiri utitiri wa buibui wenye madoa mawili, mdudu mharibifu. "
+"Matokeo halisi ya modeli yamehifadhiwa, lakini mwongozo maalum wa ugonjwa "
+"hautolewi."
+
+msgid "Uncertain result:"
+msgstr "Matokeo yasiyo na uhakika:"
+
+msgid ""
+"Confidence is below the provisional 70% threshold. Try another clear leaf "
+"photo or seek expert review."
+msgstr ""
+"Ujasiri uko chini ya kiwango cha mpito cha 70%%. Jaribu picha nyingine wazi "
+"ya jani au tafuta ukaguzi wa mtaalamu."
+
+msgid "Analysis could not be completed"
+msgstr "Uchambuzi haukuweza kukamilika"
+
+msgid ""
+"Your case and image remain saved. You can return later or start another crop"
+" check."
+msgstr ""
+"Kesi yako na picha vinabaki vimehifadhiwa. Unaweza kurudi baadaye au kuanza "
+"ukaguzi mwingine wa zao."
+
+msgid "Analysis is not complete"
+msgstr "Uchambuzi haujakamilika"
+
+msgid "Continue analysis"
+msgstr "Endelea na uchambuzi"
+
+msgid "Agricultural Guidance"
+msgstr "Mwongozo wa Kilimo"
+
+msgid "AI-generated from sources"
+msgstr "Imeundwa na AI kutoka vyanzo"
+
+msgid "Retrieved Sources"
+msgstr "Vyanzo Vilivyopatikana"
+
+msgid "References"
+msgstr "Marejeleo"
+
+msgid "Source"
+msgstr "Chanzo"
+
+msgid "Note:"
+msgstr "Kumbuka:"
+
+msgid ""
+"Advice may be specific to other regions. Consult local extension services "
+"for specific treatment dosages."
+msgstr ""
+"Ushauri unaweza kuwa maalum kwa maeneo mengine. Wasiliana na huduma za ugani"
+" za eneo lako kwa viwango maalum vya matibabu."
+
+msgid "Request evidence-backed agricultural guidance for this diagnosis."
+msgstr "Omba mwongozo wa kilimo unaoungwa mkono na ushahidi kwa utambuzi huu."
+
+msgid "Retrieve Guidance"
+msgstr "Pata Ushauri"
+
+msgid "Expert Review"
+msgstr "Ukaguzi wa Mtaalamu"
+
+msgid "Status:"
+msgstr "Hali:"
+
+msgid "Review by Expert"
+msgstr "Ukaguzi na Mtaalamu"
+
+msgid "Outcome:"
+msgstr "Matokeo:"
+
+msgid "Findings:"
+msgstr "Matokeo ya Uchunguzi:"
+
+msgid "Next Steps:"
+msgstr "Hatua Zinazofuata:"
+
+msgid "Previous Reviews"
+msgstr "Ukaguzi Uliopita"
+
+msgid "Submitted:"
+msgstr "Imewasilishwa:"
+
+msgid "Revoked:"
+msgstr "Imebatilishwa:"
+
+msgid "Check Another Crop"
+msgstr "Kagua Zao Jingine"
+
+msgid "Saved Case"
+msgstr "Kesi Iliyohifadhiwa"
+
+msgid "View History"
+msgstr "Tazama Historia"
+
+msgid "Diagnosis Result"
+msgstr "Matokeo ya Utambuzi"
+
+msgid "Check"
+msgstr "Kagua"
+
+msgid "An account with this email address already exists."
+msgstr "Akaunti yenye anwani hii ya barua pepe tayari ipo."
+
+msgid ""
+"Cannot change the species of a crop that has associated diagnosis cases."
+msgstr "Huwezi kubadilisha aina ya zao lenye kesi za utambuzi zinazohusika."
+
+msgid "Case location"
+msgstr "Eneo la kesi"
+
+msgid "Describe visible changes (optional)"
+msgstr "Eleza mabadiliko yanayoonekana (hiari)"
+
+msgid "Enter a valid email address and password."
+msgstr "Ingiza barua pepe na nenosiri sahihi."
+
+msgid "Outcome and findings are required and must be valid."
+msgstr "Matokeo na matokeo ya uchunguzi yanahitajika na lazima yawe sahihi."
+
+msgid "Planting date cannot be in the future."
+msgstr "Tarehe ya kupanda haiwezi kuwa ya baadaye."
+
+msgid "Select a registered crop (optional)"
+msgstr "Chagua zao lililosajiliwa (hiari)"
+
+msgid "The decoded image dimensions are too large."
+msgstr "Vipimo vya picha iliyosimbuliwa ni vikubwa mno."
+
+msgid "The image must be %(limit)s or smaller."
+msgstr "Picha lazima iwe %(limit)s au ndogo zaidi."
+
+msgid "This account is inactive."
+msgstr "Akaunti hii haifanyi kazi."
+
+msgid "Upload a valid, uncorrupted image."
+msgstr "Pakia picha halali isiyoharibika."
+
+msgid "Use a JPEG, PNG, or WebP image."
+msgstr "Tumia picha ya JPEG, PNG, au WebP."
+
+msgid "I understand that AI results are estimates, not confirmed diagnoses."
+msgstr ""
+"Ninaelewa kuwa matokeo ya AI ni makadirio, si utambuzi uliothibitishwa."
+
+msgid "Case Reassigned"
+msgstr "Kesi Imekabidhiwa Tena"
+

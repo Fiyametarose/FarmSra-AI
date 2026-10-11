@@ -1,6 +1,8 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
 <!doctype html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,18 +21,20 @@
         {% if user.role == 'farmer' %}
           <small>FARM WORKSPACE</small>
           <nav>
-            <a href="{% url 'dashboard' %}" class="{% block nav_dashboard %}{% endblock %}">▦ <span>Dashboard</span></a>
-            <a href="{% url 'crop-list' %}" class="{% block nav_my_crops %}{% endblock %}">▤ <span>My Crops</span></a>
-            <a href="{% url 'select-crop' %}" class="{% block nav_diagnose %}{% endblock %}">⌗ <span>Diagnose Crop</span></a>
-            <a href="{% url 'history' %}" class="{% block nav_history %}{% endblock %}">◷ <span>History</span></a>
-            <a href="{% url 'settings-account' %}" class="{% block nav_settings %}{% endblock %}">⚙ <span>Settings</span></a>
+            <a href="{% url 'dashboard' %}" class="{% block nav_dashboard %}{% endblock %}">▦ <span>{% trans "Dashboard" %}</span></a>
+            <a href="{% url 'crop-list' %}" class="{% block nav_my_crops %}{% endblock %}">▤ <span>{% trans "My Crops" %}</span></a>
+            <a href="{% url 'select-crop' %}" class="{% block nav_diagnose %}{% endblock %}">⌗ <span>{% trans "Diagnose Crop" %}</span></a>
+            <a href="{% url 'history' %}" class="{% block nav_history %}{% endblock %}">◷ <span>{% trans "History" %}</span></a>
+            <a href="{% url 'notifications:inbox' %}" class="{% block nav_notifications %}{% endblock %}">🔔 <span>{% trans "Notifications" %} {% if unread_notifications_count %}<span class="badge" style="background: var(--brand); color: white; border-radius: 9999px; padding: 2px 6px; font-size: 0.75rem; margin-left: 4px;">{{ unread_notifications_count }}</span>{% endif %}</span></a>
+            <a href="{% url 'settings-account' %}" class="{% block nav_settings %}{% endblock %}">⚙ <span>{% trans "Settings" %}</span></a>
           </nav>
         {% elif user.role == 'expert' %}
           <small>EXPERT WORKSPACE</small>
           <nav>
-            <a href="{% url 'expert-dashboard' %}" class="{% block nav_expert_dashboard %}{% endblock %}">▦ <span>Assigned Cases</span></a>
-            <a href="{% url 'expert-history' %}" class="{% block nav_expert_history %}{% endblock %}">◷ <span>Review History</span></a>
-            <a href="{% url 'expert-settings' %}" class="{% block nav_expert_settings %}{% endblock %}">⚙ <span>Account Settings</span></a>
+            <a href="{% url 'expert-dashboard' %}" class="{% block nav_expert_dashboard %}{% endblock %}">▦ <span>{% trans "Assigned Cases" %}</span></a>
+            <a href="{% url 'expert-history' %}" class="{% block nav_expert_history %}{% endblock %}">◷ <span>{% trans "Review History" %}</span></a>
+            <a href="{% url 'notifications:inbox' %}" class="{% block nav_expert_notifications %}{% endblock %}">🔔 <span>{% trans "Notifications" %} {% if unread_notifications_count %}<span class="badge" style="background: var(--brand); color: white; border-radius: 9999px; padding: 2px 6px; font-size: 0.75rem; margin-left: 4px;">{{ unread_notifications_count }}</span>{% endif %}</span></a>
+            <a href="{% url 'expert-settings' %}" class="{% block nav_expert_settings %}{% endblock %}">⚙ <span>Account {% trans "Settings" %}</span></a>
           </nav>
         {% endif %}
 
@@ -41,13 +45,42 @@
         </div>
       </aside>
       <div class="workspace-main">
-        <header class="topbar"><span>Workspace</span><strong>{% block breadcrumb %}{% if user.role == 'expert' %}Expert Dashboard{% else %}Dashboard{% endif %}{% endblock %}</strong><span class="top-user">{{ user.email }}</span></header>
+        <header class="topbar" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span>{% trans "Workspace" %}</span>
+            <strong>{% block breadcrumb %}{% if user.role == 'expert' %}{% trans "Expert Dashboard" %}{% else %}{% trans "Dashboard" %}{% endif %}{% endblock %}</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <form action="{% url 'set_language' %}" method="post" class="language-switcher">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                <select name="language" onchange="this.form.submit()" style="padding: 0.25rem; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text);">
+                    {% for lang in LANGUAGES %}
+                        <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                            {{ lang.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+            <span class="top-user">{{ user.email }}</span>
+          </div>
+        </header>
         <main class="page">{% block content %}{% endblock %}</main>
       </div>
     {% else %}
-      <header class="public-header">
+      <header class="public-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;">
         <a class="brand" href="{% url 'welcome' %}"><span class="brand-mark">⌁</span> FarmSra AI</a>
-        <span class="language">◉ English</span>
+        <form action="{% url 'set_language' %}" method="post" class="language-switcher">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <select name="language" onchange="this.form.submit()" style="padding: 0.25rem; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text);">
+                {% for lang in LANGUAGES %}
+                    <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                        {{ lang.1 }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
       </header>
       <main>{% block public_content %}{% endblock %}</main>
     {% endif %}

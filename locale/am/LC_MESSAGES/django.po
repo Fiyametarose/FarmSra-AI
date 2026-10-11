@@ -1,0 +1,545 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-01 00:00+0000\n"
+"PO-Revision-Date: 2023-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dashboard"
+msgstr "ዳሽቦርድ"
+
+msgid "My Crops"
+msgstr "የእኔ ሰብሎች"
+
+msgid "Diagnose Crop"
+msgstr "ሰብል መመርመር"
+
+msgid "History"
+msgstr "ታሪክ"
+
+msgid "Settings"
+msgstr "ቅንብሮች"
+
+msgid "Welcome back"
+msgstr "እንኳን በደህና መጡ"
+
+msgid "Your registered crops"
+msgstr "የተመዘገቡ ሰብሎች"
+
+msgid "Recent diagnoses"
+msgstr "የቅርብ ጊዜ ምርመራዎች"
+
+msgid "Local Weather"
+msgstr "የአካባቢ አየር ሁኔታ"
+
+msgid "Notifications"
+msgstr "ማሳወቂያዎች"
+
+msgid "Assigned Cases"
+msgstr "የተመደቡ ጉዳዮች"
+
+msgid "Review History"
+msgstr "የግምገማ ታሪክ"
+
+msgid "Workspace"
+msgstr "የስራ ቦታ"
+
+msgid "Check Weather"
+msgstr "አየር ሁኔታን ያረጋግጡ"
+
+msgid "Get the current weather for your registered town."
+msgstr "ለተመዘገበው ከተማዎ የአየር ሁኔታን ያግኙ።"
+
+msgid "Loading..."
+msgstr "በመጫን ላይ..."
+
+msgid "Failed to load weather."
+msgstr "የአየር ሁኔታ መጫን አልተሳካም።"
+
+msgid "Understand Your Crop's Health"
+msgstr "የሰብልዎን ጤና ይረዱ"
+
+msgid "AI for healthier crops and stronger farmers"
+msgstr "አርቴፊሻል ኢንተለጀንስ ለተሻለ የሰብል ጤና"
+
+msgid ""
+"FarmSra AI helps farmers identify possible crop problems from a leaf photo "
+"and keep a secure history of their results."
+msgstr "FarmSra AI ገበሬዎች የሰብል ችግሮችን በፎቶ እንዲለዩ ይረዳል።"
+
+msgid "Create Account"
+msgstr "መለያ ይፍጠሩ"
+
+msgid "Log in"
+msgstr "ይግቡ"
+
+msgid "Log In"
+msgstr "ይግቡ"
+
+msgid "AI-powered insights"
+msgstr "በAI የተደገፈ ግንዛቤ"
+
+msgid "Saved case history"
+msgstr "የተቀመጠ ታሪክ"
+
+msgid "Private farmer data"
+msgstr "የግል መረጃ"
+
+msgid "Your farm, in clearer focus."
+msgstr "እርሻዎ፣ በግልፅ።"
+
+msgid "Photo-based crop-health estimates for tomato, potato, and maize."
+msgstr "ለቲማቲም፣ ድንች እና በቆሎ የፎቶ ምርመራ።"
+
+msgid "Expert Dashboard"
+msgstr "የባለሙያ ዳሽቦርድ"
+
+msgid "View Review History"
+msgstr "የግምገማ ታሪክን ይመልከቱ"
+
+msgid "Assigned cases awaiting your review."
+msgstr "የተመደቡ ጉዳዮች ግምገማዎን እየጠበቁ ነው።"
+
+msgid "Assigned Referrals"
+msgstr "የተመደቡ ጉዳዮች"
+
+msgid "Date Assigned"
+msgstr "የተመደበበት ቀን"
+
+msgid "Crop"
+msgstr "ሰብል"
+
+msgid "Action"
+msgstr "ድርጊት"
+
+msgid "Review Case"
+msgstr "ጉዳዩን ይገምግሙ"
+
+msgid "You have no pending case assignments at this time."
+msgstr "በአሁኑ ጊዜ ምንም የተመደበ ጉዳይ የለም።"
+
+msgid "A clearer view of your crop checks and what to do next."
+msgstr "ስለ ሰብልዎ የተሻለ ግንዛቤ።"
+
+msgid "View all"
+msgstr "ሁሉንም ይመልከቱ"
+
+msgid "Planted"
+msgstr "ተተክሏል"
+
+msgid "No date"
+msgstr "ቀን የለም"
+
+msgid "Register Crop"
+msgstr "ሰብል ይመዝገቡ"
+
+msgid "No crops registered"
+msgstr "ምንም ሰብል አልተመዘገበም"
+
+msgid "Register your crops to keep track of their history and diagnoses."
+msgstr "ታሪካቸውን ለመከታተል ሰብሎችዎን ይመዝገቡ።"
+
+msgid "View history"
+msgstr "ታሪክን ይመልከቱ"
+
+msgid "No saved crop checks yet"
+msgstr "ምንም የተቀመጠ ምርመራ የለም"
+
+msgid "Your completed analyses will appear here."
+msgstr "የተጠናቀቁ ምርመራዎች እዚህ ይታያሉ።"
+
+msgid "Start Diagnosis"
+msgstr "ምርመራ ይጀምሩ"
+
+msgid ""
+"Understand your crops and revisit saved results whenever you need them."
+msgstr "ሰብሎችዎን ይረዱ እና ያስቀመጧቸውን ውጤቶች በፈለጉት ጊዜ ይጎብኙ።"
+
+msgid "Welcome Back"
+msgstr "እንኳን በደህና መጡ"
+
+msgid "Log in to continue to FarmSra AI."
+msgstr "ወደ FarmSra AI ለመቀጠል ይግቡ።"
+
+msgid "Email Address"
+msgstr "የኢሜል አድራሻ"
+
+msgid "Password"
+msgstr "የይለፍ ቃል"
+
+msgid "or"
+msgstr "ወይም"
+
+msgid "Create account"
+msgstr "መለያ ይፍጠሩ"
+
+msgid "Back to welcome"
+msgstr "ወደ መነሻ ይመለሱ"
+
+msgid "HEALTHIER CROPS. STRONGER FARMS."
+msgstr "ጤናማ ሰብሎች። ጠንካራ እርሻዎች።"
+
+msgid "Join FarmSra AI"
+msgstr "ወደ FarmSra AI ይቀላቀሉ"
+
+msgid ""
+"Create a farmer account to check tomato, potato, and maize leaf photos."
+msgstr "ለቲማቲም፣ ድንች እና በቆሎ የቅጠል ፎቶዎችን ለመመርመር የገበሬ መለያ ይፍጠሩ።"
+
+msgid "Create Your Account"
+msgstr "መለያዎን ይፍጠሩ"
+
+msgid "Step 1 of 2 · Add your personal details to continue."
+msgstr "ደረጃ 1 ከ 2 · ለመቀጠል የግል ዝርዝርዎን ያክሉ።"
+
+msgid "FARMER account · assigned automatically"
+msgstr "የገበሬ መለያ · በራስ-ሰር የተመደበ"
+
+msgid "1 Personal details · Step 1 of 2"
+msgstr "1 የግል ዝርዝሮች · ደረጃ 1 ከ 2"
+
+msgid "Full Name"
+msgstr "ሙሉ ስም"
+
+msgid "Confirm Password"
+msgstr "የይለፍ ቃል ያረጋግጡ"
+
+msgid "Continue"
+msgstr "ይቀጥሉ"
+
+msgid "Assigned"
+msgstr "ተመድቧል"
+
+msgid "2 Farm location · Step 2 of 2"
+msgstr "2 የእርሻ ቦታ · ደረጃ 2 ከ 2"
+
+msgid "Choose Kenya or Ethiopia, then describe your farm location."
+msgstr "ኬንያን ወይም ኢትዮጵያን ይምረጡ፣ በመቀጠል የእርሻዎን ቦታ ይግለፁ።"
+
+msgid "Country"
+msgstr "ሀገር"
+
+msgid "Region / County"
+msgstr "ክልል / ካውንቲ"
+
+msgid "Zone / Sub-county"
+msgstr "ዞን / ንዑስ-ካውንቲ"
+
+msgid "Woreda / Ward"
+msgstr "ወረዳ / ቀበሌ"
+
+msgid "City / Town"
+msgstr "ከተማ"
+
+msgid "Kebele / Locality"
+msgstr "ቀበሌ / አካባቢ"
+
+msgid "(optional)"
+msgstr "(አማራጭ)"
+
+msgid "Back"
+msgstr "ወደ ኋላ"
+
+msgid "Already have an account?"
+msgstr "አካውንት አለዎት?"
+
+msgid ""
+"Check current weather and forecasts to help plan your farming activities."
+msgstr "የእርሻ ስራዎን ለማቀድ እንዲረዳዎ የአሁኑን የአየር ሁኔታ እና ትንበያዎችን ያረጋግጡ።"
+
+msgid "Humidity:"
+msgstr "እርጥበት:"
+
+msgid "Wind:"
+msgstr "ነፋስ:"
+
+msgid "Precip:"
+msgstr "ዝናብ:"
+
+msgid "3-Day Forecast"
+msgstr "የ3 ቀናት ትንበያ"
+
+msgid "Weather data provided by"
+msgstr "የአየር ሁኔታ መረጃ ምንጭ:"
+
+msgid "Weather currently unavailable for"
+msgstr "በአሁኑ ጊዜ የአየር ሁኔታ አይገኝም ለ:"
+
+msgid "Try another city"
+msgstr "ሌላ ከተማ ይሞክሩ"
+
+msgid "You have been assigned a new case."
+msgstr "አዲስ ጉዳይ ተመድቦልዎታል።"
+
+msgid "Your request has been assigned to an expert."
+msgstr "ጥያቄዎ ለባለሙያ ተመድቧል።"
+
+msgid "An expert has reviewed your case."
+msgstr "ባለሙያ ጉዳይዎን ገምግሟል።"
+
+msgid "Consent was revoked for a case you were assigned."
+msgstr "ለተመደቡበት ጉዳይ ፈቃድ ተሰርዟል።"
+
+msgid "Mark All Read"
+msgstr "ሁሉንም እንደተነበቡ ምልክት አድርግ"
+
+msgid "Mark Read"
+msgstr "እንደተነበበ ምልክት አድርግ"
+
+msgid "View Case"
+msgstr "ጉዳዩን ይመልከቱ"
+
+msgid "You have no notifications."
+msgstr "ምንም ማሳወቂያዎች የሉዎትም።"
+
+msgid "Consent Revoked"
+msgstr "ፈቃድ ተሰርዟል"
+
+msgid "Expert Assigned"
+msgstr "ባለሙያ ተመድቧል"
+
+msgid "Request Assigned"
+msgstr "ጥያቄ ተመድቧል"
+
+msgid "Review Submitted"
+msgstr "ግምገማ ገብቷል"
+
+msgid "Multiple locations found. Please select your location:"
+msgstr "በርካታ አካባቢዎች ተገኝተዋል። እባክዎ አካባቢዎን ይምረጡ፡"
+
+msgid "No matching locations found."
+msgstr "ምንም የሚዛመዱ አካባቢዎች አልተገኙም።"
+
+msgid "Please enter a city or town name to check the weather:"
+msgstr "የአየር ሁኔታን ለመመልከት እባክዎ የከተማ ስም ያስገቡ፡"
+
+msgid "Search again"
+msgstr "እንደገና ፈልግ"
+
+msgid "Searching..."
+msgstr "በመፈለግ ላይ..."
+
+msgid "Search"
+msgstr "ፈልግ"
+
+msgid "Failed to search."
+msgstr "መፈለግ አልተሳካም።"
+
+msgid "e.g. Nairobi"
+msgstr "ለምሳሌ ናይሮቢ"
+
+msgid "your location"
+msgstr "የእርስዎ አካባቢ"
+
+msgid "English"
+msgstr "እንግሊዝኛ"
+
+msgid "Swahili"
+msgstr "ስዋሂሊ"
+
+msgid "Amharic"
+msgstr "አማርኛ"
+
+msgid ""
+"I consent to sharing my crop, leaf image, AI prediction, confidence, "
+"symptoms, and relevant advisory with an agricultural expert for review. My "
+"name, email, and exact location will not be shared."
+msgstr ""
+"የሰብሌን መረጃ፣ የቅጠል ምስል፣ የ AI ግምት፣ የእርግጠኝነት መጠን፣ ምልክቶች እና አግባብነት ያለው ምክር ለግምገማ "
+"ለግብርና ባለሙያ ለማጋራት እስማማለሁ። ስሜ፣ ኢሜይሌ እና ትክክለኛ አካባቢዬ አይጋሩም።"
+
+msgid "Explicit consent is required to request an expert review."
+msgstr "የባለሙያ ግምገማ ለመጠየቅ ግልጽ ፈቃድ ያስፈልጋል።"
+
+msgid ""
+"You can share this case with an agricultural expert for a secondary "
+"assessment. The expert will see your crop details, image, and the AI's "
+"prediction."
+msgstr ""
+"ለተጨማሪ ግምገማ ይህንን ጉዳይ ለግብርና ባለሙያ ማጋራት ይችላሉ። ባለሙያው የሰብልዎን ዝርዝሮች፣ ምስል እና የ AI "
+"ግምት ያያል።"
+
+msgid "Request Expert Review"
+msgstr "የባለሙያ ግምገማ ጠይቅ"
+
+msgid "Revoke Consent"
+msgstr "ፈቃድን ሰርዝ"
+
+msgid "AI-estimated condition"
+msgstr "በ AI የተገመተ ሁኔታ"
+
+msgid "Possible"
+msgstr "ሊሆን የሚችል"
+
+msgid "This is the model's top visual-pattern match for the uploaded leaf."
+msgstr "ይህ ለተሰቀለው ቅጠል የሞዴሉ ከፍተኛ የእይታ ንድፍ ተዛማጅ ነው።"
+
+msgid "UNCALIBRATED MODEL CONFIDENCE"
+msgstr "ያልተስተካከለ የሞዴል እርግጠኝነት"
+
+msgid "Model:"
+msgstr "ሞዴል፡"
+
+msgid "Estimated result, not a confirmed diagnosis."
+msgstr "የተገመተ ውጤት፣ የተረጋገጠ ምርመራ አይደለም።"
+
+msgid "Confidence is not disease severity or guaranteed accuracy."
+msgstr "እርግጠኝነት የበሽታው ክብደት ወይም የተረጋገጠ ትክክለኛነት አይደለም።"
+
+msgid "Outside disease-specific scope:"
+msgstr "ከበሽታ-ነክ ወሰን ውጭ፡"
+
+msgid ""
+"The model predicted two-spotted spider mites, a pest. The actual model "
+"result is preserved, but disease-specific guidance is not provided."
+msgstr ""
+"ሞዴሉ ባለ ሁለት ነጥብ የሸረሪት ተባይን ገምቷል፣ ተባይ ነው። ትክክለኛው የሞዴል ውጤት ተጠብቋል፣ ነገር ግን የበሽታ-"
+"ነክ መመሪያ አልተሰጠም።"
+
+msgid "Uncertain result:"
+msgstr "ያልተረጋገጠ ውጤት፡"
+
+msgid ""
+"Confidence is below the provisional 70% threshold. Try another clear leaf "
+"photo or seek expert review."
+msgstr ""
+"እርግጠኝነቱ ከጊዜያዊው 70%% ገደብ በታች ነው። ሌላ ግልጽ የቅጠል ፎቶ ይሞክሩ ወይም የባለሙያ ግምገማ ይጠይቁ።"
+
+msgid "Analysis could not be completed"
+msgstr "ትንታኔውን ማጠናቀቅ አልተቻለም"
+
+msgid ""
+"Your case and image remain saved. You can return later or start another crop"
+" check."
+msgstr "ጉዳይዎ እና ምስልዎ እንደተቀመጡ ይቆያሉ። ቆየት ብለው መመለስ ወይም ሌላ የሰብል ምርመራ መጀመር ይችላሉ።"
+
+msgid "Analysis is not complete"
+msgstr "ትንታኔው አልተጠናቀቀም"
+
+msgid "Continue analysis"
+msgstr "ትንታኔውን ይቀጥሉ"
+
+msgid "Agricultural Guidance"
+msgstr "የግብርና መመሪያ"
+
+msgid "AI-generated from sources"
+msgstr "ከምንጮች በ AI የተዘጋጀ"
+
+msgid "Retrieved Sources"
+msgstr "የተገኙ ምንጮች"
+
+msgid "References"
+msgstr "ማጣቀሻዎች"
+
+msgid "Source"
+msgstr "ምንጭ"
+
+msgid "Note:"
+msgstr "ማስታወሻ፡"
+
+msgid ""
+"Advice may be specific to other regions. Consult local extension services "
+"for specific treatment dosages."
+msgstr ""
+"ምክር ለሌሎች ክልሎች የተለየ ሊሆን ይችላል። ለተወሰኑ የሕክምና መጠኖች የአካባቢውን የግብርና ኤክስቴንሽን አገልግሎት "
+"ያማክሩ።"
+
+msgid "Request evidence-backed agricultural guidance for this diagnosis."
+msgstr "ለዚህ ምርመራ በማስረጃ የተደገፈ የግብርና መመሪያ ይጠይቁ።"
+
+msgid "Retrieve Guidance"
+msgstr "መመሪያ አምጣ"
+
+msgid "Expert Review"
+msgstr "የባለሙያ ግምገማ"
+
+msgid "Status:"
+msgstr "ሁኔታ፡"
+
+msgid "Review by Expert"
+msgstr "በባለሙያ የተደረገ ግምገማ"
+
+msgid "Outcome:"
+msgstr "ውጤት፡"
+
+msgid "Findings:"
+msgstr "ግኝቶች፡"
+
+msgid "Next Steps:"
+msgstr "ቀጣይ እርምጃዎች፡"
+
+msgid "Previous Reviews"
+msgstr "ቀደምት ግምገማዎች"
+
+msgid "Submitted:"
+msgstr "የቀረበበት፡"
+
+msgid "Revoked:"
+msgstr "የተሰረዘበት፡"
+
+msgid "Check Another Crop"
+msgstr "ሌላ ሰብል ይመርምሩ"
+
+msgid "Saved Case"
+msgstr "የተቀመጠ ጉዳይ"
+
+msgid "View History"
+msgstr "ታሪክን ይመልከቱ"
+
+msgid "Diagnosis Result"
+msgstr "የምርመራ ውጤት"
+
+msgid "Check"
+msgstr "ምርመራ"
+
+msgid "An account with this email address already exists."
+msgstr "በዚህ የኢሜይል አድራሻ የተመዘገበ አካውንት አስቀድሞ አለ።"
+
+msgid ""
+"Cannot change the species of a crop that has associated diagnosis cases."
+msgstr "ከተያያዙ የበሽታ ምርመራ ጉዳዮች ጋር ያለውን የሰብል ዝርያ መለወጥ አይቻልም።"
+
+msgid "Case location"
+msgstr "የጉዳዩ አካባቢ"
+
+msgid "Describe visible changes (optional)"
+msgstr "የሚታዩ ለውጦችን ይግለጹ (አማራጭ)"
+
+msgid "Enter a valid email address and password."
+msgstr "ትክክለኛ የኢሜይል አድራሻ እና የይለፍ ቃል ያስገቡ።"
+
+msgid "Outcome and findings are required and must be valid."
+msgstr "ውጤት እና ግኝቶች ያስፈልጋሉ እንዲሁም ትክክለኛ መሆን አለባቸው።"
+
+msgid "Planting date cannot be in the future."
+msgstr "የተዘራበት ቀን የወደፊት ሊሆን አይችልም።"
+
+msgid "Select a registered crop (optional)"
+msgstr "የተመዘገበ ሰብል ይምረጡ (አማራጭ)"
+
+msgid "The decoded image dimensions are too large."
+msgstr "የምስሉ መጠን በጣም ትልቅ ነው።"
+
+msgid "The image must be %(limit)s or smaller."
+msgstr "ምስሉ %(limit)s ወይም ከዚያ ያነሰ መሆን አለበት።"
+
+msgid "This account is inactive."
+msgstr "ይህ አካውንት ንቁ አይደለም።"
+
+msgid "Upload a valid, uncorrupted image."
+msgstr "ትክክለኛ ያልተበላሸ ምስል ይስቀሉ።"
+
+msgid "Use a JPEG, PNG, or WebP image."
+msgstr "የ JPEG፣ PNG ወይም WebP ምስል ይጠቀሙ።"
+
+msgid "I understand that AI results are estimates, not confirmed diagnoses."
+msgstr "የ AI ውጤቶች ግምቶች እንጂ የተረጋገጡ ምርመራዎች እንዳልሆኑ ተረድቻለሁ።"
+
+msgid "Case Reassigned"
+msgstr "ጉዳዩ በድጋሚ ተመድቧል"

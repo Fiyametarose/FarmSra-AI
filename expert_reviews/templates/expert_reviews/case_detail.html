@@ -1,16 +1,17 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block nav_diagnose %}active{% endblock %}
-{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">Expert Dashboard</a> / Case {{ case.reference }}{% endblock %}
+{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">{% trans "Expert Dashboard" %}</a> / Case {{ case.reference }}{% endblock %}
 {% block content %}
     <div class="page-heading">
-        <h1>Review Case: {{ case.reference }}</h1>
+        <h1>{% trans "Review Case" %}: {{ case.reference }}</h1>
         <p>{{ case.get_crop_display }} · Submitted on {{ case.created_at|date:"d M Y" }}</p>
     </div>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
         <div>
             <section class="card">
-                <h2>Crop Image & Details</h2>
+                <h2>{% trans "Crop" %} Image & Details</h2>
                 <img src="{% url 'expert-case-image' referral.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="max-width: 100%; height: auto; border-radius: 8px;">
                 {% if case.symptoms %}
                     <p><strong>Symptoms:</strong><br><span style="white-space: pre-wrap;">{{ case.symptoms }}</span></p>

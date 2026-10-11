@@ -1,0 +1,16 @@
+{% load i18n %}
+<div style="padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
+    <p>{% trans "Multiple locations found. Please select your location:" %}</p>
+    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem;">
+        {% for opt in options %}
+        <li>
+            <button class="button button-secondary" onclick="fetchWeatherCoords({{ opt.lat }}, {{ opt.lon }}, '{{ opt.name|escapejs }}')">
+                {{ opt.name }}{% if opt.admin1 %}, {{ opt.admin1 }}{% endif %}{% if opt.country %}, {{ opt.country }}{% endif %}
+            </button>
+        </li>
+        {% empty %}
+        <li>{% trans "No matching locations found." %}</li>
+        {% endfor %}
+    </ul>
+    <button class="button button-small" onclick="fetchWeatherManual()" style="margin-top: 1rem;">{% trans "Search again" %}</button>
+</div>

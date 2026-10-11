@@ -13,10 +13,12 @@ from users.forms import FarmerAccountForm
 from .models import ExpertReferral, ExpertReview
 
 
+from django.utils.translation import gettext_lazy as _
+
 class RequestReviewForm(forms.Form):
     consent = forms.BooleanField(
         required=True,
-        error_messages={'required': 'Explicit consent is required to request an expert review.'}
+        error_messages={'required': _('Explicit consent is required to request an expert review.')}
     )
 
 def farmer_required(view_func):
@@ -81,6 +83,15 @@ def revoke_review(request, case_id):
             active_referral.revoked_at = timezone.now()
             active_referral.save(update_fields=['state', 'revoked_at'])
 
+            if active_referral.assigned_expert:
+                from notifications.models import Notification
+                Notification.objects.get_or_create(
+                    recipient=active_referral.assigned_expert,
+                    event_type=Notification.EventType.CONSENT_REVOKED,
+                    event_key=f"referral_{active_referral.id}_revoked",
+                    defaults={'metadata': {'diagnosis_id': str(case.id)}}
+                )
+
     return redirect('case-detail', case_id=case.id)
 
 
@@ -138,7 +149,7 @@ def submit_review(request, referral_id):
             return render(request, "expert_reviews/case_detail.html", {
                 "referral": referral,
                 "case": referral.diagnosis,
-                "error": "Outcome and findings are required and must be valid."
+                "error": _("Outcome and findings are required and must be valid.")
             })
 
         if not hasattr(referral, 'review'):
@@ -146,6 +157,14 @@ def submit_review(request, referral_id):
             review.referral = referral
             review.expert = request.user
             review.save()
+
+            from notifications.models import Notification
+            Notification.objects.get_or_create(
+                recipient=referral.diagnosis.farmer,
+                event_type=Notification.EventType.EXPERT_REVIEWED,
+                event_key=f"review_{review.id}_submitted",
+                defaults={'metadata': {'referral_id': str(referral.id), 'diagnosis_id': str(referral.diagnosis.id)}}
+            )
 
         referral.state = ExpertReferral.State.REVIEWED
         referral.save(update_fields=['state'])

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="page-heading">
+    <h1>{% trans "Notifications" %}</h1>
+    {% if notifications %}
+        <form method="post" action="{% url 'notifications:mark-all-read' %}" style="display:inline;">
+            {% csrf_token %}
+            <button class="button button-secondary" type="submit">{% trans "Mark All Read" %}</button>
+        </form>
+    {% endif %}
+</div>
+
+<section class="card">
+    {% if notifications %}
+        <ul style="list-style: none; padding: 0;">
+            {% for note in notifications %}
+            <li style="border-bottom: 1px solid var(--border); padding: 1rem 0; {% if not note.is_read %}font-weight: bold; background-color: rgba(var(--primary-rgb), 0.05);{% endif %}">
+                <div>
+                    <strong>
+                        {% if note.event_type == 'expert_assigned' %}
+                            {% trans "You have been assigned a new case." %}
+                        {% elif note.event_type == 'farmer_assigned' %}
+                            {% trans "Your request has been assigned to an expert." %}
+                        {% elif note.event_type == 'expert_reviewed' %}
+                            {% trans "An expert has reviewed your case." %}
+                        {% elif note.event_type == 'consent_revoked' %}
+                            {% trans "Consent was revoked for a case you were assigned." %}
+                        {% endif %}
+                    </strong>
+                    <span style="font-size: 0.8rem; color: gray; margin-left: 1rem;">{{ note.created_at|date:"d M Y, H:i" }}</span>
+                </div>
+
+                <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                    {% if not note.is_read %}
+                        <form method="post" action="{% url 'notifications:mark-read' note.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="button button-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">{% trans "Mark Read" %}</button>
+                        </form>
+                    {% endif %}
+
+                    {% if note.event_type == 'expert_assigned' %}
+                        {% if note.is_revoked %}
+                            <span style="font-size: 0.85rem; color: gray; padding: 0.25rem 0;">{% trans "Consent Revoked" %}</span>
+                        {% elif note.is_reassigned %}
+                            <span style="font-size: 0.85rem; color: gray; padding: 0.25rem 0;">{% trans "Case Reassigned" %}</span>
+                        {% elif note.is_actionable %}
+                            <a href="{% url 'expert-case-detail' note.metadata.referral_id %}" class="button" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">{% trans "View Case" %}</a>
+                        {% endif %}
+                    {% elif note.event_type == 'farmer_assigned' or note.event_type == 'expert_reviewed' %}
+                        <a href="{% url 'case-detail' note.metadata.diagnosis_id %}" class="button" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">{% trans "View Case" %}</a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans "You have no notifications." %}</p>
+    {% endif %}
+</section>
+{% endblock %}

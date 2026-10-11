@@ -38,11 +38,14 @@ INSTALLED_APPS = [
     "crops",
     "advisory",
     "expert_reviews",
+    "notifications",
+    "weather",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -62,6 +65,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "notifications.context_processors.unread_notifications",
             ],
         },
     },
@@ -93,6 +97,35 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Africa/Nairobi"
 USE_I18N = True
 USE_TZ = True
+
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("am", _("Amharic")),
+    ("sw", _("Swahili")),
+]
+
+EXTRA_LANG_INFO = {
+    'am': {
+        'bidi': False,
+        'code': 'am',
+        'name': 'Amharic',
+        'name_local': 'አማርኛ',
+    },
+    'sw': {
+        'bidi': False,
+        'code': 'sw',
+        'name': 'Swahili',
+        'name_local': 'Kiswahili',
+    }
+}
+
+import django.conf.locale
+from django.conf.locale import LANG_INFO
+LANG_INFO.update(EXTRA_LANG_INFO)
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]

@@ -1,16 +1,17 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block nav_my_crops %}active{% endblock %}
-{% block breadcrumb %}<a href="{% url 'crop-list' %}">My Crops</a> / {{ crop.name }}{% endblock %}
+{% block breadcrumb %}<a href="{% url 'crop-list' %}">{% trans "My Crops" %}</a> / {{ crop.name }}{% endblock %}
 {% block content %}
 <div class="page-heading">
-  <a class="button button-secondary float-right" href="{% url 'crop-edit' crop.id %}">Edit Crop</a>
+  <a class="button button-secondary float-right" href="{% url 'crop-edit' crop.id %}">Edit {% trans "Crop" %}</a>
   <span class="pill">{{ crop.get_species_display }}</span>
   <h1>{{ crop.name }}</h1>
   <p>{{ crop.get_status_display }} · Registered {{ crop.created_at|date:"d M Y" }}</p>
 </div>
 <div class="dashboard-grid">
   <section class="card">
-    <h2>Crop Details</h2>
+    <h2>{% trans "Crop" %} Details</h2>
     <p><strong>Species:</strong> {{ crop.get_species_display }}</p>
     <p><strong>Planting Date:</strong> {{ crop.planting_date|default:"Not specified" }}</p>
     <p><strong>Location:</strong> {{ crop.location|default:"Not specified" }}</p>
@@ -32,7 +33,7 @@
     {% else %}
       <div class="empty">
         <p>No diagnoses associated with this crop.</p>
-        <a class="button button-secondary" href="{% url 'select-crop' %}">⌗ Start Diagnosis</a>
+        <a class="button button-secondary" href="{% url 'select-crop' %}">⌗ {% trans "Start Diagnosis" %}</a>
       </div>
     {% endif %}
   </section>

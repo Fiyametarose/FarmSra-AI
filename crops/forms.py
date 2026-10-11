@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from .models import Crop
 
 class CropForm(forms.ModelForm):
@@ -14,7 +15,7 @@ class CropForm(forms.ModelForm):
         species = self.cleaned_data.get("species")
         if self.instance and self.instance.pk:
             if species != self.instance.species and self.instance.diagnoses.exists():
-                raise forms.ValidationError("Cannot change the species of a crop that has associated diagnosis cases.")
+                raise forms.ValidationError(_("Cannot change the species of a crop that has associated diagnosis cases."))
         return species
 
     def clean_planting_date(self):
@@ -22,5 +23,5 @@ class CropForm(forms.ModelForm):
         if planting_date:
             from datetime import date
             if planting_date > date.today():
-                raise forms.ValidationError("Planting date cannot be in the future.")
+                raise forms.ValidationError(_("Planting date cannot be in the future."))
         return planting_date

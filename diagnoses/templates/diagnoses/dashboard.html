@@ -1,26 +1,101 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block nav_dashboard %}active{% endblock %}
-{% block breadcrumb %}Dashboard{% endblock %}
+{% block breadcrumb %}{% trans "Dashboard" %}{% endblock %}
 {% block content %}
-  <div class="page-heading"><h1>Welcome back, {{ user.first_name|default:"farmer" }}</h1><p>A clearer view of your crop checks and what to do next.</p></div>
+  <div class="page-heading"><h1>{% trans "Welcome back" %}, {{ user.first_name|default:"farmer" }}</h1><p>{% trans "A clearer view of your crop checks and what to do next." %}</p></div>
   <div class="dashboard-grid">
       <section class="card">
-        <div class="section-title"><h2>Your registered crops</h2><a href="{% url 'crop-list' %}">View all ({{ crop_count }}) →</a></div>
+        <div class="section-title"><h2>{% trans "Your registered crops" %}</h2><a href="{% url 'crop-list' %}">{% trans "View all" %} ({{ crop_count }}) →</a></div>
         {% if recent_crops %}
-          <div class="case-list">{% for crop in recent_crops %}<a href="{% url 'crop-detail' crop.id %}"><strong>{{ crop.name }}</strong><span>{{ crop.get_species_display }} · {% if crop.planting_date %}Planted {{ crop.planting_date|date:"M Y" }}{% else %}No date{% endif %}</span><span class="badge">{{ crop.get_status_display }}</span></a>{% endfor %}</div>
-          <a class="button" href="{% url 'crop-add' %}" style="margin-top: 1rem;">+ Register Crop</a>
+          <div class="case-list">{% for crop in recent_crops %}<a href="{% url 'crop-detail' crop.id %}"><strong>{{ crop.name }}</strong><span>{{ crop.get_species_display }} · {% if crop.planting_date %}{% trans "Planted" %} {{ crop.planting_date|date:"M Y" }}{% else %}{% trans "No date" %}{% endif %}</span><span class="badge">{{ crop.get_status_display }}</span></a>{% endfor %}</div>
+          <a class="button" href="{% url 'crop-add' %}" style="margin-top: 1rem;">+ {% trans "Register Crop" %}</a>
         {% else %}
-          <div class="empty"><h3>No crops registered</h3><p>Register your crops to keep track of their history and diagnoses.</p><a class="button" href="{% url 'crop-add' %}">+ Register Crop</a></div>
+          <div class="empty"><h3>{% trans "No crops registered" %}</h3><p>{% trans "Register your crops to keep track of their history and diagnoses." %}</p><a class="button" href="{% url 'crop-add' %}">+ {% trans "Register Crop" %}</a></div>
         {% endif %}
       </section>
       <section class="card">
-        <div class="section-title"><h2>Recent diagnoses</h2><a href="{% url 'history' %}">View history →</a></div>
+        <div class="section-title"><h2>{% trans "Recent diagnoses" %}</h2><a href="{% url 'history' %}">{% trans "View history" %} →</a></div>
         {% if recent_cases %}
           <div class="case-list">{% for case in recent_cases %}<a href="{% url 'case-detail' case.id %}"><strong>{{ case.get_crop_display }} · {{ case.reference }}</strong><span>{{ case.display_prediction }}</span><time>{{ case.created_at|date:"d M Y" }}</time></a>{% endfor %}</div>
-          <a class="button" style="margin-top: 1rem;" href="{% url 'select-crop' %}">⌗ Diagnose Crop</a>
+          <a class="button" style="margin-top: 1rem;" href="{% url 'select-crop' %}">⌗ {% trans "Diagnose Crop" %}</a>
         {% else %}
-          <div class="empty"><h3>No saved crop checks yet</h3><p>Your completed analyses will appear here.</p><a class="button" href="{% url 'select-crop' %}">⌗ Start Diagnosis</a></div>
+          <div class="empty"><h3>{% trans "No saved crop checks yet" %}</h3><p>{% trans "Your completed analyses will appear here." %}</p><a class="button" href="{% url 'select-crop' %}">⌗ {% trans "Start Diagnosis" %}</a></div>
         {% endif %}
       </section>
+      <section class="card">
+        <div class="section-title"><h2>{% trans "Local Weather" %}</h2></div>
+        <div id="weather-container">
+          <p>{% trans "Check current weather and forecasts to help plan your farming activities." %}</p>
+          <button class="button" onclick="loadWeather()" id="load-weather-btn">🌤 {% trans "Check Weather" %}</button>
+        </div>
+      </section>
   </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function renderWeatherHTML(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const container = document.getElementById('weather-container');
+    container.innerHTML = '';
+    Array.from(doc.body.childNodes).forEach(node => {
+        container.appendChild(node);
+    });
+  }
+
+  function loadWeather() {
+    const btn = document.getElementById('load-weather-btn');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerText = '{% trans "Loading..." %}';
+    } else {
+      document.getElementById('weather-container').innerHTML = '<p>{% trans "Loading..." %}</p>';
+    }
+
+    fetch('{% url "weather:widget" %}')
+      .then(response => {
+        if (!response.ok) throw new Error('Network error');
+        return response.text();
+      })
+      .then(html => renderWeatherHTML(html))
+      .catch(err => {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = '🌤 {% trans "Check Weather" %}';
+        }
+        alert('{% trans "Failed to load weather." %}');
+      });
+  }
+
+  function fetchWeatherManual() {
+    const container = document.getElementById('weather-container');
+    container.innerHTML = '<p>{% trans "Loading..." %}</p>';
+    fetch('{% url "weather:widget" %}?search=')
+        .then(res => res.text())
+        .then(html => renderWeatherHTML(html))
+        .catch(err => container.innerHTML = '<p>{% trans "Failed to load weather." %}</p>');
+  }
+
+  function searchWeather() {
+    const term = document.getElementById('weather-search-input').value;
+    if (!term) return;
+    const container = document.getElementById('weather-container');
+    container.innerHTML = '<p>{% trans "Searching..." %}</p>';
+    fetch(`{% url 'weather:widget' %}?search=${encodeURIComponent(term)}`)
+        .then(res => res.text())
+        .then(html => renderWeatherHTML(html))
+        .catch(err => container.innerHTML = '<p>{% trans "Failed to search." %}</p>');
+  }
+
+  function fetchWeatherCoords(lat, lon, name) {
+    const container = document.getElementById('weather-container');
+    container.innerHTML = '<p>{% trans "Loading..." %}</p>';
+    fetch(`{% url 'weather:widget' %}?lat=${lat}&lon=${lon}&name=${encodeURIComponent(name)}`)
+        .then(res => res.text())
+        .then(html => renderWeatherHTML(html))
+        .catch(err => container.innerHTML = '<p>{% trans "Failed to load weather." %}</p>');
+  }
+</script>
 {% endblock %}

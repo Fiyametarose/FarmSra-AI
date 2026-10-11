@@ -1,98 +1,99 @@
 {% extends "base.html" %}
-{% block nav_diagnose %}active{% endblock %}{% block breadcrumb %}Saved Case{% endblock %}
+{% load i18n %}
+{% block nav_diagnose %}active{% endblock %}{% block breadcrumb %}{% trans "Saved Case" %}{% endblock %}
 {% block content %}
-    <div class="page-heading"><a class="button button-secondary float-right" href="{% url 'history' %}">View History</a><h1>{% if case.status == 'completed' %}Diagnosis Result{% else %}Crop Check{% endif %}</h1><p>{{ case.get_crop_display }} · {{ case.reference }} · {{ case.created_at|date:"d M Y" }}{% if case.registered_crop %} · <a href="{% url 'crop-detail' case.registered_crop.id %}">{{ case.registered_crop.name }}</a>{% endif %}</p></div>
+    <div class="page-heading"><a class="button button-secondary float-right" href="{% url 'history' %}">{% trans "View History" %}</a><h1>{% if case.status == 'completed' %}{% trans "Diagnosis Result" %}{% else %}{% trans "Crop" %} {% trans "Check" %}{% endif %}</h1><p>{{ case.get_crop_display }} · {{ case.reference }} · {{ case.created_at|date:"d M Y" }}{% if case.registered_crop %} · <a href="{% url 'crop-detail' case.registered_crop.id %}">{{ case.registered_crop.name }}</a>{% endif %}</p></div>
     {% if case.status == 'completed' %}
-        <section class="result-card card"><img src="{% url 'case-image' case.id %}" alt="Uploaded {{ case.get_crop_display }} leaf"><div><span class="pill">AI-estimated condition</span><h2>Possible {{ case.display_prediction }}</h2><p>This is the model’s top visual-pattern match for the uploaded leaf.</p><hr><small>UNCALIBRATED MODEL CONFIDENCE</small><div class="confidence">{{ case.confidence_percent }}%</div><small>Model: {{ case.model_identifier }}</small></div></section>
-        {% if case.is_spider_mite %}<div class="warning"><strong>Outside disease-specific scope:</strong> The model predicted two-spotted spider mites, a pest. The actual model result is preserved, but disease-specific guidance is not provided.</div>{% elif case.is_uncertain %}<div class="warning"><strong>Uncertain result:</strong> Confidence is below the provisional 70% threshold. Try another clear leaf photo or seek expert review.</div>{% endif %}
-        <div class="warning">ⓘ <strong>Estimated result, not a confirmed diagnosis.</strong> Confidence is not disease severity or guaranteed accuracy.</div>
-    {% elif case.status == 'failed' %}<section class="card failure"><h2>Analysis could not be completed</h2><p>{{ case.failure_message }}</p><p>Your case and image remain saved. You can return later or start another crop check.</p></section>
-    {% else %}<section class="card"><h2>Analysis is not complete</h2><a class="button" href="{% url 'case-analyzing' case.id %}">Continue analysis</a></section>{% endif %}
+        <section class="result-card card"><img src="{% url 'case-image' case.id %}" alt="Uploaded {{ case.get_crop_display }} leaf"><div><span class="pill">{% trans "AI-estimated condition" %}</span><h2>{% trans "Possible" %} {{ case.display_prediction }}</h2><p>{% trans "This is the model's top visual-pattern match for the uploaded leaf." %}</p><hr><small>{% trans "UNCALIBRATED MODEL CONFIDENCE" %}</small><div class="confidence">{{ case.confidence_percent }}%</div><small>{% trans "Model:" %} {{ case.model_identifier }}</small></div></section>
+        {% if case.is_spider_mite %}<div class="warning"><strong>{% trans "Outside disease-specific scope:" %}</strong> {% trans "The model predicted two-spotted spider mites, a pest. The actual model result is preserved, but disease-specific guidance is not provided." %}</div>{% elif case.is_uncertain %}<div class="warning"><strong>{% trans "Uncertain result:" %}</strong> {% trans "Confidence is below the provisional 70% threshold. Try another clear leaf photo or seek expert review." %}</div>{% endif %}
+        <div class="warning">ⓘ <strong>{% trans "Estimated result, not a confirmed diagnosis." %}</strong> {% trans "Confidence is not disease severity or guaranteed accuracy." %}</div>
+    {% elif case.status == 'failed' %}<section class="card failure"><h2>{% trans "Analysis could not be completed" %}</h2><p>{{ case.failure_message }}</p><p>{% trans "Your case and image remain saved. You can return later or start another crop check." %}</p></section>
+    {% else %}<section class="card"><h2>{% trans "Analysis is not complete" %}</h2><a class="button" href="{% url 'case-analyzing' case.id %}">{% trans "Continue analysis" %}</a></section>{% endif %}
 
     {% if case.is_eligible_for_advisory %}
         <section class="card">
-            <h2>Agricultural Guidance</h2>
+            <h2>{% trans "Agricultural Guidance" %}</h2>
             {% if case.advisory %}
                 {% if case.advisory.is_generated %}
-                    <span class="pill">AI-generated from sources</span>
+                    <span class="pill">{% trans "AI-generated from sources" %}</span>
                 {% else %}
-                    <span class="pill">Retrieved Sources</span>
+                    <span class="pill">{% trans "Retrieved Sources" %}</span>
                 {% endif %}
                 <div style="white-space: pre-wrap; margin-top: 1rem;">{{ case.advisory.content }}</div>
                 {% if case.advisory.retrieved_sources %}
                     <hr>
-                    <h3>References</h3>
+                    <h3>{% trans "References" %}</h3>
                     <ul>
                     {% for source in case.advisory.retrieved_sources %}
                         <li style="margin-bottom: 0.5rem;">
                             <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.title }}</a> ({{ source.publisher }})
                             {% if source.date %} - {{ source.date }}{% endif %}
                             {% if source.chunk_id %}
-                                <br><small><strong>Source {{ source.chunk_id }}</strong>:<br>
+                                <br><small><strong>{% trans "Source" %} {{ source.chunk_id }}</strong>:<br>
                                 <em>"{{ source.text }}"</em></small>
                             {% endif %}
                         </li>
                     {% endfor %}
                     </ul>
                 {% endif %}
-                <p class="warning" style="margin-top: 1rem;">ⓘ <strong>Note:</strong> Advice may be specific to other regions. Consult local extension services for specific treatment dosages.</p>
+                <p class="warning" style="margin-top: 1rem;">ⓘ <strong>{% trans "Note:" %}</strong> {% trans "Advice may be specific to other regions. Consult local extension services for specific treatment dosages." %}</p>
             {% else %}
-                <p>Request evidence-backed agricultural guidance for this diagnosis.</p>
+                <p>{% trans "Request evidence-backed agricultural guidance for this diagnosis." %}</p>
                 <form action="{% url 'generate-advisory' case.id %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="button">Retrieve Guidance</button>
+                    <button type="submit" class="button">{% trans "Retrieve Guidance" %}</button>
                 </form>
             {% endif %}
         </section>
     {% endif %}
 
     <section class="card">
-        <h2>Expert Review</h2>
+        <h2>{% trans "Expert Review" %}</h2>
         {% if active_referral %}
-            <p><strong>Status:</strong> {{ active_referral.get_state_display }}</p>
+            <p><strong>{% trans "Status:" %}</strong> {{ active_referral.get_state_display }}</p>
             {% if active_referral.state == 'reviewed' and active_referral.review %}
                 <div class="result-card" style="margin-top: 1rem; border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
-                    <h3>Review by Expert {{ active_referral.review.expert.email }}</h3>
-                    <p><strong>Outcome:</strong> {{ active_referral.review.get_outcome_display }}</p>
-                    <p><strong>Findings:</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.findings }}</span></p>
+                    <h3>{% trans "Review by Expert" %} {{ active_referral.review.expert.email }}</h3>
+                    <p><strong>{% trans "Outcome:" %}</strong> {{ active_referral.review.get_outcome_display }}</p>
+                    <p><strong>{% trans "Findings:" %}</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.findings }}</span></p>
                     {% if active_referral.review.next_steps %}
-                        <p><strong>Next Steps:</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.next_steps }}</span></p>
+                        <p><strong>{% trans "Next Steps:" %}</strong><br><span style="white-space: pre-wrap;">{{ active_referral.review.next_steps }}</span></p>
                     {% endif %}
                 </div>
             {% endif %}
             <form action="{% url 'revoke-review' case.id %}" method="post" style="margin-top: 1rem;">
                 {% csrf_token %}
-                <button type="submit" class="button button-danger">Revoke Consent</button>
+                <button type="submit" class="button button-danger">{% trans "Revoke Consent" %}</button>
             </form>
         {% else %}
-            <p>You can share this case with an agricultural expert for a secondary assessment. The expert will see your crop details, image, and the AI's prediction.</p>
+            <p>{% trans "You can share this case with an agricultural expert for a secondary assessment. The expert will see your crop details, image, and the AI's prediction." %}</p>
             <form action="{% url 'request-review' case.id %}" method="post">
                 {% csrf_token %}
                 <div style="margin-bottom: 1rem;">
                     <label>
                         <input type="checkbox" required name="consent" value="on">
-                        I consent to sharing my crop, leaf image, AI prediction, confidence, symptoms, and relevant advisory with an agricultural expert for review. My name, email, and exact location will not be shared.
+                        {% trans "I consent to sharing my crop, leaf image, AI prediction, confidence, symptoms, and relevant advisory with an agricultural expert for review. My name, email, and exact location will not be shared." %}
                     </label>
                 </div>
-                <button type="submit" class="button">Request Expert Review</button>
+                <button type="submit" class="button">{% trans "Request Expert Review" %}</button>
             </form>
         {% endif %}
 
         {% if revoked_referrals %}
-            <h3 style="margin-top: 2rem;">Previous Reviews</h3>
+            <h3 style="margin-top: 2rem;">{% trans "Previous Reviews" %}</h3>
             {% for ref in revoked_referrals %}
                 <div class="result-card" style="margin-top: 1rem; border: 1px solid var(--border); padding: 1rem; border-radius: 8px; opacity: 0.8;">
-                    <h4>Review by Expert {{ ref.review.expert.email }} <span class="pill" style="float: right;">Consent Revoked</span></h4>
-                    <p><strong>Outcome:</strong> {{ ref.review.get_outcome_display }}</p>
-                    <p><strong>Findings:</strong><br><span style="white-space: pre-wrap;">{{ ref.review.findings }}</span></p>
+                    <h4>{% trans "Review by Expert" %} {{ ref.review.expert.email }} <span class="pill" style="float: right;">{% trans "Consent Revoked" %}</span></h4>
+                    <p><strong>{% trans "Outcome:" %}</strong> {{ ref.review.get_outcome_display }}</p>
+                    <p><strong>{% trans "Findings:" %}</strong><br><span style="white-space: pre-wrap;">{{ ref.review.findings }}</span></p>
                     {% if ref.review.next_steps %}
-                        <p><strong>Next Steps:</strong><br><span style="white-space: pre-wrap;">{{ ref.review.next_steps }}</span></p>
+                        <p><strong>{% trans "Next Steps:" %}</strong><br><span style="white-space: pre-wrap;">{{ ref.review.next_steps }}</span></p>
                     {% endif %}
-                    <small>Submitted: {{ ref.review.submitted_at|date:"d M Y, H:i" }} | Revoked: {{ ref.revoked_at|date:"d M Y, H:i" }}</small>
+                    <small>{% trans "Submitted:" %} {{ ref.review.submitted_at|date:"d M Y, H:i" }} | {% trans "Revoked:" %} {{ ref.revoked_at|date:"d M Y, H:i" }}</small>
                 </div>
             {% endfor %}
         {% endif %}
     </section>
 
-    <div class="form-actions"><a class="button" href="{% url 'select-crop' %}">Check Another Crop</a></div>
+    <div class="form-actions"><a class="button" href="{% url 'select-crop' %}">{% trans "Check Another Crop" %}</a></div>
 {% endblock %}

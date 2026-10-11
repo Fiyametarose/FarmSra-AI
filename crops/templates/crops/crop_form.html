@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block nav_my_crops %}active{% endblock %}
-{% block breadcrumb %}<a href="{% url 'crop-list' %}">My Crops</a> / {% if is_edit %}Edit {{ crop.name }}{% else %}Register Crop{% endif %}{% endblock %}
+{% block breadcrumb %}<a href="{% url 'crop-list' %}">{% trans "My Crops" %}</a> / {% if is_edit %}Edit {{ crop.name }}{% else %}{% trans "Register Crop" %}{% endif %}{% endblock %}
 {% block content %}
 <div class="page-heading">
   <h1>{% if is_edit %}Edit {{ crop.name }}{% else %}Register a new crop{% endif %}</h1>

@@ -6,3 +6,4 @@ keras==3.13.2
 tensorflow==2.20.0
 google-genai~=0.3.0
 chromadb==1.5.9
+polib~=1.2.0

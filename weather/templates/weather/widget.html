@@ -1,0 +1,39 @@
+{% load i18n %}
+{% if weather %}
+    <div style="background: rgba(var(--primary-rgb), 0.05); padding: 1rem; border-radius: 8px;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="font-size: 2rem;">🌡</div>
+            <div>
+                <strong style="display: block;">{{ weather.town }}</strong>
+                <span>{{ weather.temperature }}°C, {% trans weather.condition %}</span>
+                <div style="font-size: 0.85rem; color: gray;">
+                    {% trans "Humidity:" %} {{ weather.humidity }}% |
+                    {% trans "Wind:" %} {{ weather.wind_speed }} km/h |
+                    {% trans "Precip:" %} {{ weather.precipitation }} mm
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+            <strong style="font-size: 0.85rem;">{% trans "3-Day Forecast" %}</strong>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem; font-size: 0.85rem;">
+                {% for day in weather.forecast %}
+                <div style="background: var(--surface); padding: 0.5rem; border-radius: 4px; text-align: center;">
+                    <strong style="display: block;">{{ day.date }}</strong>
+                    <span>{{ day.temp_max }}° / {{ day.temp_min }}°</span>
+                    <div style="color: gray;">{% trans day.condition %}</div>
+                    <div style="color: gray; font-size: 0.75rem;">{% if day.precip %}{{ day.precip }} mm{% else %}0 mm{% endif %}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div style="font-size: 0.7rem; color: gray; margin-top: 0.5rem; text-align: right;">
+            {% trans "Weather data provided by" %} {{ weather.provider }} {% if weather.timestamp %}({{ weather.timestamp }}){% endif %}
+        </div>
+    </div>
+{% else %}
+    <div style="padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: gray;">
+        <em>{% trans "Weather currently unavailable for" %} {{ town|default:_("your location") }}.</em>
+        <button class="button button-secondary button-small" onclick="fetchWeatherManual()" style="margin-top: 0.5rem;">{% trans "Try another city" %}</button>
+    </div>
+{% endif %}

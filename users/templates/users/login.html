@@ -1,32 +1,33 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Log in — FarmSra AI{% endblock %}
+{% block title %}{% trans "Log in" %} — FarmSra AI{% endblock %}
 
 {% block public_content %}
   <section class="auth-layout">
     <div class="auth-visual">
       <div class="leaf-art">☘</div>
       <h2>Your farm,<br>in clearer focus.</h2>
-      <p>Understand your crops and revisit saved results whenever you need them.</p>
+      <p>{% trans "Understand your crops and revisit saved results whenever you need them." %}</p>
     </div>
     <div class="auth-panel">
-      <h1>Welcome Back</h1>
-      <p>Log in to continue to FarmSra AI.</p>
+      <h1>{% trans "Welcome Back" %}</h1>
+      <p>{% trans "Log in to continue to FarmSra AI." %}</p>
       <form method="post" class="stacked-form">
         {% csrf_token %}
         {{ form.non_field_errors }}
-        <label>Email Address{{ form.email }}{{ form.email.errors }}</label>
-        <label>Password{{ form.password }}{{ form.password.errors }}</label>
+        <label>{% trans "Email Address" %}{{ form.email }}{{ form.email.errors }}</label>
+        <label>{% trans "Password" %}{{ form.password }}{{ form.password.errors }}</label>
         {% if next %}
           <input type="hidden" name="next" value="{{ next }}">
         {% endif %}
-        <button class="button" type="submit">→ Log In</button>
+        <button class="button" type="submit">→ {% trans "Log In" %}</button>
       </form>
-      <div class="divider">or</div>
+      <div class="divider">{% trans "or" %}</div>
       <a class="button button-secondary full" href="{% url 'register' %}">
-        Create Account
+        {% trans "Create Account" %}
       </a>
-      <a class="back-link" href="{% url 'welcome' %}">← Back to welcome</a>
+      <a class="back-link" href="{% url 'welcome' %}">← {% trans "Back to welcome" %}</a>
     </div>
   </section>
 {% endblock %}

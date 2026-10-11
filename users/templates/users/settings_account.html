@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block nav_settings %}active{% endblock %}
-{% block breadcrumb %}Settings{% endblock %}
+{% block breadcrumb %}{% trans "Settings" %}{% endblock %}
 {% block content %}
 <div class="page-heading">
-  <h1>Settings</h1>
+  <h1>{% trans "Settings" %}</h1>
   <p>Manage your account preferences and details.</p>
 </div>
 <div class="dashboard-grid">

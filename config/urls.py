@@ -21,4 +21,7 @@ urlpatterns = [
     path("crops/", include("crops.urls")),
     path("advisory/", include("advisory.urls")),
     path("", include("expert_reviews.urls")),
+    path("notifications/", include("notifications.urls")),
+    path("i18n/", include("django.conf.urls.i18n")),
+    path("weather/", include("weather.urls")),
 ]

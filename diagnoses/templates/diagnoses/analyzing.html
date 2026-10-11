@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block nav_diagnose %}active{% endblock %}
-{% block breadcrumb %}Diagnose Crop{% endblock %}
+{% block breadcrumb %}{% trans "Diagnose Crop" %}{% endblock %}
 
 {% block content %}
   <div class="page-heading">
-    <h1>Analyzing Your Crop</h1>
+    <h1>Analyzing Your {% trans "Crop" %}</h1>
     <p>
       We’re examining your {{ case.get_crop_display|lower }} photo for visible
       crop-health patterns.

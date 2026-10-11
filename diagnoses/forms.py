@@ -3,6 +3,7 @@ import warnings
 from django import forms
 from django.conf import settings
 from PIL import Image, UnidentifiedImageError
+from django.utils.translation import gettext_lazy as _
 
 from .models import DiagnosisCase
 
@@ -13,9 +14,9 @@ class DiagnosisUploadForm(forms.ModelForm):
         fields = ("registered_crop", "image", "symptoms", "location")
         widgets = {
             "symptoms": forms.Textarea(
-                attrs={"rows": 5, "placeholder": "Describe visible changes (optional)"}
+                attrs={"rows": 5, "placeholder": _("Describe visible changes (optional)")}
             ),
-            "location": forms.TextInput(attrs={"placeholder": "Case location"}),
+            "location": forms.TextInput(attrs={"placeholder": _("Case location")}),
         }
 
     def __init__(self, *args, farmer=None, crop_species=None, **kwargs):
@@ -24,7 +25,7 @@ class DiagnosisUploadForm(forms.ModelForm):
             self.fields["registered_crop"].queryset = farmer.registered_crops.filter(species=crop_species)
         else:
             self.fields["registered_crop"].queryset = DiagnosisCase.objects.none()
-        self.fields["registered_crop"].empty_label = "Select a registered crop (optional)"
+        self.fields["registered_crop"].empty_label = _("Select a registered crop (optional)")
 
     def clean_image(self):
         upload = self.cleaned_data["image"]
@@ -34,7 +35,7 @@ class DiagnosisUploadForm(forms.ModelForm):
                 limit = "10 MB"
             else:
                 limit = f"{max_size} bytes"
-            raise forms.ValidationError(f"The image must be {limit} or smaller.")
+            raise forms.ValidationError(_("The image must be %(limit)s or smaller.") % {'limit': limit})
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("error", Image.DecompressionBombWarning)
@@ -43,7 +44,7 @@ class DiagnosisUploadForm(forms.ModelForm):
                 image_format = image.format
                 if width * height > settings.MAX_DECODED_IMAGE_PIXELS:
                     raise forms.ValidationError(
-                        "The decoded image dimensions are too large."
+                        _("The decoded image dimensions are too large.")
                     )
                 image.verify()
         except forms.ValidationError:
@@ -55,10 +56,10 @@ class DiagnosisUploadForm(forms.ModelForm):
             OSError,
             SyntaxError,
         ):
-            raise forms.ValidationError("Upload a valid, uncorrupted image.") from None
+            raise forms.ValidationError(_("Upload a valid, uncorrupted image.")) from None
         finally:
             upload.seek(0)
 
         if image_format not in {"JPEG", "PNG", "WEBP"}:
-            raise forms.ValidationError("Use a JPEG, PNG, or WebP image.")
+            raise forms.ValidationError(_("Use a JPEG, PNG, or WebP image."))
         return upload

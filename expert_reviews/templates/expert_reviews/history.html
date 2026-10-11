@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block nav_diagnose %}active{% endblock %}
-{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">Expert Dashboard</a> / History{% endblock %}
+{% block breadcrumb %}<a href="{% url 'expert-dashboard' %}">{% trans "Expert Dashboard" %}</a> / {% trans "History" %}{% endblock %}
 {% block content %}
     <div class="page-heading">
-        <h1>Review History</h1>
+        <h1>{% trans "Review History" %}</h1>
         <p>Cases you have previously reviewed.</p>
     </div>
 
@@ -15,9 +16,9 @@
                     <thead>
                         <tr style="border-bottom: 2px solid var(--border); text-align: left;">
                             <th style="padding: 0.5rem;">Date Reviewed</th>
-                            <th style="padding: 0.5rem;">Crop</th>
+                            <th style="padding: 0.5rem;">{% trans "Crop" %}</th>
                             <th style="padding: 0.5rem;">Outcome</th>
-                            <th style="padding: 0.5rem;">Action</th>
+                            <th style="padding: 0.5rem;">{% trans "Action" %}</th>
                         </tr>
                     </thead>
                     <tbody>
