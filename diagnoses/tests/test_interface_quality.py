@@ -19,7 +19,7 @@ def make_test_image():
     return SimpleUploadedFile("specimen.jpg", buf.getvalue(), content_type="image/jpeg")
 
 
-class Batch07CorrectionsTests(TestCase):
+class InterfaceQualityTests(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.media_root = tempfile.mkdtemp()
@@ -239,9 +239,8 @@ class Batch07CorrectionsTests(TestCase):
 
     def test_ui_claims_accuracy(self):
         """
-        Verify that unsupported claims (Edge AI, encrypted storage, certified experts)
-        are replaced with accurate descriptions (local server inference, protected private storage,
-        verified agricultural extension officer) and consent disclosure includes case location.
+        Unsupported claims are replaced with accurate descriptions and the consent
+        disclosure identifies every piece of case data shared with the assigned expert.
         """
         self.client.force_login(self.farmer)
 
@@ -265,10 +264,28 @@ class Batch07CorrectionsTests(TestCase):
         )
         case_resp = self.client.get(reverse("case-detail", args=[case.id]))
         self.assertEqual(case_resp.status_code, 200)
-        self.assertContains(case_resp, "verified agricultural extension officer")
+        self.assertContains(case_resp, "assigned agricultural expert")
         self.assertContains(case_resp, "case location")
+        self.assertContains(case_resp, "prediction, confidence, and symptoms")
+        self.assertNotContains(case_resp, "verified agricultural extension officer")
         self.assertNotContains(case_resp, "certified agricultural extension officer")
         self.assertNotContains(case_resp, "certified agricultural expert")
+
+    def test_navigation_is_accessible_and_role_specific(self):
+        self.client.force_login(self.farmer)
+        farmer_response = self.client.get(reverse("dashboard"))
+        self.assertContains(farmer_response, 'id="sidebarToggle"')
+        self.assertContains(farmer_response, 'aria-controls="appSidebar"')
+        self.assertContains(farmer_response, 'aria-expanded="false"')
+        self.assertContains(farmer_response, reverse("guidance-index"))
+        self.assertNotContains(farmer_response, reverse("expert-assigned-cases"))
+        self.assertNotContains(farmer_response, "floating-chat-bubble")
+
+        self.client.force_login(self.expert)
+        expert_response = self.client.get(reverse("expert-dashboard"))
+        self.assertContains(expert_response, reverse("expert-assigned-cases"))
+        self.assertNotContains(expert_response, reverse("guidance-index"))
+        self.assertNotContains(expert_response, "floating-chat-bubble")
 
     def test_registration_step_copy_translations_and_attributes(self):
         """

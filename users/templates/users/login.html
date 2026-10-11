@@ -5,11 +5,11 @@
 
 {% block public_content %}
   <div style="min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; padding: 2.5rem 1.5rem; background: var(--bg);">
-    <div class="auth-card-split" style="display: grid; grid-template-columns: 1fr 1.1fr; max-width: 960px; width: 100%; background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.06); border: 1px solid var(--border);">
+    <div class="auth-split-card" style="max-width: 960px; width: 100%; background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.06); border: 1px solid var(--border);">
 
       <!-- Left Visual Card -->
       <div style="position: relative; background: #143d30; display: flex; flex-direction: column; justify-content: flex-end;">
-        <img src="{% static 'img/farmer_portrait.jpg' %}" alt="Farmer" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;">
+        <img src="{% static 'img/farmer_portrait.jpg' %}" alt="{% trans 'Farmer' %}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;">
         <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(20, 61, 48, 0.95) 0%, rgba(20, 61, 48, 0.4) 60%, transparent 100%);"></div>
         <div style="position: relative; z-index: 2; padding: 2.5rem 2rem; color: white;">
           <h3 style="font-size: 1.5rem; font-weight: 700; line-height: 1.3; color: white; margin-bottom: 1rem;">
@@ -26,7 +26,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 0.5rem;">
               <span style="color: #a5d6a7; font-weight: bold;">✓</span>
-              <span>{% trans "Optional verified agricultural expert review" %}</span>
+              <span>{% trans "Optional assigned agricultural expert review" %}</span>
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@
         <div style="margin-bottom: 2rem;">
           <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--brand);">{% trans "Shared Login" %}</span>
           <h1 style="font-size: 2rem; font-weight: 800; color: var(--text); margin: 0.25rem 0 0.5rem 0; letter-spacing: -0.02em;">{% trans "Welcome Back" %}</h1>
-          <p style="font-size: 0.92rem; color: var(--muted); margin: 0;">{% trans "Farmers and verified agricultural experts access their workspaces here." %}</p>
+          <p style="font-size: 0.92rem; color: var(--muted); margin: 0;">{% trans "Farmers and administrator-managed agricultural experts access their workspaces here." %}</p>
         </div>
 
         <form method="post" class="stacked-form">

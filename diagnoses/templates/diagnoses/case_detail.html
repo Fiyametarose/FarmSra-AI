@@ -56,11 +56,11 @@
     {% if case.status == 'completed' %}
 
       <!-- Primary Result Split Card -->
-      <section class="card" style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 2.5rem; padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 2rem; align-items: center;">
+      <section class="card diagnosis-result-card" style="padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 2rem; align-items: center;">
 
         <!-- Left: Uploaded Leaf Image -->
         <div style="border-radius: 12px; overflow: hidden; background: #000; border: 1px solid var(--border); height: 320px; display: flex; align-items: center; justify-content: center; position: relative;">
-          <img src="{% url 'case-image' case.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="width: 100%; height: 100%; object-fit: cover;">
+          <img src="{% url 'case-image' case.id %}" alt="{% blocktrans with crop=case.get_crop_display %}Uploaded {{ crop }} leaf{% endblocktrans %}" style="width: 100%; height: 100%; object-fit: cover;">
           <div style="position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); color: white; padding: 0.25rem 0.65rem; border-radius: 6px; font-size: 0.75rem;">
             {% trans "Analyzed Leaf Specimen" %}
           </div>
@@ -186,7 +186,7 @@
         {% else %}
           <div style="text-align: center; padding: 2rem 1rem; background: var(--surface-alt); border-radius: 12px; border: 1px dashed var(--border);">
             <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.25rem 0;">
-              {% trans "Generate tailored agricultural recommendations and verified treatments for this diagnosis." %}
+              {% trans "Generate source-backed agricultural guidance for this assessment." %}
             </p>
             <form action="{% url 'generate-advisory' case.id %}" method="post">
               {% csrf_token %}
@@ -207,7 +207,7 @@
         </div>
         <div>
           <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0; color: var(--text);">{% trans "Professional Agricultural Review" %}</h2>
-          <span style="font-size: 0.82rem; color: var(--muted);">{% trans "Secondary assessment by verified extension officers with farmer consent" %}</span>
+          <span style="font-size: 0.82rem; color: var(--muted);">{% trans "Secondary assessment by an assigned agricultural expert with farmer consent" %}</span>
         </div>
       </div>
 
@@ -246,7 +246,7 @@
             </div>
           {% else %}
             <p style="font-size: 0.88rem; color: var(--muted); margin: 0;">
-              {% trans "Your case has been consented and queued for assignment to a verified agricultural specialist." %}
+              {% trans "Your case has been consented and queued for assignment to an agricultural expert." %}
             </p>
           {% endif %}
         </div>
@@ -260,7 +260,7 @@
 
       {% else %}
         <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin: 0 0 1.5rem 0;">
-          {% trans "You can share this case with a verified agricultural extension officer for a secondary review. Only this specific case, image, case location, and symptoms are shared. Your personal account details remain private." %}
+          {% trans "You can share this case with an assigned agricultural expert for a secondary review. Only this specific case, image, case location, prediction, confidence, and symptoms are shared. Your personal account details remain private." %}
         </p>
 
         <form action="{% url 'request-review' case.id %}" method="post">
@@ -269,7 +269,7 @@
             <label style="display: flex; gap: 0.75rem; font-size: 0.85rem; color: var(--text); cursor: pointer; align-items: flex-start;">
               <input type="checkbox" required name="consent" value="on" style="margin-top: 0.2rem;">
               <span>
-                {% trans "I grant explicit, revocable consent to share my crop, leaf photograph, case location, AI prediction, confidence, and symptoms with a verified agricultural expert for secondary evaluation. I understand I can revoke this consent at any time." %}
+                {% trans "I grant explicit, revocable consent to share my crop, leaf photograph, case location, AI prediction, confidence, and symptoms with an assigned agricultural expert for secondary evaluation. I understand I can revoke this consent at any time." %}
               </span>
             </label>
           </div>

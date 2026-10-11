@@ -11,7 +11,7 @@
       <p style="font-size: 0.95rem; color: var(--muted); margin: 0;">{% trans "Manage personal credentials, registered farm location, and application preferences." %}</p>
     </div>
 
-    <div style="display: grid; grid-template-columns: 240px 1fr; gap: 2rem; align-items: start;">
+    <div class="settings-layout">
 
       <!-- Settings Tabs Sidebar -->
       <aside class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 0.75rem;">
@@ -48,7 +48,7 @@
             </div>
           {% endif %}
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div class="form-grid-two settings-form-row">
             <div class="form-group">
               <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">
                 {{ form.country.label }}
@@ -65,7 +65,7 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div class="form-grid-two settings-form-row">
             <div class="form-group">
               <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">
                 {{ form.subcounty.label }}
@@ -82,7 +82,7 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div class="form-grid-two settings-form-row settings-form-row-last">
             <div class="form-group">
               <label style="display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text);">
                 {{ form.town.label }}

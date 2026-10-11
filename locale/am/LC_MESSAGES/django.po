@@ -1650,3 +1650,72 @@ msgstr "ግምገማ"
 
 msgid "total case"
 msgstr "ጠቅላላ ጉዳዮች"
+msgid "Primary navigation"
+msgstr "ዋና አሰሳ"
+
+msgid "Crop Health System"
+msgstr "የሰብል ጤና ስርዓት"
+
+msgid "FARM WORKSPACE"
+msgstr "የገበሬ የሥራ ቦታ"
+
+msgid "EXPERT WORKSPACE"
+msgstr "የባለሙያ የሥራ ቦታ"
+
+msgid "Agricultural Expert"
+msgstr "የግብርና ባለሙያ"
+
+msgid "Farmer"
+msgstr "ገበሬ"
+
+msgid "Open navigation"
+msgstr "አሰሳውን ክፈት"
+
+msgid "Close navigation"
+msgstr "አሰሳውን ዝጋ"
+
+msgid "Optional assigned agricultural expert review"
+msgstr "በተመደበ የግብርና ባለሙያ አማራጭ ግምገማ"
+
+msgid "Farmers and administrator-managed agricultural experts access their workspaces here."
+msgstr "ገበሬዎች እና በአስተዳዳሪ የሚተዳደሩ የግብርና ባለሙያዎች የሥራ ቦታቸውን እዚህ ይጠቀማሉ።"
+
+msgid "Request an agricultural expert review with strict farmer consent."
+msgstr "በገበሬው ግልጽ ፈቃድ የግብርና ባለሙያ ግምገማ ይጠይቁ።"
+
+msgid "Generate source-backed agricultural guidance for this assessment."
+msgstr "ለዚህ ግምገማ በምንጭ የተደገፈ የግብርና መመሪያ ያዘጋጁ።"
+
+msgid "Secondary assessment by an assigned agricultural expert with farmer consent"
+msgstr "በገበሬው ፈቃድ በተመደበ የግብርና ባለሙያ ሁለተኛ ግምገማ"
+
+msgid "Your case has been consented and queued for assignment to an agricultural expert."
+msgstr "ለጉዳይዎ ፈቃድ ተሰጥቶ ለግብርና ባለሙያ ምደባ ተራ ይዟል።"
+
+msgid "You can share this case with an assigned agricultural expert for a secondary review. Only this specific case, image, case location, prediction, confidence, and symptoms are shared. Your personal account details remain private."
+msgstr "ይህን ጉዳይ ለሁለተኛ ግምገማ ከተመደበ የግብርና ባለሙያ ጋር ማጋራት ይችላሉ። የሚጋሩት ይህ የተወሰነ ጉዳይ፣ ምስል፣ የጉዳዩ ቦታ፣ ትንበያ፣ የመተማመን ደረጃ እና ምልክቶች ብቻ ናቸው። የግል መለያ ዝርዝሮችዎ ሚስጥራዊ ሆነው ይቆያሉ።"
+
+msgid "I grant explicit, revocable consent to share my crop, leaf photograph, case location, AI prediction, confidence, and symptoms with an assigned agricultural expert for secondary evaluation. I understand I can revoke this consent at any time."
+msgstr "ሰብሌን፣ የቅጠል ፎቶውን፣ የጉዳዩን ቦታ፣ የAI ትንበያን፣ የመተማመን ደረጃን እና ምልክቶችን ለሁለተኛ ግምገማ ከተመደበ የግብርና ባለሙያ ጋር ለማጋራት ግልጽና ሊሰረዝ የሚችል ፈቃድ እሰጣለሁ። ይህን ፈቃድ በማንኛውም ጊዜ መሰረዝ እንደምችል ተረድቻለሁ።"
+
+msgid "Secondary case assessments by assigned agricultural experts with strict farmer consent."
+msgstr "በገበሬው ግልጽ ፈቃድ በተመደቡ የግብርና ባለሙያዎች የሚደረግ ሁለተኛ የጉዳይ ግምገማ።"
+
+msgid "3. Expert Assessment"
+msgstr "3. የባለሙያ ግምገማ"
+
+msgid "Administrator-managed expert account"
+msgstr "በአስተዳዳሪ የሚተዳደር የባለሙያ መለያ"
+
+#, python-format
+msgid "Uploaded %(crop)s leaf"
+msgstr "የተጫነ %(crop)s ቅጠል"
+
+msgid "Selected crop leaf preview"
+msgstr "የተመረጠው የሰብል ቅጠል ቅድመ እይታ"
+
+msgid "Crop leaves"
+msgstr "የሰብል ቅጠሎች"
+
+msgid "Crop field"
+msgstr "የሰብል ማሳ"

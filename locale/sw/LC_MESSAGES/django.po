@@ -1766,3 +1766,72 @@ msgstr "ukaguzi"
 
 msgid "total case"
 msgstr "jumla ya kesi"
+msgid "Primary navigation"
+msgstr "Urambazaji mkuu"
+
+msgid "Crop Health System"
+msgstr "Mfumo wa Afya ya Mazao"
+
+msgid "FARM WORKSPACE"
+msgstr "SEHEMU YA KAZI YA MKULIMA"
+
+msgid "EXPERT WORKSPACE"
+msgstr "SEHEMU YA KAZI YA MTAALAMU"
+
+msgid "Agricultural Expert"
+msgstr "Mtaalamu wa Kilimo"
+
+msgid "Farmer"
+msgstr "Mkulima"
+
+msgid "Open navigation"
+msgstr "Fungua urambazaji"
+
+msgid "Close navigation"
+msgstr "Funga urambazaji"
+
+msgid "Optional assigned agricultural expert review"
+msgstr "Ukaguzi wa hiari wa mtaalamu wa kilimo aliyepangiwa"
+
+msgid "Farmers and administrator-managed agricultural experts access their workspaces here."
+msgstr "Wakulima na wataalamu wa kilimo wanaosimamiwa na msimamizi huingia katika sehemu zao za kazi hapa."
+
+msgid "Request an agricultural expert review with strict farmer consent."
+msgstr "Omba ukaguzi wa mtaalamu wa kilimo kwa idhini mahsusi ya mkulima."
+
+msgid "Generate source-backed agricultural guidance for this assessment."
+msgstr "Tengeneza mwongozo wa kilimo unaotegemea vyanzo kwa tathmini hii."
+
+msgid "Secondary assessment by an assigned agricultural expert with farmer consent"
+msgstr "Tathmini ya pili na mtaalamu wa kilimo aliyepangiwa kwa idhini ya mkulima"
+
+msgid "Your case has been consented and queued for assignment to an agricultural expert."
+msgstr "Kesi yako imepewa idhini na imepangwa kupangiwa mtaalamu wa kilimo."
+
+msgid "You can share this case with an assigned agricultural expert for a secondary review. Only this specific case, image, case location, prediction, confidence, and symptoms are shared. Your personal account details remain private."
+msgstr "Unaweza kushiriki kesi hii na mtaalamu wa kilimo aliyepangiwa kwa ukaguzi wa pili. Ni kesi hii pekee, picha, eneo la kesi, utabiri, kiwango cha uhakika na dalili vinavyoshirikiwa. Maelezo ya akaunti yako binafsi hubaki ya faragha."
+
+msgid "I grant explicit, revocable consent to share my crop, leaf photograph, case location, AI prediction, confidence, and symptoms with an assigned agricultural expert for secondary evaluation. I understand I can revoke this consent at any time."
+msgstr "Ninatoa idhini ya wazi inayoweza kubatilishwa kushiriki zao langu, picha ya jani, eneo la kesi, utabiri wa AI, kiwango cha uhakika na dalili na mtaalamu wa kilimo aliyepangiwa kwa tathmini ya pili. Ninaelewa kuwa ninaweza kubatilisha idhini hii wakati wowote."
+
+msgid "Secondary case assessments by assigned agricultural experts with strict farmer consent."
+msgstr "Tathmini za pili za kesi na wataalamu wa kilimo waliopangiwa kwa idhini mahsusi ya mkulima."
+
+msgid "3. Expert Assessment"
+msgstr "3. Tathmini ya Mtaalamu"
+
+msgid "Administrator-managed expert account"
+msgstr "Akaunti ya mtaalamu inayosimamiwa na msimamizi"
+
+#, python-format
+msgid "Uploaded %(crop)s leaf"
+msgstr "Jani la %(crop)s lililopakiwa"
+
+msgid "Selected crop leaf preview"
+msgstr "Onyesho la awali la jani la zao lililochaguliwa"
+
+msgid "Crop leaves"
+msgstr "Majani ya mazao"
+
+msgid "Crop field"
+msgstr "Shamba la mazao"

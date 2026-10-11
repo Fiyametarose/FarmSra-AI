@@ -145,6 +145,15 @@ button, input, select, textarea {
   z-index: 50;
 }
 
+.public-header-actions,
+.public-auth-actions {
+  display: flex;
+  align-items: center;
+}
+
+.public-header-actions { gap: 1.5rem; }
+.public-auth-actions { gap: 0.75rem; }
+
 .lang-selector-wrap {
   position: relative;
   display: inline-flex;
@@ -359,8 +368,8 @@ button, input, select, textarea {
   width: 100%;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 460px 1fr;
-  gap: 3.5rem;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 0;
   align-items: stretch;
 }
 
@@ -1701,34 +1710,20 @@ textarea.form-control {
   color: var(--danger-ink);
 }
 
-/* Floating Assistant Chat Bubble */
-.floating-chat-bubble {
-  position: fixed;
-  right: 2rem;
-  bottom: 2rem;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--brand);
-  color: #ffffff;
+.form-grid-two,
+.dashboard-content-grid,
+.expert-review-layout,
+.settings-layout {
   display: grid;
-  place-items: center;
-  box-shadow: 0 4px 18px rgba(27, 110, 74, 0.4);
-  cursor: pointer;
-  z-index: 1000;
-  transition: transform 0.2s ease, background 0.2s ease;
-  border: none;
 }
 
-.floating-chat-bubble:hover {
-  transform: scale(1.06);
-  background: var(--brand-hover);
-}
-
-.floating-chat-bubble svg {
-  width: 24px;
-  height: 24px;
-}
+.form-grid-two { grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.settings-form-row { margin-bottom: 1.25rem; }
+.settings-form-row-last { margin-bottom: 1.5rem; }
+.upload-layout-spacing { margin-bottom: 2rem; }
+.dashboard-content-grid { grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start; }
+.expert-review-layout { grid-template-columns: 1fr 1.15fr; gap: 2rem; align-items: start; }
+.settings-layout { grid-template-columns: 240px minmax(0, 1fr); gap: 2rem; align-items: start; }
 
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
@@ -1752,7 +1747,10 @@ textarea.form-control {
   .guidance-two-col,
   .expert-cards-row,
   .analyzing-showcase-card,
-  .diagnosis-result-card {
+  .diagnosis-result-card,
+  .dashboard-content-grid,
+  .expert-review-layout,
+  .settings-layout {
     grid-template-columns: 1fr;
   }
 }
@@ -1810,11 +1808,35 @@ textarea.form-control {
   .auth-form-card {
     padding: 2rem 1.5rem;
   }
-  .topbar {
-    padding: 0 1.25rem;
+  .form-grid-two {
+    grid-template-columns: 1fr;
   }
-  .floating-chat-bubble {
-    right: 1.25rem;
-    bottom: 1.25rem;
+  .topbar {
+    padding: 0 1rem;
+  }
+  .topbar-breadcrumbs {
+    display: none !important;
+  }
+  .topbar-actions {
+    gap: 0.5rem;
+  }
+  .public-header {
+    height: auto;
+    min-height: 72px;
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .public-header-actions {
+    flex: 1 1 100%;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .public-auth-actions {
+    gap: 0.5rem;
+  }
+  .public-auth-actions .button {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
   }
 }

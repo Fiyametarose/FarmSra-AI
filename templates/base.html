@@ -15,20 +15,20 @@
   </head>
   <body class="{% if user.is_authenticated %}{% if user.role == 'farmer' or user.role == 'expert' %}workspace{% else %}public{% endif %}{% else %}public{% endif %}">
     {% if user.is_authenticated and user.role != 'administrator' %}
-      <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
-      <aside class="sidebar" id="appSidebar">
+      <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+      <aside class="sidebar" id="appSidebar" aria-label="{% trans 'Primary navigation' %}">
         <div class="brand brand-light">
           <span class="brand-mark">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
           </span>
           <div style="display: flex; flex-direction: column;">
             <span style="font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em;">FarmSra AI</span>
-            <span style="font-size: 0.65rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Crop Health System</span>
+            <span style="font-size: 0.65rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">{% trans "Crop Health System" %}</span>
           </div>
         </div>
 
         {% if user.role == 'farmer' %}
-          <small>FARM WORKSPACE</small>
+          <small>{% trans "FARM WORKSPACE" %}</small>
           <nav>
             <a href="{% url 'dashboard' %}" class="{% block nav_dashboard %}{% endblock %}">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
@@ -65,7 +65,7 @@
             </a>
           </nav>
         {% elif user.role == 'expert' %}
-          <small>EXPERT WORKSPACE</small>
+          <small>{% trans "EXPERT WORKSPACE" %}</small>
           <nav>
             <a href="{% url 'expert-dashboard' %}" class="{% block nav_expert_dashboard %}{% endblock %}">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
@@ -98,7 +98,7 @@
             </div>
             <div style="min-width: 0; flex: 1;">
               <strong style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.85rem;">{{ user.get_full_name|default:user.email }}</strong>
-              <span style="font-size: 0.72rem; color: rgba(255,255,255,0.7);">{% if user.role == 'expert' %}Agricultural Expert{% else %}Farmer{% endif %}</span>
+              <span style="font-size: 0.72rem; color: rgba(255,255,255,0.7);">{% if user.role == 'expert' %}{% trans "Agricultural Expert" %}{% else %}{% trans "Farmer" %}{% endif %}</span>
             </div>
           </div>
           <form method="post" action="{% url 'logout' %}" style="margin-top: 0.5rem;">
@@ -114,7 +114,7 @@
       <div class="workspace-main">
         <header class="topbar">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <button class="icon-button" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="display: none; background: none; border: none; cursor: pointer; padding: 0.25rem;">
+            <button class="icon-button mobile-menu-btn" id="sidebarToggle" type="button" aria-label="{% trans 'Open navigation' %}" aria-controls="appSidebar" aria-expanded="false">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
             <div class="topbar-breadcrumbs" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--muted);">
@@ -124,7 +124,7 @@
             </div>
           </div>
 
-          <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="topbar-actions">
             <!-- Language Selector with Globe Icon -->
             <form action="{% url 'set_language' %}" method="post" class="language-switcher" style="display: flex; align-items: center; gap: 0.35rem; margin: 0;">
               {% csrf_token %}
@@ -140,7 +140,7 @@
             </form>
 
             <!-- Notifications Icon -->
-            <a href="{% url 'notifications:inbox' %}" style="position: relative; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--surface-alt); color: var(--text); text-decoration: none;" aria-label="Notifications">
+            <a href="{% url 'notifications:inbox' %}" style="position: relative; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--surface-alt); color: var(--text); text-decoration: none;" aria-label="{% trans 'Notifications' %}">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
               {% if unread_notifications_count %}
                 <span style="position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; background: #e53935; border-radius: 50%; border: 2px solid var(--surface);"></span>
@@ -170,13 +170,8 @@
         </main>
       </div>
 
-      <!-- Floating Assistant Bubble -->
-      <a href="{% url 'guidance-index' %}" class="floating-chat-bubble" title="AI Agricultural Guidance Assistant" aria-label="Open Guidance Assistant">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      </a>
-
     {% else %}
-      <header class="public-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem; background: var(--surface); border-bottom: 1px solid var(--border);">
+      <header class="public-header">
         <a class="brand" href="{% url 'welcome' %}" style="text-decoration: none; color: var(--text);">
           <span class="brand-mark">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
@@ -184,7 +179,7 @@
           <span style="font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em;">FarmSra AI</span>
         </a>
 
-        <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div class="public-header-actions">
           <form action="{% url 'set_language' %}" method="post" class="language-switcher" style="display: flex; align-items: center; gap: 0.35rem; margin: 0;">
             {% csrf_token %}
             <input name="next" type="hidden" value="{{ request.get_full_path }}">
@@ -199,7 +194,7 @@
           </form>
 
           {% if not user.is_authenticated %}
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="public-auth-actions">
               <a href="{% url 'login' %}" class="button button-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem;">{% trans "Log in" %}</a>
               <a href="{% url 'register' %}" class="button button-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">{% trans "Register" %}</a>
             </div>
@@ -210,14 +205,36 @@
     {% endif %}
 
     <script>
-      function toggleSidebar() {
+      (() => {
         const sidebar = document.getElementById('appSidebar');
         const backdrop = document.getElementById('sidebarBackdrop');
-        if (sidebar && backdrop) {
-          sidebar.classList.toggle('open');
-          backdrop.classList.toggle('open');
-        }
-      }
+        const toggle = document.getElementById('sidebarToggle');
+        if (!sidebar || !backdrop || !toggle) return;
+
+        const setSidebarOpen = (open) => {
+          sidebar.classList.toggle('open', open);
+          backdrop.classList.toggle('active', open);
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.setAttribute('aria-label', open ? "{% trans 'Close navigation' %}" : "{% trans 'Open navigation' %}");
+        };
+
+        toggle.addEventListener('click', () => setSidebarOpen(!sidebar.classList.contains('open')));
+        backdrop.addEventListener('click', () => setSidebarOpen(false));
+        sidebar.addEventListener('click', (event) => {
+          if (event.target.closest('a') && window.matchMedia('(max-width: 900px)').matches) {
+            setSidebarOpen(false);
+          }
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && sidebar.classList.contains('open')) {
+            setSidebarOpen(false);
+            toggle.focus();
+          }
+        });
+        window.addEventListener('resize', () => {
+          if (!window.matchMedia('(max-width: 900px)').matches) setSidebarOpen(false);
+        });
+      })();
     </script>
     {% block scripts %}{% endblock %}
   </body>

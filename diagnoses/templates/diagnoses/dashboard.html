@@ -25,7 +25,7 @@
       </div>
     </div>
     <div style="display: flex; align-items: center; justify-content: flex-end; z-index: 1;">
-      <img src="{% static 'img/dashboard_botanical.png' %}" alt="Botanical Art" style="max-height: 170px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); opacity: 0.95;">
+      <img src="{% static 'img/dashboard_botanical.png' %}" alt="{% trans 'Crop leaves' %}" style="max-height: 170px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); opacity: 0.95;">
     </div>
   </div>
 
@@ -83,7 +83,7 @@
   </div>
 
   <!-- Dashboard Main Grid -->
-  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+  <div class="dashboard-content-grid">
 
     <!-- Left Column: Recent Health Checks & Active Crops -->
     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
@@ -234,7 +234,7 @@
         </div>
         <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0 0 0.35rem 0; color: var(--text);">{% trans "Need Expert Review?" %}</h3>
         <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 1rem 0; line-height: 1.5;">
-          {% trans "Request professional evaluation from verified agricultural specialists with strict farmer consent." %}
+          {% trans "Request an agricultural expert review with strict farmer consent." %}
         </p>
         <a href="{% url 'agricultural-experts' %}" class="button button-outline" style="width: 100%; text-align: center; padding: 0.6rem; font-size: 0.85rem; font-weight: 600;">
           {% trans "View Extension Services" %} →

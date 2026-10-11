@@ -31,11 +31,11 @@
     </div>
 
     <!-- Main Analyzing Card -->
-    <div class="card" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 2.5rem; padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.04); align-items: center; margin-bottom: 2rem;">
+    <div class="card analyzing-showcase-card" style="padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 2rem;">
 
       <!-- Uploaded Leaf Visual -->
       <div style="border-radius: 12px; overflow: hidden; background: #000; border: 1px solid var(--border); height: 320px; display: flex; align-items: center; justify-content: center;">
-        <img src="{% url 'case-image' case.id %}" alt="Uploaded {{ case.get_crop_display }} leaf" style="width: 100%; height: 100%; object-fit: cover;">
+        <img src="{% url 'case-image' case.id %}" alt="{% blocktrans with crop=case.get_crop_display %}Uploaded {{ crop }} leaf{% endblocktrans %}" style="width: 100%; height: 100%; object-fit: cover;">
       </div>
 
       <!-- Analysis Status Panel -->
