@@ -2,6 +2,7 @@ import os
 import uuid
 import json
 from unittest.mock import patch, MagicMock
+from django.core.exceptions import PermissionDenied
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from users.models import User
@@ -9,6 +10,7 @@ from crops.models import Crop
 from diagnoses.models import DiagnosisCase
 from advisory.models import AdvisoryResult
 from advisory.services import retrieve_evidence, generate_advisory
+from advisory.context import build_case_context, retrieval_query_texts
 
 class AdvisoryTests(TestCase):
     def setUp(self):
@@ -131,6 +133,86 @@ class AdvisoryTests(TestCase):
         self.client.login(email="f1@example.com", password="pwd")
         resp = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
         self.assertRedirects(resp, reverse('case-detail', args=[self.case_normal.id]))
+
+    def test_context_history_is_farmer_scoped_and_weather_is_optional(self):
+        other = User.objects.create_user(email="other@example.com", password="pwd", role="farmer")
+        DiagnosisCase.objects.create(
+            farmer=other, crop="tomato", image="cases/other.jpg", status="completed",
+            predicted_class="Tomato_Other_farmer_only", model_confidence=0.9,
+        )
+        context = build_case_context(self.farmer1, self.case_normal)
+        self.assertTrue(context["missing"]["weather"])
+        self.assertNotIn("Tomato_Other_farmer_only", [item["predicted_class"] for item in context["history"]])
+
+    def test_context_rejects_another_farmer(self):
+        other = User.objects.create_user(email="context-other@example.com", password="pwd", role="farmer")
+        with self.assertRaises(PermissionDenied):
+            build_case_context(other, self.case_normal)
+
+    def test_retrieval_query_includes_symptoms_and_weather_when_available(self):
+        self.case_normal.symptoms = "Dark concentric spots"
+        self.case_normal.save(update_fields=["symptoms"])
+        from weather.models import WeatherContext
+        from django.utils import timezone
+        WeatherContext.objects.create(
+            diagnosis=self.case_normal, location_name="Plot", location_source="explicit",
+            latitude=1, longitude=2, provider="Open-Meteo", observed_at=timezone.now(),
+            temperature=20, humidity=80, precipitation=3, wind_speed=5, condition="Rain",
+        )
+        query = " ".join(retrieval_query_texts(build_case_context(self.farmer1, self.case_normal)))
+        self.assertIn("Dark concentric spots", query)
+        self.assertIn("Rain", query)
+
+        context = build_case_context(self.farmer1, self.case_normal)
+        self.assertNotIn("farmer_id", context)
+        self.assertNotIn("case_id", context)
+        self.assertEqual(context["weather"]["provider"], "Open-Meteo")
+        self.assertEqual(context["weather"]["location_source"], "explicit")
+        self.assertIn("observed_at", context["weather"])
+
+    @patch("advisory.services.get_chroma_collection")
+    def test_retrieval_keeps_crop_and_condition_filters(self, mock_collection):
+        mock_collection.return_value.query.return_value = {
+            "documents": [[]], "metadatas": [[]], "ids": [[]],
+        }
+        retrieve_evidence(
+            "tomato",
+            "Tomato_Early_blight",
+            query_texts=["Dark spots", "Rain"],
+        )
+        where = mock_collection.return_value.query.call_args.kwargs["where"]
+        self.assertEqual(where, {
+            "$and": [
+                {"crop": {"$eq": "tomato"}},
+                {"condition": {"$eq": "Tomato_Early_blight"}},
+            ]
+        })
+
+    @patch("advisory.services.get_chroma_collection")
+    def test_long_symptoms_cannot_remove_weather_from_chroma_query(self, mock_collection):
+        mock_collection.return_value.query.return_value = {
+            "documents": [[]], "metadatas": [[]], "ids": [[]],
+        }
+        context = {
+            "crop": "tomato",
+            "predicted_class": "Tomato_Early_blight",
+            "symptoms": "x" * 1000,
+            "weather": {
+                "condition": "Heavy rain",
+                "temperature": 19,
+                "humidity": 95,
+                "precipitation": 12,
+            },
+        }
+        retrieve_evidence(
+            "tomato",
+            "Tomato_Early_blight",
+            query_texts=retrieval_query_texts(context),
+        )
+        query = mock_collection.return_value.query.call_args.kwargs["query_texts"][0]
+        self.assertLessEqual(len(query), 200)
+        self.assertIn("Observed weather", query)
+        self.assertIn("Heavy rain", query)
 
     @patch('advisory.views.retrieve_evidence')
     @patch('advisory.services.genai.Client')

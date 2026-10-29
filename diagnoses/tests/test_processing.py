@@ -64,3 +64,11 @@ class ProcessingConcurrencyTests(TransactionTestCase):
         )
         self.case.refresh_from_db()
         self.assertEqual(self.case.predicted_class, "new")
+        self.assertIsNotNone(self.case.completed_at)
+        self.assertEqual(self.case.completed_at, self.case.updated_at)
+
+        completion_time = self.case.completed_at
+        self.case.location = "Later correction"
+        self.case.save(update_fields=["location"])
+        self.case.refresh_from_db()
+        self.assertEqual(self.case.completed_at, completion_time)

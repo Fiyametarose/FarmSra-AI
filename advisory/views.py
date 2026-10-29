@@ -6,6 +6,7 @@ from django.contrib import messages
 from diagnoses.models import DiagnosisCase
 from .models import AdvisoryResult
 from .services import retrieve_evidence, generate_advisory
+from .context import build_case_context, retrieval_query_texts
 
 @login_required
 def generate_case_advisory(request, case_id):
@@ -35,17 +36,23 @@ def generate_case_advisory(request, case_id):
             messages.warning(request, "Advisory generation is not available for this condition or confidence level.")
         return redirect('case-detail', case_id=case.id)
 
+    case_context = build_case_context(request.user, case)
     evidence = retrieve_evidence(
         crop=case.crop,
         condition=case.predicted_class,
-        query_texts=None
+        query_texts=retrieval_query_texts(case_context),
     )
 
     if not evidence:
         messages.error(request, "No verified agricultural sources found for this condition.")
         return redirect('case-detail', case_id=case.id)
 
-    generated_text, citations = generate_advisory(case.crop, case.predicted_class, evidence)
+    generated_text, citations = generate_advisory(
+        case.crop,
+        case.predicted_class,
+        evidence,
+        case_context=case_context,
+    )
 
     is_generated = True
     cited_chunks = []

@@ -1,4 +1,5 @@
 import warnings
+import math
 
 from django import forms
 from django.conf import settings
@@ -13,21 +14,56 @@ from .models import DiagnosisCase
 class DiagnosisUploadForm(forms.ModelForm):
     class Meta:
         model = DiagnosisCase
-        fields = ("registered_crop", "image", "symptoms", "location")
+        fields = ("registered_crop", "image", "symptoms", "location", "location_source")
         widgets = {
             "symptoms": forms.Textarea(
                 attrs={"rows": 5, "placeholder": _("Describe visible changes (optional)")}
             ),
             "location": forms.TextInput(attrs={"placeholder": _("Case location")}),
+            "location_source": forms.HiddenInput(),
         }
 
     def __init__(self, *args, farmer=None, crop_species=None, **kwargs):
+        self.farmer = farmer
+        self.crop_species = crop_species
         super().__init__(*args, **kwargs)
         if farmer and crop_species:
             self.fields["registered_crop"].queryset = farmer.registered_crops.filter(species=crop_species)
         else:
             self.fields["registered_crop"].queryset = Crop.objects.none()
         self.fields["registered_crop"].empty_label = _("Select a registered crop (optional)")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        registered_crop = cleaned_data.get("registered_crop")
+        location = (cleaned_data.get("location") or "").strip()
+        if registered_crop:
+            if registered_crop.farmer_id != getattr(self.farmer, "id", None):
+                self.add_error("registered_crop", _("Select one of your registered crops."))
+            elif registered_crop.species != self.crop_species:
+                self.add_error("registered_crop", _("The registered crop must match the selected species."))
+            elif not location:
+                location = registered_crop.location.strip()
+        if not location and self.farmer:
+            location = self.farmer.farm_location
+        cleaned_data["location"] = location
+        if cleaned_data.get("location_source") == DiagnosisCase.LocationSource.BROWSER_GEOLOCATION:
+            try:
+                latitude, longitude = map(
+                    float,
+                    [part.strip() for part in location.split(",")],
+                )
+            except (TypeError, ValueError):
+                cleaned_data["location_source"] = ""
+            else:
+                if not (
+                    math.isfinite(latitude)
+                    and math.isfinite(longitude)
+                    and -90 <= latitude <= 90
+                    and -180 <= longitude <= 180
+                ):
+                    cleaned_data["location_source"] = ""
+        return cleaned_data
 
     def clean_image(self):
         upload = self.cleaned_data["image"]

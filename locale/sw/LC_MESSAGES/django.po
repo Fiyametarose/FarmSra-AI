@@ -1840,3 +1840,120 @@ msgstr "Shamba la mazao"
 msgid "classes"
 msgstr "madarasa"
 
+msgid "Select one of your registered crops."
+msgstr "Chagua mojawapo ya mazao yako yaliyosajiliwa."
+
+msgid "The registered crop must match the selected species."
+msgstr "Zao lililosajiliwa lazima lilingane na aina iliyochaguliwa."
+
+msgid "Uses this entry first, then the selected crop location, then your farm profile location."
+msgstr "Hutumia eneo hili kwanza, kisha eneo la zao lililochaguliwa, halafu eneo la wasifu wa shamba lako."
+
+msgid "Use device location"
+msgstr "Tumia eneo la kifaa"
+
+msgid "Location unavailable. Enter the case location or select a crop with a location."
+msgstr "Eneo halipatikani. Weka eneo la kesi au uchague zao lenye eneo."
+
+msgid "Location is not supported by this browser."
+msgstr "Kivinjari hiki hakitumii huduma ya eneo."
+
+msgid "Requesting device location…"
+msgstr "Inaomba eneo la kifaa…"
+
+msgid "Device location added. You can edit it before submitting."
+msgstr "Eneo la kifaa limeongezwa. Unaweza kulihariri kabla ya kutuma."
+
+msgid "Device location was not available. Enter the location manually."
+msgstr "Eneo la kifaa halikupatikana. Weka eneo mwenyewe."
+
+msgid "Location unavailable"
+msgstr "Eneo halipatikani"
+
+msgid "Case Weather Snapshot"
+msgstr "Picha ya Hali ya Hewa ya Kesi"
+
+msgid "Temperature"
+msgstr "Halijoto"
+
+msgid "Humidity"
+msgstr "Unyevunyevu"
+
+msgid "Precipitation"
+msgstr "Mvua"
+
+msgid "Wind speed"
+msgstr "Kasi ya upepo"
+
+msgid "Observed"
+msgstr "Ilipimwa"
+
+msgid "No weather snapshot has been saved for this case."
+msgstr "Hakuna hali ya hewa iliyohifadhiwa kwa kesi hii."
+
+msgid "Enter a specific location"
+msgstr "Weka eneo mahususi"
+
+msgid "Correct location and refresh weather"
+msgstr "Sahihisha eneo na usasishe hali ya hewa"
+
+msgid "Capture weather"
+msgstr "Hifadhi hali ya hewa"
+
+msgid "Location is unavailable. Enter the case location and try again."
+msgstr "Eneo halipatikani. Weka eneo la kesi na ujaribu tena."
+
+msgid "Location could not be found. Check the case location and try again."
+msgstr "Eneo halikupatikana. Hakiki eneo la kesi na ujaribu tena."
+
+msgid "Location is ambiguous. Enter a more specific town, region, and country."
+msgstr "Eneo haliko wazi. Weka mji, mkoa na nchi kwa usahihi zaidi."
+
+msgid "The supplied coordinates are invalid."
+msgstr "Kuratibu zilizotolewa si sahihi."
+
+msgid "Weather is currently unavailable for this case location."
+msgstr "Hali ya hewa haipatikani kwa sasa katika eneo la kesi hii."
+
+msgid "Case weather snapshot saved."
+msgstr "Hali ya hewa ya kesi imehifadhiwa."
+
+msgid "Registered crop"
+msgstr "Zao lililosajiliwa"
+
+msgid "Farm profile"
+msgstr "Wasifu wa shamba"
+
+msgid "Device GPS"
+msgstr "GPS ya kifaa"
+
+msgid "Manual correction"
+msgstr "Marekebisho ya mkono"
+
+msgid "Historical weather was not recorded for this diagnosis. You can look up current weather, which will be labeled with its actual observation time."
+msgstr "Hali ya hewa ya kihistoria haikurekodiwa kwa utambuzi huu. Unaweza kuangalia hali ya hewa ya sasa, ambayo itaonyesha wakati halisi wa uchunguzi."
+
+msgid "This is a later current-weather lookup, not weather recorded at the original diagnosis time."
+msgstr "Hii ni hali ya hewa ya sasa iliyoangaliwa baadaye, si hali ya hewa iliyorekodiwa wakati wa utambuzi wa awali."
+
+msgid "Replace saved snapshot with corrected current weather"
+msgstr "Badilisha taarifa iliyohifadhiwa kwa hali ya hewa ya sasa ya eneo lililosahihishwa"
+
+msgid "Look up current weather"
+msgstr "Angalia hali ya hewa ya sasa"
+
+msgid "Automatic weather capture is only available shortly after diagnosis completion."
+msgstr "Uhifadhi wa hali ya hewa kiotomatiki unapatikana muda mfupi tu baada ya utambuzi kukamilika."
+
+msgid "The coordinate pair is malformed. Enter latitude and longitude as numbers."
+msgstr "Jozi ya kuratibu imeandikwa vibaya. Weka latitudo na longitudo kama nambari."
+
+msgid "Browser coordinates (unverified)"
+msgstr "Kuratibu za kivinjari (hazijathibitishwa)"
+
+msgid "The country in this location was not recognized. Enter a country name or two-letter country code."
+msgstr "Nchi katika eneo hili haikutambuliwa. Weka jina la nchi au msimbo wa nchi wa herufi mbili."
+
+msgid "Approximate town-level weather location"
+msgstr "Eneo la hali ya hewa la kiwango cha mji (makadirio)"
+

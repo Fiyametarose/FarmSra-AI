@@ -10,6 +10,9 @@ def case_image_path(instance, filename):
 
 
 class DiagnosisCase(models.Model):
+    class LocationSource(models.TextChoices):
+        BROWSER_GEOLOCATION = "browser_geolocation", "Browser coordinates (unverified)"
+
     class Crop(models.TextChoices):
         TOMATO = "tomato", "Tomato"
         POTATO = "potato", "Potato"
@@ -38,6 +41,11 @@ class DiagnosisCase(models.Model):
     image = models.ImageField(upload_to=case_image_path)
     symptoms = models.TextField(blank=True)
     location = models.CharField(max_length=500, blank=True)
+    location_source = models.CharField(
+        max_length=24,
+        choices=LocationSource,
+        blank=True,
+    )
     status = models.CharField(max_length=12, choices=Status, default=Status.PENDING)
     failure_message = models.TextField(blank=True)
     predicted_class = models.CharField(max_length=200, blank=True)
@@ -46,6 +54,7 @@ class DiagnosisCase(models.Model):
     model_identifier = models.CharField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["-created_at"]

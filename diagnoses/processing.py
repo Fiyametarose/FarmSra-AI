@@ -21,6 +21,7 @@ def claim_case(case_id, farmer_id):
 
 
 def complete_case(case_id, farmer_id, claimed_at, prediction):
+    completed_at = timezone.now()
     return DiagnosisCase.objects.filter(
         id=case_id,
         farmer_id=farmer_id,
@@ -32,7 +33,8 @@ def complete_case(case_id, farmer_id, claimed_at, prediction):
         predicted_class_index=prediction.class_index,
         model_confidence=prediction.confidence,
         model_identifier=prediction.model_identifier,
-        updated_at=timezone.now(),
+        updated_at=completed_at,
+        completed_at=completed_at,
     )
 
 

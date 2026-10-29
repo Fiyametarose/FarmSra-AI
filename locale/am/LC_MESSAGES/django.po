@@ -1725,3 +1725,120 @@ msgstr "የሰብል ማሳ"
 msgid "classes"
 msgstr "ክፍሎች"
 
+msgid "Select one of your registered crops."
+msgstr "ከተመዘገቡ ሰብሎችዎ አንዱን ይምረጡ።"
+
+msgid "The registered crop must match the selected species."
+msgstr "የተመዘገበው ሰብል ከተመረጠው ዝርያ ጋር መዛመድ አለበት።"
+
+msgid "Uses this entry first, then the selected crop location, then your farm profile location."
+msgstr "በመጀመሪያ ይህን ቦታ፣ ከዚያ የተመረጠውን የሰብል ቦታ፣ በመጨረሻም የእርሻ መገለጫዎን ቦታ ይጠቀማል።"
+
+msgid "Use device location"
+msgstr "የመሣሪያውን ቦታ ይጠቀሙ"
+
+msgid "Location unavailable. Enter the case location or select a crop with a location."
+msgstr "ቦታው አይገኝም። የጉዳዩን ቦታ ያስገቡ ወይም ቦታ ያለውን ሰብል ይምረጡ።"
+
+msgid "Location is not supported by this browser."
+msgstr "ይህ አሳሽ የቦታ አገልግሎትን አይደግፍም።"
+
+msgid "Requesting device location…"
+msgstr "የመሣሪያውን ቦታ በመጠየቅ ላይ…"
+
+msgid "Device location added. You can edit it before submitting."
+msgstr "የመሣሪያው ቦታ ታክሏል። ከመላክዎ በፊት ማርትዕ ይችላሉ።"
+
+msgid "Device location was not available. Enter the location manually."
+msgstr "የመሣሪያው ቦታ አልተገኘም። ቦታውን በእጅ ያስገቡ።"
+
+msgid "Location unavailable"
+msgstr "ቦታው አይገኝም"
+
+msgid "Case Weather Snapshot"
+msgstr "የጉዳዩ የአየር ሁኔታ ቅጽበታዊ መረጃ"
+
+msgid "Temperature"
+msgstr "የሙቀት መጠን"
+
+msgid "Humidity"
+msgstr "እርጥበት"
+
+msgid "Precipitation"
+msgstr "ዝናብ"
+
+msgid "Wind speed"
+msgstr "የንፋስ ፍጥነት"
+
+msgid "Observed"
+msgstr "የተመዘገበበት"
+
+msgid "No weather snapshot has been saved for this case."
+msgstr "ለዚህ ጉዳይ የአየር ሁኔታ መረጃ አልተቀመጠም።"
+
+msgid "Enter a specific location"
+msgstr "የተወሰነ ቦታ ያስገቡ"
+
+msgid "Correct location and refresh weather"
+msgstr "ቦታውን ያርሙ እና የአየር ሁኔታውን ያድሱ"
+
+msgid "Capture weather"
+msgstr "የአየር ሁኔታውን ያስቀምጡ"
+
+msgid "Location is unavailable. Enter the case location and try again."
+msgstr "ቦታው አይገኝም። የጉዳዩን ቦታ ያስገቡ እና እንደገና ይሞክሩ።"
+
+msgid "Location could not be found. Check the case location and try again."
+msgstr "ቦታው ሊገኝ አልቻለም። የጉዳዩን ቦታ ያረጋግጡ እና እንደገና ይሞክሩ።"
+
+msgid "Location is ambiguous. Enter a more specific town, region, and country."
+msgstr "ቦታው ግልጽ አይደለም። ይበልጥ የተወሰነ ከተማ፣ ክልል እና አገር ያስገቡ።"
+
+msgid "The supplied coordinates are invalid."
+msgstr "የቀረቡት መጋጠሚያዎች ትክክል አይደሉም።"
+
+msgid "Weather is currently unavailable for this case location."
+msgstr "ለዚህ የጉዳይ ቦታ የአየር ሁኔታ አሁን አይገኝም።"
+
+msgid "Case weather snapshot saved."
+msgstr "የጉዳዩ የአየር ሁኔታ መረጃ ተቀምጧል።"
+
+msgid "Registered crop"
+msgstr "የተመዘገበ ሰብል"
+
+msgid "Farm profile"
+msgstr "የእርሻ መገለጫ"
+
+msgid "Device GPS"
+msgstr "የመሣሪያ GPS"
+
+msgid "Manual correction"
+msgstr "በእጅ ማስተካከያ"
+
+msgid "Historical weather was not recorded for this diagnosis. You can look up current weather, which will be labeled with its actual observation time."
+msgstr "ለዚህ ምርመራ ታሪካዊ የአየር ሁኔታ አልተመዘገበም። በትክክለኛው የምልከታ ጊዜ የሚለየውን የአሁኑን የአየር ሁኔታ መመልከት ይችላሉ።"
+
+msgid "This is a later current-weather lookup, not weather recorded at the original diagnosis time."
+msgstr "ይህ በኋላ የታየ የአሁኑ የአየር ሁኔታ ነው፤ በመጀመሪያው የምርመራ ጊዜ የተመዘገበ አይደለም።"
+
+msgid "Replace saved snapshot with corrected current weather"
+msgstr "የተቀመጠውን መረጃ በታረመው ቦታ የአሁኑ የአየር ሁኔታ ይተኩ"
+
+msgid "Look up current weather"
+msgstr "የአሁኑን የአየር ሁኔታ ይመልከቱ"
+
+msgid "Automatic weather capture is only available shortly after diagnosis completion."
+msgstr "ራስ-ሰር የአየር ሁኔታ ማስቀመጥ ምርመራው ከተጠናቀቀ በኋላ ለአጭር ጊዜ ብቻ ይገኛል።"
+
+msgid "The coordinate pair is malformed. Enter latitude and longitude as numbers."
+msgstr "የመጋጠሚያው ጥንድ በትክክል አልተጻፈም። ኬክሮስንና ኬንትሮስን በቁጥር ያስገቡ።"
+
+msgid "Browser coordinates (unverified)"
+msgstr "የአሳሽ መጋጠሚያዎች (ያልተረጋገጡ)"
+
+msgid "The country in this location was not recognized. Enter a country name or two-letter country code."
+msgstr "በዚህ ቦታ ውስጥ ያለው አገር አልታወቀም። የአገር ስም ወይም ባለሁለት ፊደል የአገር ኮድ ያስገቡ።"
+
+msgid "Approximate town-level weather location"
+msgstr "ግምታዊ የከተማ ደረጃ የአየር ሁኔታ ቦታ"
+

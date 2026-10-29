@@ -4,6 +4,8 @@ from django.core.exceptions import PermissionDenied
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
+from django.utils import timezone
+from datetime import timedelta
 
 from users.models import User
 from expert_reviews.models import ExpertReferral
@@ -66,11 +68,10 @@ def select_crop(request):
 def upload(request, crop):
     if crop not in DiagnosisCase.Crop.values:
         raise PermissionDenied
-    initial = {"location": request.user.farm_location}
+    registered_crops = request.user.registered_crops.filter(species=crop)
     form = DiagnosisUploadForm(
         request.POST or None,
         request.FILES or None,
-        initial=initial,
         farmer=request.user,
         crop_species=crop,
     )
@@ -83,7 +84,17 @@ def upload(request, crop):
     return render(
         request,
         "diagnoses/upload.html",
-        {"form": form, "crop": crop, "crop_name": DiagnosisCase.Crop(crop).label},
+        {
+            "form": form,
+            "crop": crop,
+            "crop_name": DiagnosisCase.Crop(crop).label,
+            "crop_locations": {
+                str(registered_crop.id): registered_crop.location
+                for registered_crop in registered_crops
+            },
+            "farm_location": request.user.farm_location,
+            "preserve_location_value": form.is_bound,
+        },
     )
 
 
@@ -139,6 +150,23 @@ def recover_case(request, case_id):
 @farmer_required
 def case_detail(request, case_id):
     case = owned_case(request, case_id)
+    auto_capture_window = timedelta(
+        minutes=settings.CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES
+    )
+    case_age = timezone.now() - case.completed_at if case.completed_at else None
+    weather_auto_capture_eligible = (
+        case.status == DiagnosisCase.Status.COMPLETED
+        and case_age is not None
+        and timedelta(0) <= case_age <= auto_capture_window
+    )
+    weather_context = getattr(case, "weather_context", None)
+    weather_is_late_lookup = bool(
+        weather_context
+        and (
+            case.completed_at is None
+            or abs(weather_context.observed_at - case.completed_at) > auto_capture_window
+        )
+    )
     active_referral = case.expert_referrals.exclude(state='revoked').first()
     revoked_referrals = case.expert_referrals.filter(state='revoked', review__isnull=False).order_by('-revoked_at')
 
@@ -149,6 +177,8 @@ def case_detail(request, case_id):
             "case": case,
             "active_referral": active_referral,
             "revoked_referrals": revoked_referrals,
+            "weather_auto_capture_eligible": weather_auto_capture_eligible,
+            "weather_is_late_lookup": weather_is_late_lookup,
             "confidence_threshold_percent": round(
                 settings.DIAGNOSIS_CONFIDENCE_THRESHOLD * 100, 1
             ),

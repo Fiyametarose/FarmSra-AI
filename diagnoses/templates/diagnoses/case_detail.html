@@ -39,7 +39,7 @@
           {% if case.status == 'completed' %}{% trans "Diagnosis Result" %}{% else %}{% trans "Crop Health Case" %}{% endif %}
         </h1>
         <p style="font-size: 0.92rem; color: var(--muted); margin: 0;">
-          {{ case.created_at|date:"d M Y, H:i" }} · {% trans "Location" %}: {{ case.location|default:"Registered Farm" }}
+          {{ case.created_at|date:"d M Y, H:i" }} · {% trans "Location" %}: {% if case.location %}{{ case.location }}{% else %}{% trans "Location unavailable" %}{% endif %}
           {% if case.registered_crop %} · {% trans "Crop" %}: <a href="{% url 'crop-detail' case.registered_crop.id %}" style="color: var(--brand); font-weight: 600;">{{ case.registered_crop.name }}</a>{% endif %}
         </p>
       </div>
@@ -52,6 +52,46 @@
         </a>
       </div>
     </div>
+
+    <section class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 2rem;">
+      <h2 style="font-size: 1.1rem; margin: 0 0 0.75rem;">{% trans "Case Weather Snapshot" %}</h2>
+      {% if case.weather_context %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+          <div><strong>{{ case.weather_context.temperature|default_if_none:"—" }}°C</strong><br><small>{% trans "Temperature" %}</small></div>
+          <div><strong>{{ case.weather_context.humidity|default_if_none:"—" }}%</strong><br><small>{% trans "Humidity" %}</small></div>
+          <div><strong>{{ case.weather_context.precipitation|default_if_none:"—" }} mm</strong><br><small>{% trans "Precipitation" %}</small></div>
+          <div><strong>{{ case.weather_context.wind_speed|default_if_none:"—" }} km/h</strong><br><small>{% trans "Wind speed" %}</small></div>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--muted); margin: 0 0 1rem;">
+          {{ case.weather_context.condition }} · {{ case.weather_context.location_name }}
+          {% if case.weather_context.location_source == 'farm_profile' %}({% trans "Approximate town-level weather location" %}){% endif %}
+          ({{ case.weather_context.get_location_source_display }}) ·
+          {% trans "Observed" %} {{ case.weather_context.observed_at|date:"d M Y, H:i" }} · {{ case.weather_context.provider }}
+        </p>
+        {% if weather_is_late_lookup %}
+          <p class="callout callout-warning" style="font-size: 0.82rem; margin: 0 0 1rem;">
+            {% trans "This is a later current-weather lookup, not weather recorded at the original diagnosis time." %}
+          </p>
+        {% endif %}
+      {% else %}
+        <p style="font-size: 0.88rem; color: var(--muted);">
+          {% if weather_auto_capture_eligible %}
+            {% trans "No weather snapshot has been saved for this case." %}
+          {% else %}
+            {% trans "Historical weather was not recorded for this diagnosis. You can look up current weather, which will be labeled with its actual observation time." %}
+          {% endif %}
+        </p>
+      {% endif %}
+      <form action="{% url 'weather:capture-case-weather' case.id %}" method="post" id="case-weather-form" style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+        {% csrf_token %}
+        <input type="text" name="location" value="{{ case.location }}" placeholder="{% trans 'Enter a specific location' %}" style="flex: 1; min-width: 240px;">
+        <input type="hidden" name="capture_mode" id="weather-capture-mode" value="">
+        {% if case.weather_context %}<input type="hidden" name="replace" value="1">{% endif %}
+        <button class="button button-outline" type="submit">
+          {% if case.weather_context %}{% trans "Replace saved snapshot with corrected current weather" %}{% elif weather_auto_capture_eligible %}{% trans "Capture weather" %}{% else %}{% trans "Look up current weather" %}{% endif %}
+        </button>
+      </form>
+    </section>
 
     {% if case.status == 'completed' %}
 
@@ -299,4 +339,19 @@
     </section>
 
   </div>
+{% endblock %}
+
+{% block scripts %}
+  {% if weather_auto_capture_eligible and not case.weather_context and case.location %}
+    <script>
+      window.addEventListener("load", () => {
+        const key = "weather-capture-{{ case.id }}";
+        if (!sessionStorage.getItem(key)) {
+          sessionStorage.setItem(key, "attempted");
+          document.getElementById("weather-capture-mode").value = "automatic";
+          document.getElementById("case-weather-form").requestSubmit();
+        }
+      });
+    </script>
+  {% endif %}
 {% endblock %}

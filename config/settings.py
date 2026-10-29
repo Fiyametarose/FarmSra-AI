@@ -154,4 +154,16 @@ if not 0 <= DIAGNOSIS_CONFIDENCE_THRESHOLD <= 1:
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024
 MAX_DECODED_IMAGE_PIXELS = 25_000_000
 PROCESSING_STALE_AFTER_SECONDS = 15 * 60
+try:
+    CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES = int(
+        os.getenv("CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES", "30")
+    )
+except ValueError as exc:
+    raise ImproperlyConfigured(
+        "CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES must be a non-negative integer."
+    ) from exc
+if CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES < 0:
+    raise ImproperlyConfigured(
+        "CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES must be a non-negative integer."
+    )
 CHROMA_DB_DIR = BASE_DIR / "chroma_db"

@@ -121,9 +121,20 @@
                 {% trans "Case Location" %}
               </label>
               {{ form.location }}
+              {{ form.location_source }}
               {% if form.location.errors %}<div style="color: var(--danger); font-size: 0.8rem;">{{ form.location.errors }}</div>{% endif %}
               <small style="color: var(--muted); font-size: 0.78rem; display: block; margin-top: 0.25rem;">
-                {% trans "Defaults to your registered farm location. Adjust if collected at an off-site plot." %}
+                {% trans "Uses this entry first, then the selected crop location, then your farm profile location." %}
+              </small>
+              {% trans "Location is not supported by this browser." as gps_unsupported %}
+              {% trans "Requesting device location…" as gps_requesting %}
+              {% trans "Device location added. You can edit it before submitting." as gps_added %}
+              {% trans "Device location was not available. Enter the location manually." as gps_unavailable %}
+              <button class="button button-outline" type="button" id="use-device-location" data-unsupported="{{ gps_unsupported }}" data-requesting="{{ gps_requesting }}" data-added="{{ gps_added }}" data-unavailable="{{ gps_unavailable }}" style="margin-top: 0.5rem; padding: 0.4rem 0.75rem; font-size: 0.78rem;">
+                {% trans "Use device location" %}
+              </button>
+              <small id="location-status" style="color: var(--muted); font-size: 0.78rem; margin-left: 0.5rem;">
+                {% if not farm_location %}{% trans "Location unavailable. Enter the case location or select a crop with a location." %}{% endif %}
               </small>
             </div>
           </section>
@@ -155,5 +166,8 @@
 {% endblock %}
 
 {% block scripts %}
+  {{ crop_locations|json_script:"crop-locations" }}
+  {{ farm_location|json_script:"farm-location" }}
+  {{ preserve_location_value|json_script:"preserve-location-value" }}
   <script src="{% static 'js/upload.js' %}"></script>
 {% endblock %}
