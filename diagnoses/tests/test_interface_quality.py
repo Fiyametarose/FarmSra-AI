@@ -464,6 +464,12 @@ class InterfaceQualityTests(TestCase):
                             for m in pattern_blocktrans.finditer(content):
                                 text = m.group(1).strip()
                                 normalized = re.sub(r'\s+', ' ', text)
+                                normalized = normalized.replace('%', '%%')
+                                normalized = re.sub(
+                                    r'{{\s*([\w.]+)\s*}}',
+                                    r'%(\1)s',
+                                    normalized,
+                                )
                                 found_keys.add(normalized)
 
         po_sw = polib.pofile(str(settings.BASE_DIR / "locale/sw/LC_MESSAGES/django.po"))

@@ -139,6 +139,18 @@ LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "welcome"
 
 MODEL_ARTIFACTS_DIR = BASE_DIR / "model_artifacts"
+try:
+    DIAGNOSIS_CONFIDENCE_THRESHOLD = float(
+        os.getenv("DIAGNOSIS_CONFIDENCE_THRESHOLD", "0.70")
+    )
+except ValueError as exc:
+    raise ImproperlyConfigured(
+        "DIAGNOSIS_CONFIDENCE_THRESHOLD must be a number between 0 and 1."
+    ) from exc
+if not 0 <= DIAGNOSIS_CONFIDENCE_THRESHOLD <= 1:
+    raise ImproperlyConfigured(
+        "DIAGNOSIS_CONFIDENCE_THRESHOLD must be between 0 and 1."
+    )
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024
 MAX_DECODED_IMAGE_PIXELS = 25_000_000
 PROCESSING_STALE_AFTER_SECONDS = 15 * 60

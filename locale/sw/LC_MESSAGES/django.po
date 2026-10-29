@@ -810,12 +810,14 @@ msgstr "Ukaguzi Uliokamilika"
 msgid "Confidence"
 msgstr "Uhakika"
 
+#, python-format
 msgid ""
-"Confidence is below the provisional 70% threshold. Re-examine symptoms or "
-"seek verification from an agricultural expert."
+"Confidence is below the provisional %(confidence_threshold_percent)s%% "
+"threshold. Re-examine symptoms or seek verification from an agricultural "
+"expert."
 msgstr ""
-"Uhakika uko chini ya kiwango cha mpito cha 70%. Chunguza tena dalili au "
-"tafuta uthibitisho kutoka kwa mtaalamu wa kilimo."
+"Uhakika uko chini ya kiwango cha mpito cha %(confidence_threshold_percent)s%%. "
+"Chunguza tena dalili au tafuta uthibitisho kutoka kwa mtaalamu wa kilimo."
 
 msgid "Confirm new password"
 msgstr "Thibitisha nenosiri jipya"

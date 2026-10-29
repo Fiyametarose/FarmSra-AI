@@ -5,6 +5,8 @@ from django.conf import settings
 from PIL import Image, UnidentifiedImageError
 from django.utils.translation import gettext_lazy as _
 
+from crops.models import Crop
+
 from .models import DiagnosisCase
 
 
@@ -24,7 +26,7 @@ class DiagnosisUploadForm(forms.ModelForm):
         if farmer and crop_species:
             self.fields["registered_crop"].queryset = farmer.registered_crops.filter(species=crop_species)
         else:
-            self.fields["registered_crop"].queryset = DiagnosisCase.objects.none()
+            self.fields["registered_crop"].queryset = Crop.objects.none()
         self.fields["registered_crop"].empty_label = _("Select a registered crop (optional)")
 
     def clean_image(self):

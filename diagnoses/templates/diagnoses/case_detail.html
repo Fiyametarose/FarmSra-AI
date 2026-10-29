@@ -85,7 +85,7 @@
                 {% trans "Model Prediction Confidence" %}
               </span>
               {% if case.model_confidence is not None %}
-                <strong style="font-size: 1.5rem; font-weight: 800; color: {% if case.model_confidence >= 0.7 %}var(--brand){% elif case.model_confidence >= 0.4 %}#f57c00{% else %}var(--danger){% endif %};">
+                <strong style="font-size: 1.5rem; font-weight: 800; color: {% if not case.is_uncertain %}var(--brand){% elif case.model_confidence >= 0.4 %}#f57c00{% else %}var(--danger){% endif %};">
                   {{ case.confidence_percent }}%
                 </strong>
               {% else %}
@@ -95,7 +95,7 @@
 
             <!-- Meter Bar -->
             <div style="height: 8px; width: 100%; background: var(--border); border-radius: 9999px; overflow: hidden; margin-bottom: 0.75rem;">
-              <div style="height: 100%; width: {{ case.confidence_percent|default:0 }}%; background: {% if case.model_confidence and case.model_confidence >= 0.7 %}var(--brand){% elif case.model_confidence and case.model_confidence >= 0.4 %}#f57c00{% else %}var(--danger){% endif %}; border-radius: 9999px; transition: width 0.5s ease-out;"></div>
+              <div style="height: 100%; width: {{ case.confidence_percent|default:0 }}%; background: {% if case.model_confidence and not case.is_uncertain %}var(--brand){% elif case.model_confidence and case.model_confidence >= 0.4 %}#f57c00{% else %}var(--danger){% endif %}; border-radius: 9999px; transition: width 0.5s ease-out;"></div>
             </div>
 
             <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted);">
@@ -110,7 +110,7 @@
             </div>
           {% elif case.is_uncertain %}
             <div class="callout callout-warning" style="margin-bottom: 1rem; font-size: 0.85rem;">
-              <strong>{% trans "Uncertain classification" %}:</strong> {% trans "Confidence is below the provisional 70% threshold. Re-examine symptoms or seek verification from an agricultural expert." %}
+              <strong>{% trans "Uncertain classification" %}:</strong> {% blocktrans %}Confidence is below the provisional {{ confidence_threshold_percent }}% threshold. Re-examine symptoms or seek verification from an agricultural expert.{% endblocktrans %}
             </div>
           {% endif %}
 

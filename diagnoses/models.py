@@ -78,7 +78,10 @@ class DiagnosisCase(models.Model):
 
     @property
     def is_uncertain(self):
-        return self.model_confidence is None or self.model_confidence < 0.70
+        return (
+            self.model_confidence is None
+            or self.model_confidence < settings.DIAGNOSIS_CONFIDENCE_THRESHOLD
+        )
 
     @property
     def is_eligible_for_advisory(self):

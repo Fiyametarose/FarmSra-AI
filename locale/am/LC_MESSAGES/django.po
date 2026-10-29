@@ -782,11 +782,14 @@ msgstr "የተጠናቀቁ ግምገማዎች"
 msgid "Confidence"
 msgstr "እርግጠኝነት"
 
+#, python-format
 msgid ""
-"Confidence is below the provisional 70% threshold. Re-examine symptoms or "
-"seek verification from an agricultural expert."
+"Confidence is below the provisional %(confidence_threshold_percent)s%% "
+"threshold. Re-examine symptoms or seek verification from an agricultural "
+"expert."
 msgstr ""
-"እርግጠኝነቱ ከጊዜያዊው 70% ገደብ በታች ነው። ምልክቶችን እንደገና ይመርምሩ ወይም ከግብርና ባለሙያ ማረጋገጫ ይጠይቁ።"
+"እርግጠኝነቱ ከጊዜያዊው %(confidence_threshold_percent)s%% ገደብ በታች ነው። ምልክቶችን "
+"እንደገና ይመርምሩ ወይም ከግብርና ባለሙያ ማረጋገጫ ይጠይቁ።"
 
 msgid "Confirm new password"
 msgstr "አዲሱን የይለፍ ቃል ያረጋግጡ"

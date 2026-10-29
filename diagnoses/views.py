@@ -148,7 +148,10 @@ def case_detail(request, case_id):
         {
             "case": case,
             "active_referral": active_referral,
-            "revoked_referrals": revoked_referrals
+            "revoked_referrals": revoked_referrals,
+            "confidence_threshold_percent": round(
+                settings.DIAGNOSIS_CONFIDENCE_THRESHOLD * 100, 1
+            ),
         },
     )
 
