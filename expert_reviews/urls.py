@@ -12,6 +12,7 @@ urlpatterns = [
     path('expert/referrals/<uuid:referral_id>/', views.case_detail, name='expert-case-detail'),
     path('expert/referrals/<uuid:referral_id>/review/', views.submit_review, name='expert-submit-review'),
     path('expert/referrals/<uuid:referral_id>/image/', views.case_image, name='expert-case-image'),
+    path('referrals/<uuid:referral_id>/messages/', views.send_message, name='expert-send-message'),
     path('expert/history/', views.history, name='expert-history'),
     path('expert/settings/', views.settings_account, name='expert-settings'),
 ]

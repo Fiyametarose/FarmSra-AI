@@ -816,8 +816,9 @@ msgid ""
 "threshold. Re-examine symptoms or seek verification from an agricultural "
 "expert."
 msgstr ""
-"Uhakika uko chini ya kiwango cha mpito cha %(confidence_threshold_percent)s%%. "
-"Chunguza tena dalili au tafuta uthibitisho kutoka kwa mtaalamu wa kilimo."
+"Uhakika uko chini ya kiwango cha mpito cha "
+"%(confidence_threshold_percent)s%%. Chunguza tena dalili au tafuta "
+"uthibitisho kutoka kwa mtaalamu wa kilimo."
 
 msgid "Confirm new password"
 msgstr "Thibitisha nenosiri jipya"
@@ -1768,6 +1769,7 @@ msgstr "ukaguzi"
 
 msgid "total case"
 msgstr "jumla ya kesi"
+
 msgid "Primary navigation"
 msgstr "Urambazaji mkuu"
 
@@ -1795,8 +1797,12 @@ msgstr "Funga urambazaji"
 msgid "Optional assigned agricultural expert review"
 msgstr "Ukaguzi wa hiari wa mtaalamu wa kilimo aliyepangiwa"
 
-msgid "Farmers and administrator-managed agricultural experts access their workspaces here."
-msgstr "Wakulima na wataalamu wa kilimo wanaosimamiwa na msimamizi huingia katika sehemu zao za kazi hapa."
+msgid ""
+"Farmers and administrator-managed agricultural experts access their "
+"workspaces here."
+msgstr ""
+"Wakulima na wataalamu wa kilimo wanaosimamiwa na msimamizi huingia katika "
+"sehemu zao za kazi hapa."
 
 msgid "Request an agricultural expert review with strict farmer consent."
 msgstr "Omba ukaguzi wa mtaalamu wa kilimo kwa idhini mahsusi ya mkulima."
@@ -1804,20 +1810,44 @@ msgstr "Omba ukaguzi wa mtaalamu wa kilimo kwa idhini mahsusi ya mkulima."
 msgid "Generate source-backed agricultural guidance for this assessment."
 msgstr "Tengeneza mwongozo wa kilimo unaotegemea vyanzo kwa tathmini hii."
 
-msgid "Secondary assessment by an assigned agricultural expert with farmer consent"
-msgstr "Tathmini ya pili na mtaalamu wa kilimo aliyepangiwa kwa idhini ya mkulima"
+msgid ""
+"Secondary assessment by an assigned agricultural expert with farmer consent"
+msgstr ""
+"Tathmini ya pili na mtaalamu wa kilimo aliyepangiwa kwa idhini ya mkulima"
 
-msgid "Your case has been consented and queued for assignment to an agricultural expert."
+msgid ""
+"Your case has been consented and queued for assignment to an agricultural "
+"expert."
 msgstr "Kesi yako imepewa idhini na imepangwa kupangiwa mtaalamu wa kilimo."
 
-msgid "You can share this case with an assigned agricultural expert for a secondary review. Only this specific case, image, case location, prediction, confidence, and symptoms are shared. Your personal account details remain private."
-msgstr "Unaweza kushiriki kesi hii na mtaalamu wa kilimo aliyepangiwa kwa ukaguzi wa pili. Ni kesi hii pekee, picha, eneo la kesi, utabiri, kiwango cha uhakika na dalili vinavyoshirikiwa. Maelezo ya akaunti yako binafsi hubaki ya faragha."
+msgid ""
+"You can share this case with an assigned agricultural expert for a secondary"
+" review. Only this specific case, image, case location, prediction, "
+"confidence, and symptoms are shared. Your personal account details remain "
+"private."
+msgstr ""
+"Unaweza kushiriki kesi hii na mtaalamu wa kilimo aliyepangiwa kwa ukaguzi wa"
+" pili. Ni kesi hii pekee, picha, eneo la kesi, utabiri, kiwango cha uhakika "
+"na dalili vinavyoshirikiwa. Maelezo ya akaunti yako binafsi hubaki ya "
+"faragha."
 
-msgid "I grant explicit, revocable consent to share my crop, leaf photograph, case location, AI prediction, confidence, and symptoms with an assigned agricultural expert for secondary evaluation. I understand I can revoke this consent at any time."
-msgstr "Ninatoa idhini ya wazi inayoweza kubatilishwa kushiriki zao langu, picha ya jani, eneo la kesi, utabiri wa AI, kiwango cha uhakika na dalili na mtaalamu wa kilimo aliyepangiwa kwa tathmini ya pili. Ninaelewa kuwa ninaweza kubatilisha idhini hii wakati wowote."
+msgid ""
+"I grant explicit, revocable consent to share my crop, leaf photograph, case "
+"location, AI prediction, confidence, and symptoms with an assigned "
+"agricultural expert for secondary evaluation. I understand I can revoke this"
+" consent at any time."
+msgstr ""
+"Ninatoa idhini ya wazi inayoweza kubatilishwa kushiriki zao langu, picha ya "
+"jani, eneo la kesi, utabiri wa AI, kiwango cha uhakika na dalili na mtaalamu"
+" wa kilimo aliyepangiwa kwa tathmini ya pili. Ninaelewa kuwa ninaweza "
+"kubatilisha idhini hii wakati wowote."
 
-msgid "Secondary case assessments by assigned agricultural experts with strict farmer consent."
-msgstr "Tathmini za pili za kesi na wataalamu wa kilimo waliopangiwa kwa idhini mahsusi ya mkulima."
+msgid ""
+"Secondary case assessments by assigned agricultural experts with strict "
+"farmer consent."
+msgstr ""
+"Tathmini za pili za kesi na wataalamu wa kilimo waliopangiwa kwa idhini "
+"mahsusi ya mkulima."
 
 msgid "3. Expert Assessment"
 msgstr "3. Tathmini ya Mtaalamu"
@@ -1837,6 +1867,7 @@ msgstr "Majani ya mazao"
 
 msgid "Crop field"
 msgstr "Shamba la mazao"
+
 msgid "classes"
 msgstr "madarasa"
 
@@ -1846,13 +1877,19 @@ msgstr "Chagua mojawapo ya mazao yako yaliyosajiliwa."
 msgid "The registered crop must match the selected species."
 msgstr "Zao lililosajiliwa lazima lilingane na aina iliyochaguliwa."
 
-msgid "Uses this entry first, then the selected crop location, then your farm profile location."
-msgstr "Hutumia eneo hili kwanza, kisha eneo la zao lililochaguliwa, halafu eneo la wasifu wa shamba lako."
+msgid ""
+"Uses this entry first, then the selected crop location, then your farm "
+"profile location."
+msgstr ""
+"Hutumia eneo hili kwanza, kisha eneo la zao lililochaguliwa, halafu eneo la "
+"wasifu wa shamba lako."
 
 msgid "Use device location"
 msgstr "Tumia eneo la kifaa"
 
-msgid "Location unavailable. Enter the case location or select a crop with a location."
+msgid ""
+"Location unavailable. Enter the case location or select a crop with a "
+"location."
 msgstr "Eneo halipatikani. Weka eneo la kesi au uchague zao lenye eneo."
 
 msgid "Location is not supported by this browser."
@@ -1906,7 +1943,8 @@ msgstr "Eneo halipatikani. Weka eneo la kesi na ujaribu tena."
 msgid "Location could not be found. Check the case location and try again."
 msgstr "Eneo halikupatikana. Hakiki eneo la kesi na ujaribu tena."
 
-msgid "Location is ambiguous. Enter a more specific town, region, and country."
+msgid ""
+"Location is ambiguous. Enter a more specific town, region, and country."
 msgstr "Eneo haliko wazi. Weka mji, mkoa na nchi kwa usahihi zaidi."
 
 msgid "The supplied coordinates are invalid."
@@ -1930,30 +1968,136 @@ msgstr "GPS ya kifaa"
 msgid "Manual correction"
 msgstr "Marekebisho ya mkono"
 
-msgid "Historical weather was not recorded for this diagnosis. You can look up current weather, which will be labeled with its actual observation time."
-msgstr "Hali ya hewa ya kihistoria haikurekodiwa kwa utambuzi huu. Unaweza kuangalia hali ya hewa ya sasa, ambayo itaonyesha wakati halisi wa uchunguzi."
+msgid ""
+"Historical weather was not recorded for this diagnosis. You can look up "
+"current weather, which will be labeled with its actual observation time."
+msgstr ""
+"Hali ya hewa ya kihistoria haikurekodiwa kwa utambuzi huu. Unaweza kuangalia"
+" hali ya hewa ya sasa, ambayo itaonyesha wakati halisi wa uchunguzi."
 
-msgid "This is a later current-weather lookup, not weather recorded at the original diagnosis time."
-msgstr "Hii ni hali ya hewa ya sasa iliyoangaliwa baadaye, si hali ya hewa iliyorekodiwa wakati wa utambuzi wa awali."
+msgid ""
+"This is a later current-weather lookup, not weather recorded at the original"
+" diagnosis time."
+msgstr ""
+"Hii ni hali ya hewa ya sasa iliyoangaliwa baadaye, si hali ya hewa "
+"iliyorekodiwa wakati wa utambuzi wa awali."
 
 msgid "Replace saved snapshot with corrected current weather"
-msgstr "Badilisha taarifa iliyohifadhiwa kwa hali ya hewa ya sasa ya eneo lililosahihishwa"
+msgstr ""
+"Badilisha taarifa iliyohifadhiwa kwa hali ya hewa ya sasa ya eneo "
+"lililosahihishwa"
 
 msgid "Look up current weather"
 msgstr "Angalia hali ya hewa ya sasa"
 
-msgid "Automatic weather capture is only available shortly after diagnosis completion."
-msgstr "Uhifadhi wa hali ya hewa kiotomatiki unapatikana muda mfupi tu baada ya utambuzi kukamilika."
+msgid ""
+"Automatic weather capture is only available shortly after diagnosis "
+"completion."
+msgstr ""
+"Uhifadhi wa hali ya hewa kiotomatiki unapatikana muda mfupi tu baada ya "
+"utambuzi kukamilika."
 
-msgid "The coordinate pair is malformed. Enter latitude and longitude as numbers."
-msgstr "Jozi ya kuratibu imeandikwa vibaya. Weka latitudo na longitudo kama nambari."
+msgid ""
+"The coordinate pair is malformed. Enter latitude and longitude as numbers."
+msgstr ""
+"Jozi ya kuratibu imeandikwa vibaya. Weka latitudo na longitudo kama nambari."
 
 msgid "Browser coordinates (unverified)"
 msgstr "Kuratibu za kivinjari (hazijathibitishwa)"
 
-msgid "The country in this location was not recognized. Enter a country name or two-letter country code."
-msgstr "Nchi katika eneo hili haikutambuliwa. Weka jina la nchi au msimbo wa nchi wa herufi mbili."
+msgid ""
+"The country in this location was not recognized. Enter a country name or "
+"two-letter country code."
+msgstr ""
+"Nchi katika eneo hili haikutambuliwa. Weka jina la nchi au msimbo wa nchi wa"
+" herufi mbili."
 
 msgid "Approximate town-level weather location"
 msgstr "Eneo la hali ya hewa la kiwango cha mji (makadirio)"
 
+msgid "Expert Directory"
+msgstr "Orodha ya Wataalamu"
+
+msgid "Any available expert"
+msgstr "Mtaalamu yeyote anayepatikana"
+
+msgid "Unnamed expert"
+msgstr "Mtaalamu ambaye hajatajwa jina"
+
+msgid "Profile incomplete"
+msgstr "Wasifu haujakamilika"
+
+msgid "Languages"
+msgstr "Lugha"
+
+msgid "Availability"
+msgstr "Upatikanaji"
+
+msgid "Verification"
+msgstr "Uthibitishaji"
+
+msgid "Selected recipient"
+msgstr "Mpokeaji aliyechaguliwa"
+
+msgid "Assigned expert"
+msgstr "Mtaalamu aliyekabidhiwa"
+
+msgid "Awaiting assignment"
+msgstr "Inasubiri kukabidhiwa"
+
+msgid "Case Messages"
+msgstr "Ujumbe wa Kesi"
+
+msgid "No messages yet."
+msgstr "Hakuna ujumbe bado."
+
+msgid "Send Message"
+msgstr "Tuma Ujumbe"
+
+msgid "Choose recipient"
+msgstr "Chagua mpokeaji"
+
+msgid "Messages retained after consent revocation"
+msgstr "Ujumbe uliohifadhiwa baada ya idhini kubatilishwa"
+
+msgid "Select an active, available expert."
+msgstr "Chagua mtaalamu aliye hai na anayepatikana."
+
+msgid "Enter a message."
+msgstr "Andika ujumbe."
+
+msgid "You have a new case message."
+msgstr "Una ujumbe mpya wa kesi."
+
+msgid "A referral is awaiting coordinator assignment."
+msgstr "Rufaa inasubiri kukabidhiwa na mratibu."
+
+msgid "Open Message"
+msgstr "Fungua Ujumbe"
+
+msgid "Assign Request"
+msgstr "Kabidhi Ombi"
+
+msgid "Choose a recipient"
+msgstr "Chagua mpokeaji"
+
+msgid "Your case is assigned to an agricultural expert."
+msgstr "Kesi yako imekabidhiwa kwa mtaalamu wa kilimo."
+
+msgid "Unknown availability"
+msgstr "Upatikanaji haujulikani"
+
+msgid "Submitted"
+msgstr "Imewasilishwa"
+
+msgid "Read"
+msgstr "Imesomwa"
+
+msgid "Not provided"
+msgstr "Haijatolewa"
+
+msgid "Referral state"
+msgstr "Hali ya rufaa"
+
+msgid "No expert profiles are currently listed."
+msgstr "Hakuna wasifu wa wataalamu ulioorodheshwa kwa sasa."

@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django import forms
 from django.utils import timezone
-from .models import ExpertReferral, ExpertReview
+from .models import ExpertMessage, ExpertProfile, ExpertReferral, ExpertReview
+from .services import notify_assignment
 from users.models import User
 
 class ExpertReferralAdminForm(forms.ModelForm):
@@ -39,6 +40,10 @@ class ExpertReferralAdminForm(forms.ModelForm):
                 cleaned_data['state'] = ExpertReferral.State.ASSIGNED
                 if not self.instance.assigned_at:
                     cleaned_data['assigned_at'] = timezone.now()
+            if (self.instance.recipient_choice == ExpertReferral.RecipientChoice.SPECIFIC
+                    and self.instance.selected_expert_id
+                    and assigned_expert.pk != self.instance.selected_expert_id):
+                raise forms.ValidationError("A specifically selected expert cannot be reassigned without renewed farmer authorization.")
         elif state == ExpertReferral.State.ASSIGNED:
             raise forms.ValidationError("An expert must be assigned to set state to ASSIGNED.")
 
@@ -50,7 +55,7 @@ class ExpertReferralAdmin(admin.ModelAdmin):
     list_display = ('diagnosis', 'state', 'assigned_expert', 'consent_granted_at', 'assigned_at')
     list_filter = ('state', 'consent_granted_at', 'assigned_at')
     search_fields = ('diagnosis__id', 'diagnosis__farmer__email', 'assigned_expert__email')
-    readonly_fields = ('diagnosis', 'consent_granted_at', 'revoked_at', 'created_at', 'updated_at')
+    readonly_fields = ('diagnosis', 'recipient_choice', 'selected_expert', 'consent_granted_at', 'revoked_at', 'created_at', 'updated_at')
 
     def has_add_permission(self, request):
         return False
@@ -74,23 +79,7 @@ class ExpertReferralAdmin(admin.ModelAdmin):
         became_assigned = (old_state != ExpertReferral.State.ASSIGNED and obj.state == ExpertReferral.State.ASSIGNED and new_expert is not None)
 
         if expert_changed or became_assigned:
-            from notifications.models import Notification
-            from uuid import uuid4
-
-            assignment_event_key = f"referral_{obj.id}_assignment_{uuid4().hex}"
-            Notification.objects.get_or_create(
-                recipient=new_expert,
-                event_type=Notification.EventType.EXPERT_ASSIGNED,
-                event_key=assignment_event_key,
-                defaults={'metadata': {'referral_id': str(obj.id), 'diagnosis_id': str(obj.diagnosis.id)}}
-            )
-            if obj.diagnosis.farmer:
-                Notification.objects.get_or_create(
-                    recipient=obj.diagnosis.farmer,
-                    event_type=Notification.EventType.FARMER_ASSIGNED,
-                    event_key=assignment_event_key,
-                    defaults={'metadata': {'referral_id': str(obj.id), 'diagnosis_id': str(obj.diagnosis.id)}}
-                )
+            notify_assignment(obj, f"referral_{obj.id}_assignment_{new_expert.id}")
 
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.state in [ExpertReferral.State.REVOKED, ExpertReferral.State.REVIEWED]:
@@ -103,6 +92,33 @@ class ExpertReviewAdmin(admin.ModelAdmin):
     list_filter = ('outcome', 'submitted_at')
     search_fields = ('referral__diagnosis__id', 'expert__email')
     readonly_fields = ('referral', 'expert', 'outcome', 'findings', 'next_steps', 'submitted_at')
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(ExpertProfile)
+class ExpertProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "specialization", "availability", "verification_status")
+    list_filter = ("availability", "verification_status")
+    search_fields = ("user__email", "user__first_name", "user__last_name", "specialization")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "user":
+            kwargs["queryset"] = User.objects.filter(role=User.Role.EXPERT)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(ExpertMessage)
+class ExpertMessageAdmin(admin.ModelAdmin):
+    list_display = ("referral", "sender", "created_at", "read_at")
+    readonly_fields = ("referral", "sender", "body", "created_at", "read_at")
 
     def has_add_permission(self, request):
         return False

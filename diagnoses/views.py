@@ -8,7 +8,8 @@ from django.utils import timezone
 from datetime import timedelta
 
 from users.models import User
-from expert_reviews.models import ExpertReferral
+from expert_reviews.models import ExpertMessage, ExpertReferral
+from expert_reviews.forms import ExpertMessageForm, RequestReviewForm
 
 from .forms import DiagnosisUploadForm
 from .inference import InferenceError, ModelUnavailableError, predict
@@ -169,6 +170,8 @@ def case_detail(request, case_id):
     )
     active_referral = case.expert_referrals.exclude(state='revoked').first()
     revoked_referrals = case.expert_referrals.filter(state='revoked', review__isnull=False).order_by('-revoked_at')
+    if active_referral:
+        active_referral.messages.exclude(sender=request.user).filter(read_at__isnull=True).update(read_at=timezone.now())
 
     return render(
         request,
@@ -177,6 +180,10 @@ def case_detail(request, case_id):
             "case": case,
             "active_referral": active_referral,
             "revoked_referrals": revoked_referrals,
+            "request_review_form": RequestReviewForm(),
+            "expert_messages": active_referral.messages.select_related("sender") if active_referral else (),
+            "revoked_messages": ExpertMessage.objects.filter(referral__diagnosis=case, referral__state=ExpertReferral.State.REVOKED).select_related("sender"),
+            "message_form": ExpertMessageForm(),
             "weather_auto_capture_eligible": weather_auto_capture_eligible,
             "weather_is_late_lookup": weather_is_late_lookup,
             "confidence_threshold_percent": round(
@@ -257,5 +264,6 @@ def agricultural_experts(request):
         "diagnoses/experts.html",
         {
             "active_referrals": active_referrals,
+            "expert_users": User.objects.filter(role=User.Role.EXPERT, is_active=True).select_related("expert_profile").order_by("first_name", "last_name", "email"),
         },
     )

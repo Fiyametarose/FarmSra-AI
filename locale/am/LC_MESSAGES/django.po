@@ -788,8 +788,8 @@ msgid ""
 "threshold. Re-examine symptoms or seek verification from an agricultural "
 "expert."
 msgstr ""
-"እርግጠኝነቱ ከጊዜያዊው %(confidence_threshold_percent)s%% ገደብ በታች ነው። ምልክቶችን "
-"እንደገና ይመርምሩ ወይም ከግብርና ባለሙያ ማረጋገጫ ይጠይቁ።"
+"እርግጠኝነቱ ከጊዜያዊው %(confidence_threshold_percent)s%% ገደብ በታች ነው። ምልክቶችን እንደገና "
+"ይመርምሩ ወይም ከግብርና ባለሙያ ማረጋገጫ ይጠይቁ።"
 
 msgid "Confirm new password"
 msgstr "አዲሱን የይለፍ ቃል ያረጋግጡ"
@@ -1653,6 +1653,7 @@ msgstr "ግምገማ"
 
 msgid "total case"
 msgstr "ጠቅላላ ጉዳዮች"
+
 msgid "Primary navigation"
 msgstr "ዋና አሰሳ"
 
@@ -1680,7 +1681,9 @@ msgstr "አሰሳውን ዝጋ"
 msgid "Optional assigned agricultural expert review"
 msgstr "በተመደበ የግብርና ባለሙያ አማራጭ ግምገማ"
 
-msgid "Farmers and administrator-managed agricultural experts access their workspaces here."
+msgid ""
+"Farmers and administrator-managed agricultural experts access their "
+"workspaces here."
 msgstr "ገበሬዎች እና በአስተዳዳሪ የሚተዳደሩ የግብርና ባለሙያዎች የሥራ ቦታቸውን እዚህ ይጠቀማሉ።"
 
 msgid "Request an agricultural expert review with strict farmer consent."
@@ -1689,19 +1692,37 @@ msgstr "በገበሬው ግልጽ ፈቃድ የግብርና ባለሙያ ግም�
 msgid "Generate source-backed agricultural guidance for this assessment."
 msgstr "ለዚህ ግምገማ በምንጭ የተደገፈ የግብርና መመሪያ ያዘጋጁ።"
 
-msgid "Secondary assessment by an assigned agricultural expert with farmer consent"
+msgid ""
+"Secondary assessment by an assigned agricultural expert with farmer consent"
 msgstr "በገበሬው ፈቃድ በተመደበ የግብርና ባለሙያ ሁለተኛ ግምገማ"
 
-msgid "Your case has been consented and queued for assignment to an agricultural expert."
+msgid ""
+"Your case has been consented and queued for assignment to an agricultural "
+"expert."
 msgstr "ለጉዳይዎ ፈቃድ ተሰጥቶ ለግብርና ባለሙያ ምደባ ተራ ይዟል።"
 
-msgid "You can share this case with an assigned agricultural expert for a secondary review. Only this specific case, image, case location, prediction, confidence, and symptoms are shared. Your personal account details remain private."
-msgstr "ይህን ጉዳይ ለሁለተኛ ግምገማ ከተመደበ የግብርና ባለሙያ ጋር ማጋራት ይችላሉ። የሚጋሩት ይህ የተወሰነ ጉዳይ፣ ምስል፣ የጉዳዩ ቦታ፣ ትንበያ፣ የመተማመን ደረጃ እና ምልክቶች ብቻ ናቸው። የግል መለያ ዝርዝሮችዎ ሚስጥራዊ ሆነው ይቆያሉ።"
+msgid ""
+"You can share this case with an assigned agricultural expert for a secondary"
+" review. Only this specific case, image, case location, prediction, "
+"confidence, and symptoms are shared. Your personal account details remain "
+"private."
+msgstr ""
+"ይህን ጉዳይ ለሁለተኛ ግምገማ ከተመደበ የግብርና ባለሙያ ጋር ማጋራት ይችላሉ። የሚጋሩት ይህ የተወሰነ ጉዳይ፣ ምስል፣ "
+"የጉዳዩ ቦታ፣ ትንበያ፣ የመተማመን ደረጃ እና ምልክቶች ብቻ ናቸው። የግል መለያ ዝርዝሮችዎ ሚስጥራዊ ሆነው ይቆያሉ።"
 
-msgid "I grant explicit, revocable consent to share my crop, leaf photograph, case location, AI prediction, confidence, and symptoms with an assigned agricultural expert for secondary evaluation. I understand I can revoke this consent at any time."
-msgstr "ሰብሌን፣ የቅጠል ፎቶውን፣ የጉዳዩን ቦታ፣ የAI ትንበያን፣ የመተማመን ደረጃን እና ምልክቶችን ለሁለተኛ ግምገማ ከተመደበ የግብርና ባለሙያ ጋር ለማጋራት ግልጽና ሊሰረዝ የሚችል ፈቃድ እሰጣለሁ። ይህን ፈቃድ በማንኛውም ጊዜ መሰረዝ እንደምችል ተረድቻለሁ።"
+msgid ""
+"I grant explicit, revocable consent to share my crop, leaf photograph, case "
+"location, AI prediction, confidence, and symptoms with an assigned "
+"agricultural expert for secondary evaluation. I understand I can revoke this"
+" consent at any time."
+msgstr ""
+"ሰብሌን፣ የቅጠል ፎቶውን፣ የጉዳዩን ቦታ፣ የAI ትንበያን፣ የመተማመን ደረጃን እና ምልክቶችን ለሁለተኛ ግምገማ ከተመደበ"
+" የግብርና ባለሙያ ጋር ለማጋራት ግልጽና ሊሰረዝ የሚችል ፈቃድ እሰጣለሁ። ይህን ፈቃድ በማንኛውም ጊዜ መሰረዝ እንደምችል"
+" ተረድቻለሁ።"
 
-msgid "Secondary case assessments by assigned agricultural experts with strict farmer consent."
+msgid ""
+"Secondary case assessments by assigned agricultural experts with strict "
+"farmer consent."
 msgstr "በገበሬው ግልጽ ፈቃድ በተመደቡ የግብርና ባለሙያዎች የሚደረግ ሁለተኛ የጉዳይ ግምገማ።"
 
 msgid "3. Expert Assessment"
@@ -1722,6 +1743,7 @@ msgstr "የሰብል ቅጠሎች"
 
 msgid "Crop field"
 msgstr "የሰብል ማሳ"
+
 msgid "classes"
 msgstr "ክፍሎች"
 
@@ -1731,13 +1753,17 @@ msgstr "ከተመዘገቡ ሰብሎችዎ አንዱን ይምረጡ።"
 msgid "The registered crop must match the selected species."
 msgstr "የተመዘገበው ሰብል ከተመረጠው ዝርያ ጋር መዛመድ አለበት።"
 
-msgid "Uses this entry first, then the selected crop location, then your farm profile location."
+msgid ""
+"Uses this entry first, then the selected crop location, then your farm "
+"profile location."
 msgstr "በመጀመሪያ ይህን ቦታ፣ ከዚያ የተመረጠውን የሰብል ቦታ፣ በመጨረሻም የእርሻ መገለጫዎን ቦታ ይጠቀማል።"
 
 msgid "Use device location"
 msgstr "የመሣሪያውን ቦታ ይጠቀሙ"
 
-msgid "Location unavailable. Enter the case location or select a crop with a location."
+msgid ""
+"Location unavailable. Enter the case location or select a crop with a "
+"location."
 msgstr "ቦታው አይገኝም። የጉዳዩን ቦታ ያስገቡ ወይም ቦታ ያለውን ሰብል ይምረጡ።"
 
 msgid "Location is not supported by this browser."
@@ -1791,7 +1817,8 @@ msgstr "ቦታው አይገኝም። የጉዳዩን ቦታ ያስገቡ እና 
 msgid "Location could not be found. Check the case location and try again."
 msgstr "ቦታው ሊገኝ አልቻለም። የጉዳዩን ቦታ ያረጋግጡ እና እንደገና ይሞክሩ።"
 
-msgid "Location is ambiguous. Enter a more specific town, region, and country."
+msgid ""
+"Location is ambiguous. Enter a more specific town, region, and country."
 msgstr "ቦታው ግልጽ አይደለም። ይበልጥ የተወሰነ ከተማ፣ ክልል እና አገር ያስገቡ።"
 
 msgid "The supplied coordinates are invalid."
@@ -1815,10 +1842,16 @@ msgstr "የመሣሪያ GPS"
 msgid "Manual correction"
 msgstr "በእጅ ማስተካከያ"
 
-msgid "Historical weather was not recorded for this diagnosis. You can look up current weather, which will be labeled with its actual observation time."
-msgstr "ለዚህ ምርመራ ታሪካዊ የአየር ሁኔታ አልተመዘገበም። በትክክለኛው የምልከታ ጊዜ የሚለየውን የአሁኑን የአየር ሁኔታ መመልከት ይችላሉ።"
+msgid ""
+"Historical weather was not recorded for this diagnosis. You can look up "
+"current weather, which will be labeled with its actual observation time."
+msgstr ""
+"ለዚህ ምርመራ ታሪካዊ የአየር ሁኔታ አልተመዘገበም። በትክክለኛው የምልከታ ጊዜ የሚለየውን የአሁኑን የአየር ሁኔታ "
+"መመልከት ይችላሉ።"
 
-msgid "This is a later current-weather lookup, not weather recorded at the original diagnosis time."
+msgid ""
+"This is a later current-weather lookup, not weather recorded at the original"
+" diagnosis time."
 msgstr "ይህ በኋላ የታየ የአሁኑ የአየር ሁኔታ ነው፤ በመጀመሪያው የምርመራ ጊዜ የተመዘገበ አይደለም።"
 
 msgid "Replace saved snapshot with corrected current weather"
@@ -1827,18 +1860,109 @@ msgstr "የተቀመጠውን መረጃ በታረመው ቦታ የአሁኑ የ�
 msgid "Look up current weather"
 msgstr "የአሁኑን የአየር ሁኔታ ይመልከቱ"
 
-msgid "Automatic weather capture is only available shortly after diagnosis completion."
+msgid ""
+"Automatic weather capture is only available shortly after diagnosis "
+"completion."
 msgstr "ራስ-ሰር የአየር ሁኔታ ማስቀመጥ ምርመራው ከተጠናቀቀ በኋላ ለአጭር ጊዜ ብቻ ይገኛል።"
 
-msgid "The coordinate pair is malformed. Enter latitude and longitude as numbers."
+msgid ""
+"The coordinate pair is malformed. Enter latitude and longitude as numbers."
 msgstr "የመጋጠሚያው ጥንድ በትክክል አልተጻፈም። ኬክሮስንና ኬንትሮስን በቁጥር ያስገቡ።"
 
 msgid "Browser coordinates (unverified)"
 msgstr "የአሳሽ መጋጠሚያዎች (ያልተረጋገጡ)"
 
-msgid "The country in this location was not recognized. Enter a country name or two-letter country code."
+msgid ""
+"The country in this location was not recognized. Enter a country name or "
+"two-letter country code."
 msgstr "በዚህ ቦታ ውስጥ ያለው አገር አልታወቀም። የአገር ስም ወይም ባለሁለት ፊደል የአገር ኮድ ያስገቡ።"
 
 msgid "Approximate town-level weather location"
 msgstr "ግምታዊ የከተማ ደረጃ የአየር ሁኔታ ቦታ"
 
+msgid "Expert Directory"
+msgstr "የባለሙያዎች ማውጫ"
+
+msgid "Any available expert"
+msgstr "ማንኛውም የሚገኝ ባለሙያ"
+
+msgid "Unnamed expert"
+msgstr "ስም ያልተጠቀሰ ባለሙያ"
+
+msgid "Profile incomplete"
+msgstr "መገለጫው ያልተሟላ ነው"
+
+msgid "Languages"
+msgstr "ቋንቋዎች"
+
+msgid "Availability"
+msgstr "ተገኝነት"
+
+msgid "Verification"
+msgstr "ማረጋገጫ"
+
+msgid "Selected recipient"
+msgstr "የተመረጠ ተቀባይ"
+
+msgid "Assigned expert"
+msgstr "የተመደበ ባለሙያ"
+
+msgid "Awaiting assignment"
+msgstr "ምደባን በመጠበቅ ላይ"
+
+msgid "Case Messages"
+msgstr "የጉዳይ መልዕክቶች"
+
+msgid "No messages yet."
+msgstr "እስካሁን ምንም መልዕክት የለም።"
+
+msgid "Send Message"
+msgstr "መልዕክት ላክ"
+
+msgid "Choose recipient"
+msgstr "ተቀባይ ይምረጡ"
+
+msgid "Messages retained after consent revocation"
+msgstr "ፈቃድ ከተሰረዘ በኋላ የተቀመጡ መልዕክቶች"
+
+msgid "Select an active, available expert."
+msgstr "ንቁ እና የሚገኝ ባለሙያ ይምረጡ።"
+
+msgid "Enter a message."
+msgstr "መልዕክት ያስገቡ።"
+
+msgid "You have a new case message."
+msgstr "አዲስ የጉዳይ መልዕክት አለዎት።"
+
+msgid "A referral is awaiting coordinator assignment."
+msgstr "ሪፈራሉ የአስተባባሪ ምደባን በመጠበቅ ላይ ነው።"
+
+msgid "Open Message"
+msgstr "መልዕክት ክፈት"
+
+msgid "Assign Request"
+msgstr "ጥያቄውን መድብ"
+
+msgid "Choose a recipient"
+msgstr "ተቀባይ ይምረጡ"
+
+msgid "Your case is assigned to an agricultural expert."
+msgstr "ጉዳይዎ ለግብርና ባለሙያ ተመድቧል።"
+
+msgid "Unknown availability"
+msgstr "ተገኝነት አልታወቀም"
+
+msgid "Submitted"
+msgstr "ገብቷል"
+
+msgid "Read"
+msgstr "ተነቧል"
+
+msgid "Not provided"
+msgstr "አልቀረበም"
+
+msgid "Referral state"
+msgstr "የባለሙያ ሪፈራል ሁኔታ"
+
+msgid "No expert profiles are currently listed."
+msgstr "በአሁኑ ጊዜ የተዘረዘሩ የባለሙያ መገለጫዎች የሉም።"

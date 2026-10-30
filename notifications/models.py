@@ -9,6 +9,8 @@ class Notification(models.Model):
         FARMER_ASSIGNED = 'farmer_assigned', _('Request Assigned')
         EXPERT_REVIEWED = 'expert_reviewed', _('Review Submitted')
         CONSENT_REVOKED = 'consent_revoked', _('Consent Revoked')
+        COORDINATOR_REQUEST = 'coordinator_request', _('Coordinator Request')
+        NEW_MESSAGE = 'new_message', _('New Message')
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')

@@ -65,7 +65,7 @@ class ExpertReviewsTests(TestCase):
         self.assertEqual(response.status_code, 400)
 
         # Valid consent
-        response = self.client.post(reverse("request-review", args=[self.case.id]), {"consent": "on"})
+        response = self.client.post(reverse("request-review", args=[self.case.id]), {"consent": "on", "recipient": "any"})
         self.assertRedirects(response, reverse("case-detail", args=[self.case.id]))
         self.assertTrue(ExpertReferral.objects.filter(diagnosis=self.case).exists())
 
@@ -76,12 +76,12 @@ class ExpertReviewsTests(TestCase):
             status=DiagnosisCase.Status.PENDING
         )
         self.client.login(email="farmer@example.com", password="testpassword")
-        response = self.client.post(reverse("request-review", args=[pending_case.id]), {"consent": "on"})
+        response = self.client.post(reverse("request-review", args=[pending_case.id]), {"consent": "on", "recipient": "any"})
         self.assertEqual(response.status_code, 403)
 
     def test_expert_cannot_request_review(self):
         self.client.login(email="expert@example.com", password="testpassword")
-        response = self.client.post(reverse("request-review", args=[self.case.id]), {"consent": "on"})
+        response = self.client.post(reverse("request-review", args=[self.case.id]), {"consent": "on", "recipient": "any"})
         self.assertEqual(response.status_code, 403)
 
     def test_farmer_can_revoke_review(self):
@@ -260,7 +260,7 @@ class ExpertReviewsTests(TestCase):
     def test_csrf_enforced_on_consent(self):
         client = Client(enforce_csrf_checks=True)
         client.login(email="farmer@example.com", password="testpassword")
-        response = client.post(reverse("request-review", args=[self.case.id]), {"consent": "on"})
+        response = client.post(reverse("request-review", args=[self.case.id]), {"consent": "on", "recipient": "any"})
         self.assertEqual(response.status_code, 403) # Forbidden due to missing CSRF token
 
     def test_admin_assignment_to_active_expert(self):
@@ -367,7 +367,7 @@ class ExpertReviewsTests(TestCase):
             state=ExpertReferral.State.REVOKED
         )
         self.client.login(email="farmer@example.com", password="testpassword")
-        response = self.client.post(reverse("request-review", args=[self.case.id]), {"consent": "on"})
+        response = self.client.post(reverse("request-review", args=[self.case.id]), {"consent": "on", "recipient": "any"})
         self.assertRedirects(response, reverse("case-detail", args=[self.case.id]))
 
         active_referrals = ExpertReferral.objects.filter(diagnosis=self.case).exclude(state=ExpertReferral.State.REVOKED)

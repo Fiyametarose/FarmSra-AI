@@ -101,6 +101,37 @@ class NotificationTests(TestCase):
         note = response.context['notifications'][0]
         self.assertTrue(note.is_revoked)
 
+    def test_new_message_link_respects_current_assignment_and_consent(self):
+        referral = ExpertReferral.objects.create(
+            diagnosis=self.case, assigned_expert=self.expert, state=ExpertReferral.State.ASSIGNED
+        )
+        Notification.objects.create(
+            recipient=self.expert, event_type=Notification.EventType.NEW_MESSAGE,
+            event_key="message-1", metadata={"referral_id": str(referral.id)},
+        )
+        self.client.force_login(self.expert)
+        response = self.client.get(reverse('notifications:inbox'))
+        self.assertContains(response, reverse('expert-case-detail', args=[referral.id]))
+
+        referral.state = ExpertReferral.State.REVOKED
+        referral.save(update_fields=['state'])
+        response = self.client.get(reverse('notifications:inbox'))
+        self.assertNotContains(response, reverse('expert-case-detail', args=[referral.id]))
+
+    def test_coordinator_request_link_requires_administrator_permission(self):
+        referral = ExpertReferral.objects.create(diagnosis=self.case, state=ExpertReferral.State.REQUESTED)
+        admin = User.objects.create_superuser(email="coordinator@test.com", password="test")
+        for recipient in (admin, self.farmer):
+            Notification.objects.create(
+                recipient=recipient, event_type=Notification.EventType.COORDINATOR_REQUEST,
+                event_key=f"coordinator-{recipient.id}", metadata={"referral_id": str(referral.id)},
+            )
+        admin_url = reverse('admin:expert_reviews_expertreferral_change', args=[referral.id])
+        self.client.force_login(admin)
+        self.assertContains(self.client.get(reverse('notifications:inbox')), admin_url)
+        self.client.force_login(self.farmer)
+        self.assertNotContains(self.client.get(reverse('notifications:inbox')), admin_url)
+
 
 class TranslationCoverageTests(TestCase):
     def tearDown(self):

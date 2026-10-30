@@ -59,6 +59,25 @@
 
     </div>
 
+    <section class="card" style="padding: 2rem; margin-bottom: 2rem;">
+      <h2>{% trans "Expert Directory" %}</h2>
+      {% for expert in expert_users %}
+        <article style="padding: 1rem 0; border-top: 1px solid var(--border);">
+          <strong>{{ expert.get_full_name|default:_('Unnamed expert') }}</strong>
+          {% if expert.expert_profile %}
+            <div>{{ expert.expert_profile.specialization|default:_('Profile incomplete') }}</div>
+            <div>{% trans "Languages" %}: {% for language in expert.expert_profile.supported_languages %}{{ language }}{% if not forloop.last %}, {% endif %}{% empty %}{% trans "Not provided" %}{% endfor %}</div>
+            <div>{% trans "Availability" %}: {{ expert.expert_profile.get_availability_display }} · {% trans "Verification" %}: {{ expert.expert_profile.get_verification_status_display }}</div>
+            {% if not expert.expert_profile.is_complete %}<small>{% trans "Profile incomplete" %}</small>{% endif %}
+            {% if expert.expert_profile.professional_description %}<p>{{ expert.expert_profile.professional_description }}</p>{% endif %}
+          {% else %}
+            <div>{% trans "Profile incomplete" %}</div>
+            <div>{% trans "Availability" %}: {% trans "Unknown availability" %}</div>
+          {% endif %}
+        </article>
+      {% empty %}<p>{% trans "No expert profiles are currently listed." %}</p>{% endfor %}
+    </section>
+
     <!-- Active Reviews List -->
     <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">

@@ -252,6 +252,12 @@
       </div>
 
       {% if active_referral %}
+        <p><strong>{% trans "Selected recipient" %}:</strong>
+          {% if active_referral.recipient_choice == 'specific' %}{{ active_referral.selected_expert.get_full_name|default:_('Unnamed expert') }}{% else %}{% trans "Any available expert" %}{% endif %}<br>
+          <strong>{% trans "Assigned expert" %}:</strong> {{ active_referral.assigned_expert.get_full_name|default:_('Awaiting assignment') }}<br>
+          {% if active_referral.assigned_expert.expert_profile %}{{ active_referral.assigned_expert.expert_profile.specialization }} · {{ active_referral.assigned_expert.expert_profile.supported_languages|join:", " }}<br>{% endif %}
+          {% trans "Submitted" %}: {{ active_referral.created_at|date:"d M Y, H:i" }}{% if active_referral.assigned_at %} · {% trans "Assigned" %}: {{ active_referral.assigned_at|date:"d M Y, H:i" }}{% endif %}
+        </p>
         <div style="background: var(--surface-alt); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <div>
@@ -284,10 +290,12 @@
                 </div>
               {% endif %}
             </div>
-          {% else %}
+          {% elif active_referral.state == 'requested' %}
             <p style="font-size: 0.88rem; color: var(--muted); margin: 0;">
               {% trans "Your case has been consented and queued for assignment to an agricultural expert." %}
             </p>
+          {% elif active_referral.state == 'assigned' %}
+            <p style="font-size: 0.88rem; color: var(--muted); margin: 0;">{% trans "Your case is assigned to an agricultural expert." %}</p>
           {% endif %}
         </div>
 
@@ -298,6 +306,14 @@
           </button>
         </form>
 
+        {% if active_referral.state == 'assigned' or active_referral.state == 'reviewed' %}
+          <div style="margin-top: 1.5rem;">
+            <h3>{% trans "Case Messages" %}</h3>
+            {% for item in expert_messages %}<p><strong>{{ item.sender.get_full_name|default:item.sender.get_role_display }}</strong> · {{ item.created_at|date:"d M Y, H:i" }}{% if item.read_at %} · {% trans "Read" %}{% endif %}<br>{{ item.body|linebreaksbr }}</p>{% empty %}<p>{% trans "No messages yet." %}</p>{% endfor %}
+            <form action="{% url 'expert-send-message' active_referral.id %}" method="post">{% csrf_token %}{{ message_form.body }}<button class="button button-primary" type="submit">{% trans "Send Message" %}</button></form>
+          </div>
+        {% endif %}
+
       {% else %}
         <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin: 0 0 1.5rem 0;">
           {% trans "You can share this case with an assigned agricultural expert for a secondary review. Only this specific case, image, case location, prediction, confidence, and symptoms are shared. Your personal account details remain private." %}
@@ -305,6 +321,7 @@
 
         <form action="{% url 'request-review' case.id %}" method="post">
           {% csrf_token %}
+          <div style="margin-bottom: 1rem;"><label for="id_recipient">{% trans "Choose a recipient" %}</label>{{ request_review_form.recipient }}</div>
           <div style="background: var(--surface-alt); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
             <label style="display: flex; gap: 0.75rem; font-size: 0.85rem; color: var(--text); cursor: pointer; align-items: flex-start;">
               <input type="checkbox" required name="consent" value="on" style="margin-top: 0.2rem;">
@@ -333,6 +350,12 @@
               <p style="font-size: 0.85rem; margin: 0; color: var(--text);">{{ ref.review.findings }}</p>
             </div>
           {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if revoked_messages %}
+        <div style="margin-top: 1.5rem;"><h3>{% trans "Messages retained after consent revocation" %}</h3>
+          {% for item in revoked_messages %}<p><strong>{{ item.sender.get_full_name|default:item.sender.get_role_display }}</strong> · {{ item.created_at|date:"d M Y, H:i" }}<br>{{ item.body|linebreaksbr }}</p>{% endfor %}
         </div>
       {% endif %}
 

@@ -21,6 +21,12 @@
       <a href="{% url 'expert-assigned-cases' %}" class="button button-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
         ← {% trans "Back to Cases" %}
       </a>
+      <section class="card" style="padding: 1.5rem; margin-top: 1.5rem;">
+        <h2>{% trans "Case Messages" %}</h2>
+        <p><strong>{% trans "Selected recipient" %}:</strong> {% if referral.recipient_choice == 'specific' %}{{ referral.selected_expert.get_full_name|default:_('Unnamed expert') }}{% else %}{% trans "Any available expert" %}{% endif %} · <strong>{% trans "Referral state" %}:</strong> {{ referral.get_state_display }}</p>
+        {% for item in expert_messages %}<p><strong>{{ item.sender.get_full_name|default:item.sender.get_role_display }}</strong> · {{ item.created_at|date:"d M Y, H:i" }}{% if item.read_at %} · {% trans "Read" %}{% endif %}<br>{{ item.body|linebreaksbr }}</p>{% empty %}<p>{% trans "No messages yet." %}</p>{% endfor %}
+        <form action="{% url 'expert-send-message' referral.id %}" method="post">{% csrf_token %}{{ message_form.body }}<button class="button button-primary" type="submit">{% trans "Send Message" %}</button></form>
+      </section>
     </div>
 
     <div class="expert-review-layout">

@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.http import FileResponse
@@ -10,16 +11,13 @@ from django.db import transaction, IntegrityError
 from diagnoses.models import DiagnosisCase
 from users.models import User
 from users.forms import FarmerAccountForm
-from .models import ExpertReferral, ExpertReview
+from .models import ExpertMessage, ExpertProfile, ExpertReferral, ExpertReview
+from .forms import ExpertMessageForm, RequestReviewForm
+from .services import notify, notify_assignment, notify_coordinators
+from notifications.models import Notification
 
 
 from django.utils.translation import gettext_lazy as _
-
-class RequestReviewForm(forms.Form):
-    consent = forms.BooleanField(
-        required=True,
-        error_messages={'required': _('Explicit consent is required to request an expert review.')}
-    )
 
 def farmer_required(view_func):
     @login_required
@@ -44,14 +42,13 @@ def expert_required(view_func):
 @farmer_required
 @require_POST
 def request_review(request, case_id):
-    form = RequestReviewForm(request.POST)
-    if not form.is_valid():
-        from django.http import HttpResponseBadRequest
-        return HttpResponseBadRequest(form.errors['consent'].as_text())
-
     case = get_object_or_404(DiagnosisCase, id=case_id, farmer=request.user)
     if case.status != DiagnosisCase.Status.COMPLETED:
         raise PermissionDenied("Case is not completed.")
+    form = RequestReviewForm(request.POST)
+    if not form.is_valid():
+        from django.http import HttpResponseBadRequest
+        return HttpResponseBadRequest(form.errors.as_text())
 
     try:
         with transaction.atomic():
@@ -60,10 +57,19 @@ def request_review(request, case_id):
             if active_referral:
                 return redirect('case-detail', case_id=case.id)
 
-            ExpertReferral.objects.create(
+            selected_expert = form.cleaned_data["recipient"]
+            referral = ExpertReferral.objects.create(
                 diagnosis=case,
-                state=ExpertReferral.State.REQUESTED
+                state=ExpertReferral.State.ASSIGNED if selected_expert else ExpertReferral.State.REQUESTED,
+                recipient_choice=(ExpertReferral.RecipientChoice.SPECIFIC if selected_expert else ExpertReferral.RecipientChoice.ANY),
+                selected_expert=selected_expert,
+                assigned_expert=selected_expert,
+                assigned_at=timezone.now() if selected_expert else None,
             )
+            if selected_expert:
+                notify_assignment(referral, f"referral_{referral.id}_direct_assignment")
+            else:
+                notify_coordinators(referral)
     except IntegrityError:
         pass
 
@@ -160,11 +166,55 @@ def case_detail(request, referral_id):
     if referral.state == ExpertReferral.State.REVOKED:
         raise PermissionDenied("Farmer has revoked consent for this case.")
 
+    if referral.state not in (ExpertReferral.State.ASSIGNED, ExpertReferral.State.REVIEWED):
+        raise PermissionDenied
     case = referral.diagnosis
+    referral.messages.exclude(sender=request.user).filter(read_at__isnull=True).update(read_at=timezone.now())
     return render(request, "expert_reviews/case_detail.html", {
         "referral": referral,
-        "case": case
+        "case": case,
+        "expert_messages": referral.messages.select_related("sender"),
+        "message_form": ExpertMessageForm(),
     })
+
+
+def _message_referral_for(request, referral_id):
+    referral = get_object_or_404(ExpertReferral.objects.select_related("diagnosis__farmer"), id=referral_id)
+    is_farmer = request.user.id == referral.diagnosis.farmer_id
+    is_expert = request.user.id == referral.assigned_expert_id
+    if not (is_farmer or is_expert) or referral.state not in (ExpertReferral.State.ASSIGNED, ExpertReferral.State.REVIEWED):
+        raise PermissionDenied
+    return referral, is_farmer
+
+
+@login_required
+@require_POST
+def send_message(request, referral_id):
+    referral, is_farmer = _message_referral_for(request, referral_id)
+    form = ExpertMessageForm(request.POST)
+    if not form.is_valid():
+        if is_farmer:
+            return redirect("case-detail", case_id=referral.diagnosis_id)
+        return render(request, "expert_reviews/case_detail.html", {
+            "referral": referral, "case": referral.diagnosis,
+            "expert_messages": referral.messages.select_related("sender"), "message_form": form,
+        }, status=400)
+    with transaction.atomic():
+        locked = ExpertReferral.objects.select_for_update().get(pk=referral.pk)
+        if locked.state not in (ExpertReferral.State.ASSIGNED, ExpertReferral.State.REVIEWED):
+            raise PermissionDenied
+        if request.user.id not in (locked.diagnosis.farmer_id, locked.assigned_expert_id):
+            raise PermissionDenied
+        message = form.save(commit=False)
+        message.referral = locked
+        message.sender = request.user
+        message.save()
+        recipient = locked.assigned_expert if is_farmer else locked.diagnosis.farmer
+        path = reverse("expert-case-detail", args=[locked.id]) if is_farmer else reverse("case-detail", args=[locked.diagnosis_id])
+        notify(recipient, Notification.EventType.NEW_MESSAGE, f"message_{message.id}",
+               {"referral_id": str(locked.id), "diagnosis_id": str(locked.diagnosis_id), "message_id": str(message.id)},
+               "New FarmSra AI message", "You have a new message about a crop-health case.", path)
+    return redirect("case-detail", case_id=referral.diagnosis_id) if is_farmer else redirect("expert-case-detail", referral_id=referral.id)
 
 
 class SubmitReviewForm(forms.ModelForm):
@@ -199,12 +249,13 @@ def submit_review(request, referral_id):
             review.expert = request.user
             review.save()
 
-            from notifications.models import Notification
-            Notification.objects.get_or_create(
-                recipient=referral.diagnosis.farmer,
-                event_type=Notification.EventType.EXPERT_REVIEWED,
-                event_key=f"review_{review.id}_submitted",
-                defaults={'metadata': {'referral_id': str(referral.id), 'diagnosis_id': str(referral.diagnosis.id)}}
+            notify(
+                referral.diagnosis.farmer, Notification.EventType.EXPERT_REVIEWED,
+                f"review_{review.id}_submitted",
+                {'referral_id': str(referral.id), 'diagnosis_id': str(referral.diagnosis.id)},
+                "FarmSra AI expert review submitted",
+                "An expert has submitted a review for your crop-health case.",
+                reverse("case-detail", args=[referral.diagnosis_id]),
             )
 
         referral.state = ExpertReferral.State.REVIEWED

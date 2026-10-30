@@ -167,3 +167,17 @@ if CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES < 0:
         "CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES must be a non-negative integer."
     )
 CHROMA_DB_DIR = BASE_DIR / "chroma_db"
+
+# External delivery is opt-in. In-app notifications remain available without SMTP.
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend" if os.getenv("EMAIL_HOST") else "django.core.mail.backends.dummy.EmailBackend",
+)
+EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "true").lower() == "true"
+EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "10"))
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "FarmSra AI <no-reply@localhost>")
+APP_BASE_URL = os.getenv("APP_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
