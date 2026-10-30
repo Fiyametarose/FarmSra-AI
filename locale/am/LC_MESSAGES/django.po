@@ -1968,3 +1968,144 @@ msgid "No expert profiles are currently listed."
 msgstr "በአሁኑ ጊዜ የተዘረዘሩ የባለሙያ መገለጫዎች የሉም።"
 msgid "Grounded guidance retrieval starts automatically. Use the button below to retry if retrieval does not complete."
 msgstr "በማስረጃ የተመሠረተ መመሪያ ማምጣት በራስ-ሰር ይጀምራል። ማምጣቱ ካልተጠናቀቀ ከታች ያለውን አዝራር ተጠቅመው እንደገና ይሞክሩ።"
+
+msgid "AI Assistant"
+msgstr "የAI ረዳት"
+
+msgid "Ask follow-up questions about this case. Answers use your case details and cited agricultural sources."
+msgstr "ስለዚህ ጉዳይ ተጨማሪ ጥያቄዎችን ይጠይቁ። ምላሾች የጉዳይዎን ዝርዝር እና የተጠቀሱ የግብርና ምንጮችን ይጠቀማሉ።"
+
+msgid "Case summary"
+msgstr "የጉዳይ ማጠቃለያ"
+
+msgid "Predicted condition"
+msgstr "የተተነበየ ሁኔታ"
+
+msgid "Case"
+msgstr "ጉዳይ"
+
+msgid "Symptoms"
+msgstr "ምልክቶች"
+
+msgid "Weather snapshot"
+msgstr "የአየር ሁኔታ ቅጽበታዊ መረጃ"
+
+msgid "Model uncertainty: the confidence is below the %(threshold)s%% reliability threshold, so this result is uncertain."
+msgstr "የሞዴሉ እርግጠኛ አለመሆን፡ የእርግጠኝነት ደረጃው ከ%(threshold)s%% የአስተማማኝነት ወሰን በታች ነው፣ ስለዚህ ይህ ውጤት እርግጠኛ አይደለም።"
+
+msgid "AI guidance is not a confirmed diagnosis."
+msgstr "የAI መመሪያ የተረጋገጠ ምርመራ አይደለም።"
+
+msgid "The model output is a tentative estimate and its confidence is not severity. Verify any chemical product on the official local label with your local extension service."
+msgstr "የሞዴሉ ውጤት ጊዜያዊ ግምት ነው፣ የእርግጠኝነት ደረጃውም የበሽታውን ክብደት አያመለክትም። ማንኛውንም የኬሚካል ምርት በአካባቢዎ ኦፊሴላዊ መለያ ላይ ከአካባቢዎ የግብርና ኤክስቴንሽን አገልግሎት ጋር ያረጋግጡ።"
+
+msgid "Conversation"
+msgstr "ውይይት"
+
+msgid "You"
+msgstr "እርስዎ"
+
+msgid "Source excerpts"
+msgstr "ከምንጮች የተወሰዱ ክፍሎች"
+
+msgid "Notice"
+msgstr "ማሳሰቢያ"
+
+msgid "AI guidance, not a confirmed diagnosis. Verify any chemical product on the official local label with local extension services."
+msgstr "የAI መመሪያ እንጂ የተረጋገጠ ምርመራ አይደለም። ማንኛውንም የኬሚካል ምርት በአካባቢዎ ኦፊሴላዊ መለያ ላይ ከአካባቢዎ የግብርና ኤክስቴንሽን አገልግሎቶች ጋር ያረጋግጡ።"
+
+msgid "No messages yet. Ask your first question below."
+msgstr "እስካሁን መልዕክት የለም። የመጀመሪያ ጥያቄዎን ከታች ይጠይቁ።"
+
+msgid "Your question"
+msgstr "ጥያቄዎ"
+
+msgid "You can write in English, Swahili or Amharic. Up to %(limit)s characters. Replies use the language selected in the top bar."
+msgstr "በእንግሊዝኛ፣ በስዋሂሊ ወይም በአማርኛ መጻፍ ይችላሉ። እስከ %(limit)s ፊደላት። ምላሾች በላይኛው አሞሌ የተመረጠውን ቋንቋ ይጠቀማሉ።"
+
+msgid "Send"
+msgstr "ላክ"
+
+msgid "Finding sources and writing a reply…"
+msgstr "ምንጮችን በመፈለግ እና ምላሽ በመጻፍ ላይ…"
+
+msgid "Want a human opinion?"
+msgstr "የሰው ባለሙያ አስተያየት ይፈልጋሉ?"
+
+msgid "Expert review is voluntary. Nothing from this chat is sent to an expert unless you request a review yourself."
+msgstr "የባለሙያ ግምገማ በፈቃደኝነት ነው። ራስዎ ግምገማ ካልጠየቁ በስተቀር ከዚህ ውይይት ምንም ነገር ወደ ባለሙያ አይላክም።"
+
+msgid "View expert review status"
+msgstr "የባለሙያ ግምገማ ሁኔታን ይመልከቱ"
+
+msgid "Go to expert review options"
+msgstr "ወደ የባለሙያ ግምገማ አማራጮች ይሂዱ"
+
+msgid "Ask AI Assistant"
+msgstr "የAI ረዳትን ይጠይቁ"
+
+msgid "Guidance Library"
+msgstr "የመመሪያ ቤተ-መጻሕፍት"
+
+msgid "Browse the curated disease guidance documents used as sources by the AI assistant. No diagnosis case is needed."
+msgstr "በAI ረዳቱ እንደ ምንጭ የሚጠቀሙባቸውን የተመረጡ የበሽታ መመሪያ ሰነዶች ያስሱ። የምርመራ ጉዳይ አያስፈልግም።"
+
+msgid "All crops"
+msgstr "ሁሉም ሰብሎች"
+
+msgid "Condition"
+msgstr "ሁኔታ"
+
+msgid "All conditions"
+msgstr "ሁሉም ሁኔታዎች"
+
+msgid "Filter"
+msgstr "አጣራ"
+
+msgid "Reset"
+msgstr "ዳግም አስጀምር"
+
+msgid "Showing %(shown)s of %(total)s documents."
+msgstr "ከ%(total)s ሰነዶች %(shown)s በማሳየት ላይ።"
+
+msgid "Guidance exists only for the disease classes listed here. Healthy-crop results and the tomato spider-mite output have no guidance document: a healthy prediction is not a guarantee, and spider mites are a pest outside the supported disease scope. Verify any chemical product on the official local label with local extension services."
+msgstr "መመሪያ ያለው እዚህ ለተዘረዘሩት የበሽታ ክፍሎች ብቻ ነው። ጤናማ ሰብል ውጤቶች እና የቲማቲም ሸረሪት ሚት ውጤት የመመሪያ ሰነድ የላቸውም፡ ጤናማ ትንበያ ዋስትና አይደለም፣ ሸረሪት ሚትም ከሚደገፈው የበሽታ ወሰን ውጭ የሆነ ተባይ ነው። ማንኛውንም የኬሚካል ምርት በአካባቢዎ ኦፊሴላዊ መለያ ላይ ከአካባቢዎ የግብርና ኤክስቴንሽን አገልግሎቶች ጋር ያረጋግጡ።"
+
+msgid "Read the curated excerpt"
+msgstr "የተመረጠውን ክፍል ያንብቡ"
+
+msgid "Source text is shown in its original language (English)."
+msgstr "የምንጩ ጽሑፍ በመጀመሪያው ቋንቋ (እንግሊዝኛ) ይታያል።"
+
+msgid "No guidance documents match these filters."
+msgstr "ከእነዚህ ማጣሪያዎች ጋር የሚዛመድ የመመሪያ ሰነድ የለም።"
+
+msgid "The AI assistant is available once the analysis has completed."
+msgstr "የAI ረዳቱ ትንተናው ከተጠናቀቀ በኋላ ይገኛል።"
+
+msgid "This conversation has reached its question limit."
+msgstr "ይህ ውይይት የጥያቄ ገደቡ ላይ ደርሷል።"
+
+msgid "Too many questions in the last hour. Please try again later."
+msgstr "ባለፈው ሰዓት ውስጥ ብዙ ጥያቄዎች ተጠይቀዋል። እባክዎ ቆይተው እንደገና ይሞክሩ።"
+
+msgid "The model's output for this case (two-spotted spider mites) is a pest result outside the disease scope of this assistant, so no disease guidance is given for it. You can consult your local extension service or request a voluntary expert review."
+msgstr "የሞዴሉ ውጤት ለዚህ ጉዳይ (ባለሁለት ነጥብ ሸረሪት ሚት) ከዚህ ረዳት የበሽታ ወሰን ውጭ የሆነ የተባይ ውጤት ነው፣ ስለዚህ ምንም የበሽታ መመሪያ አይሰጥም። የአካባቢዎን የግብርና ኤክስቴንሽን አገልግሎት ማማከር ወይም በፈቃደኝነት የባለሙያ ግምገማ መጠየቅ ይችላሉ።"
+
+msgid "The model's confidence for this case is below the reliability threshold, so the result is uncertain and this assistant does not give disease-specific guidance for it. Consider taking a clearer photo of the affected leaf, consulting your local extension service, or requesting a voluntary expert review."
+msgstr "የሞዴሉ የእርግጠኝነት ደረጃ ለዚህ ጉዳይ ከአስተማማኝነት ወሰኑ በታች ነው፣ ስለዚህ ውጤቱ እርግጠኛ አይደለም እና ይህ ረዳት ለዚህ ጉዳይ በሽታ-ተኮር መመሪያ አይሰጥም። የተጎዳውን ቅጠል የበለጠ ግልጽ ፎቶ ማንሳት፣ የአካባቢዎን የግብርና ኤክስቴንሽን አገልግሎት ማማከር ወይም በፈቃደኝነት የባለሙያ ግምገማ መጠየቅ ያስቡ።"
+
+msgid "The model's tentative result for this case is a healthy plant. That is not a guarantee, and this assistant answers only from disease guidance sources, so it cannot add advice for this case. If you see symptoms or they get worse, take a clear photo, consult your local extension service, or request a voluntary expert review."
+msgstr "የሞዴሉ ጊዜያዊ ውጤት ለዚህ ጉዳይ ጤናማ ተክል ነው። ይህ ዋስትና አይደለም፣ ይህ ረዳትም የሚመልሰው ከበሽታ መመሪያ ምንጮች ብቻ ስለሆነ ለዚህ ጉዳይ ተጨማሪ ምክር መስጠት አይችልም። ምልክቶች ካዩ ወይም ከተባባሱ ግልጽ ፎቶ ያንሱ፣ የአካባቢዎን የግብርና ኤክስቴንሽን አገልግሎት ያማክሩ ወይም በፈቃደኝነት የባለሙያ ግምገማ ይጠይቁ።"
+
+msgid "The retrieved sources do not answer this question, so no guidance is given. Please consult your local extension service or request a voluntary expert review."
+msgstr "የተገኙት ምንጮች ይህንን ጥያቄ አይመልሱም፣ ስለዚህ ምንም መመሪያ አይሰጥም። እባክዎ የአካባቢዎን የግብርና ኤክስቴንሽን አገልግሎት ያማክሩ ወይም በፈቃደኝነት የባለሙያ ግምገማ ይጠይቁ።"
+
+msgid "The AI writer is unavailable or its answer could not be verified. These excerpts from the cited sources are shown in their original language (English):"
+msgstr "የAI ጸሐፊ አይገኝም ወይም መልሱ ሊረጋገጥ አልቻለም። እነዚህ ከተጠቀሱት ምንጮች የተወሰዱ ክፍሎች በመጀመሪያው ቋንቋ (እንግሊዝኛ) ተቀምጠዋል፦"
+
+msgid "The guidance sources are temporarily unavailable. Please try again later."
+msgstr "የመመሪያ ምንጮች ለጊዜው አይገኙም። እባክዎ ቆይተው እንደገና ይሞክሩ።"
+
+msgid "No verified sources were found for this condition, so no answer can be given."
+msgstr "ለዚህ ሁኔታ የተረጋገጡ ምንጮች አልተገኙም፣ ስለዚህ መልስ መስጠት አይቻልም።"

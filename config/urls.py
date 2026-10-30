@@ -24,6 +24,6 @@ urlpatterns = [
     path("advisory/", include("advisory.urls")),
     path("", include("expert_reviews.urls")),
     path("notifications/", include("notifications.urls")),
-    path("i18n/", include("django.conf.urls.i18n")),
+    path("i18n/setlang/", user_views.set_language, name="set_language"),
     path("weather/", include("weather.urls")),
 ]

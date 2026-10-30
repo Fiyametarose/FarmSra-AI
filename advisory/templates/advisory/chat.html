@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block nav_diagnose %}active{% endblock %}
+{% block breadcrumb %}<a href="{% url 'case-detail' case.id %}">{% trans "Diagnosis Result" %}</a> / {% trans "AI Assistant" %}{% endblock %}
+
+{% block content %}
+  <div class="chat-layout">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+      <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; margin: 0 0 0.25rem; color: var(--ink);">{% trans "AI Assistant" %}</h1>
+        <p style="margin: 0; color: var(--muted); font-size: 0.92rem;">{% trans "Ask follow-up questions about this case. Answers use your case details and cited agricultural sources." %}</p>
+      </div>
+      <a href="{% url 'case-detail' case.id %}" class="button button-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">← {% trans "Back to Case" %}</a>
+    </div>
+
+    <section class="chat-panel" aria-label="{% trans 'Case summary' %}">
+      <div class="chat-summary">
+        <div><span>{% trans "Crop" %}:</span> <strong>{{ case.get_crop_display }}</strong></div>
+        <div><span>{% trans "Predicted condition" %}:</span> <strong>{{ case.display_prediction }}</strong></div>
+        <div><span>{% trans "Model Confidence" %}:</span> <strong>{{ case.confidence_percent }}%</strong></div>
+        <div><span>{% trans "Case" %}:</span> {{ case.reference }}</div>
+        {% if case.symptoms %}<div><span>{% trans "Symptoms" %}:</span> {{ case.symptoms|truncatechars:160 }}</div>{% endif %}
+        {% if case.weather_context %}<div><span>{% trans "Weather snapshot" %}:</span> {{ case.weather_context.location_name }}, {{ case.weather_context.observed_at|date:"d M Y, H:i" }}</div>{% endif %}
+      </div>
+      {% if case.is_uncertain %}
+        <div class="callout-box callout-warning" style="margin-top: 0.85rem;">
+          {% blocktrans with threshold=confidence_threshold_percent %}Model uncertainty: the confidence is below the {{ threshold }}% reliability threshold, so this result is uncertain.{% endblocktrans %}
+        </div>
+      {% endif %}
+    </section>
+
+    <div class="callout-box callout-info" role="note" style="margin-bottom: 1.25rem;">
+      <strong>{% trans "AI guidance is not a confirmed diagnosis." %}</strong>
+      {% trans "The model output is a tentative estimate and its confidence is not severity. Verify any chemical product on the official local label with your local extension service." %}
+    </div>
+
+    <section class="chat-thread" aria-live="polite" aria-label="{% trans 'Conversation' %}">
+      {% for message in chat_messages %}
+        {% language message.language %}
+        <article class="chat-message {% if message.role == 'farmer' %}chat-message-farmer{% else %}chat-message-assistant{% endif %}">
+          <div class="chat-message-meta">
+            <span>{% if message.role == 'farmer' %}{% trans "You" %}{% else %}{% trans "AI Assistant" %}{% endif %}</span>
+            <span>{{ message.language|upper }}</span>
+            <span>{{ message.created_at|date:"d M Y, H:i" }}</span>
+            {% if message.kind == 'excerpts' %}<span class="badge badge-yellow">{% trans "Source excerpts" %}</span>{% endif %}
+            {% if message.kind == 'notice' %}<span class="badge badge-yellow">{% trans "Notice" %}</span>{% endif %}
+          </div>
+          <div>{{ message.content|linebreaksbr }}</div>
+          {% if message.role == 'assistant' %}
+            {% if message.sources %}
+              <ul class="chat-sources">
+                {% for source in message.sources %}
+                  <li>
+                    {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.title }} ↗</a>{% else %}<strong>{{ source.title }}</strong>{% endif %}
+                    <div style="color: var(--muted);">{{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}</div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            <div class="chat-warning">{% trans "AI guidance, not a confirmed diagnosis. Verify any chemical product on the official local label with local extension services." %}</div>
+          {% endif %}
+        </article>
+        {% endlanguage %}
+      {% empty %}
+        <p style="color: var(--muted); font-size: 0.92rem;">{% trans "No messages yet. Ask your first question below." %}</p>
+      {% endfor %}
+    </section>
+
+    {% if error %}
+      <div class="callout-box callout-danger" role="alert" style="margin-bottom: 1rem;">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="{% url 'case-chat' case.id %}" id="chat-form" class="chat-panel chat-form">
+      {% csrf_token %}
+      {{ form.token }}
+      <label for="{{ form.question.id_for_label }}" style="font-weight: 700; font-size: 0.9rem;">{% trans "Your question" %}</label>
+      <p style="margin: 0.25rem 0 0.5rem; font-size: 0.8rem; color: var(--muted);">{% blocktrans with limit=max_question_chars %}You can write in English, Swahili or Amharic. Up to {{ limit }} characters. Replies use the language selected in the top bar.{% endblocktrans %}</p>
+      {{ form.question }}
+      {% for field_error in form.question.errors %}<div class="form-errors">{{ field_error }}</div>{% endfor %}
+      {% for field_error in form.token.errors %}<div class="form-errors">{{ field_error }}</div>{% endfor %}
+      <div class="chat-form-actions">
+        <button type="submit" class="button button-primary" id="chat-submit">{% trans "Send" %}</button>
+        <span class="chat-loading" role="status">{% trans "Finding sources and writing a reply…" %}</span>
+      </div>
+    </form>
+
+    <section class="chat-panel">
+      <h2 style="font-size: 1rem; margin: 0 0 0.4rem;">{% trans "Want a human opinion?" %}</h2>
+      <p style="margin: 0 0 0.75rem; font-size: 0.88rem; color: var(--muted);">{% trans "Expert review is voluntary. Nothing from this chat is sent to an expert unless you request a review yourself." %}</p>
+      <a href="{% url 'case-detail' case.id %}#expert-review" class="button button-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+        {% if active_referral %}{% trans "View expert review status" %}{% else %}{% trans "Go to expert review options" %}{% endif %}
+      </a>
+    </section>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    (function () {
+      const form = document.getElementById("chat-form");
+      const button = document.getElementById("chat-submit");
+      form.addEventListener("submit", function (event) {
+        if (form.classList.contains("is-submitting")) {
+          event.preventDefault();
+          return;
+        }
+        form.classList.add("is-submitting");
+        button.disabled = true;
+      });
+      window.addEventListener("pageshow", function () {
+        form.classList.remove("is-submitting");
+        button.disabled = false;
+      });
+      const thread = document.querySelector(".chat-thread");
+      if (thread && thread.lastElementChild) {
+        thread.lastElementChild.scrollIntoView({ block: "nearest" });
+      }
+    })();
+  </script>
+{% endblock %}

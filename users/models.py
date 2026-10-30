@@ -5,6 +5,11 @@ from django.db.models.functions import Lower
 from .managers import UserManager
 
 
+def normalize_language(code):
+    base = (code or "").split("-")[0].lower()
+    return base if base in User.Language.values else User.Language.ENGLISH.value
+
+
 class User(AbstractUser):
     class Role(models.TextChoices):
         FARMER = "farmer", "Farmer"
@@ -15,9 +20,17 @@ class User(AbstractUser):
         KENYA = "KE", "Kenya"
         ETHIOPIA = "ET", "Ethiopia"
 
+    class Language(models.TextChoices):
+        ENGLISH = "en", "English"
+        SWAHILI = "sw", "Swahili"
+        AMHARIC = "am", "Amharic"
+
     username = None
     email = models.EmailField("email address")
     role = models.CharField(max_length=13, choices=Role, default=Role.FARMER)
+    preferred_language = models.CharField(
+        max_length=2, choices=Language, default=Language.ENGLISH
+    )
     country = models.CharField(max_length=2, choices=Country, blank=True)
     region = models.CharField("region or county", max_length=100, blank=True)
     subcounty = models.CharField("zone or sub-county", max_length=100, blank=True)

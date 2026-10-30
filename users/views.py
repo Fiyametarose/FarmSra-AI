@@ -1,9 +1,13 @@
+from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import get_language
+from django.views.decorators.http import require_POST
+from django.views.i18n import set_language as django_set_language
 
-from .models import User
+from .models import User, normalize_language
 from .forms import EmailAuthenticationForm, FarmerRegistrationForm, FarmerAccountForm, FarmerLocationForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -39,6 +43,22 @@ class FarmSraLoginView(LoginView):
     def get_success_url(self):
         return reverse(role_home_name(self.request.user))
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, form.get_user().preferred_language)
+        return response
+
+
+@require_POST
+def set_language(request):
+    response = django_set_language(request)
+    language = request.POST.get("language")
+    if request.user.is_authenticated and language in User.Language.values:
+        if request.user.preferred_language != language:
+            request.user.preferred_language = language
+            request.user.save(update_fields=["preferred_language"])
+    return response
+
 
 class FarmSraLogoutView(LogoutView):
     http_method_names = ["post", "options"]
@@ -49,7 +69,9 @@ def register(request):
         return redirect(role_home_name(request.user))
     form = FarmerRegistrationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        user = form.save()
+        user = form.save(commit=False)
+        user.preferred_language = normalize_language(get_language())
+        user.save()
         login(request, user, backend="users.backends.EmailBackend")
         return redirect("dashboard")
     return render(request, "users/register.html", {"form": form})
@@ -87,8 +109,9 @@ def settings_location(request):
 def settings_preferences(request):
     if request.method == "POST":
         lang = request.POST.get("language")
-        if lang in ["en", "sw", "am"]:
-            from django.conf import settings
+        if lang in User.Language.values:
+            request.user.preferred_language = lang
+            request.user.save(update_fields=["preferred_language"])
             response = redirect("settings-preferences")
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
             return response

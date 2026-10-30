@@ -236,20 +236,6 @@ def case_guidance(request, case_id):
     )
 
 
-@farmer_required
-def guidance_index(request):
-    latest_with_adv = request.user.diagnosis_cases.filter(
-        advisory__isnull=False
-    ).order_by("-created_at").first()
-    if latest_with_adv:
-        return redirect("case-guidance", case_id=latest_with_adv.id)
-    latest_completed = request.user.diagnosis_cases.filter(
-        status=DiagnosisCase.Status.COMPLETED
-    ).order_by("-created_at").first()
-    if latest_completed:
-        return redirect("case-detail", case_id=latest_completed.id)
-    return redirect("select-crop")
-
 
 @farmer_required
 def agricultural_experts(request):

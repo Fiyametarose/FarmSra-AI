@@ -43,7 +43,12 @@
           {% if case.registered_crop %} · {% trans "Crop" %}: <a href="{% url 'crop-detail' case.registered_crop.id %}" style="color: var(--brand); font-weight: 600;">{{ case.registered_crop.name }}</a>{% endif %}
         </p>
       </div>
-      <div style="display: flex; gap: 0.75rem;">
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        {% if case.status == 'completed' and case.predicted_class %}
+        <a class="button button-outline" href="{% url 'case-chat' case.id %}" style="padding: 0.55rem 1rem; font-size: 0.88rem;">
+          {% trans "Ask AI Assistant" %}
+        </a>
+        {% endif %}
         <a class="button button-outline" href="{% url 'history' %}" style="padding: 0.55rem 1rem; font-size: 0.88rem;">
           {% trans "View History" %}
         </a>
@@ -240,7 +245,7 @@
     {% endif %}
 
     <!-- Expert Review Section -->
-    <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+    <section id="expert-review" class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
         <div style="width: 40px; height: 40px; border-radius: 8px; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>

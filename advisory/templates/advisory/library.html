@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block nav_guidance %}active{% endblock %}
+{% block breadcrumb %}{% trans "Guidance Library" %}{% endblock %}
+
+{% block content %}
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div style="margin-bottom: 1.5rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; margin: 0 0 0.35rem; color: var(--ink);">{% trans "Guidance Library" %}</h1>
+      <p style="margin: 0; color: var(--muted); font-size: 0.95rem;">{% trans "Browse the curated disease guidance documents used as sources by the AI assistant. No diagnosis case is needed." %}</p>
+    </div>
+
+    <form method="get" class="chat-panel library-filters" role="search">
+      <div>
+        <label for="library-q" style="font-weight: 600; font-size: 0.85rem;">{% trans "Search" %}</label>
+        <input type="search" id="library-q" name="q" value="{{ query }}" maxlength="100" class="form-control">
+      </div>
+      <div>
+        <label for="library-crop" style="font-weight: 600; font-size: 0.85rem;">{% trans "Crop" %}</label>
+        <select id="library-crop" name="crop" class="form-control">
+          <option value="">{% trans "All crops" %}</option>
+          {% for value, label in crops.choices %}
+            <option value="{{ value }}" {% if value == selected_crop %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="library-condition" style="font-weight: 600; font-size: 0.85rem;">{% trans "Condition" %}</label>
+        <select id="library-condition" name="condition" class="form-control">
+          <option value="">{% trans "All conditions" %}</option>
+          {% for document in all_documents %}
+            <option value="{{ document.condition }}" {% if document.condition == selected_condition %}selected{% endif %}>{{ document.crop|title }} · {{ document.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <button type="submit" class="button button-primary">{% trans "Filter" %}</button>
+        <a href="{% url 'guidance-index' %}" class="button button-outline">{% trans "Reset" %}</a>
+      </div>
+    </form>
+
+    <p style="color: var(--muted); font-size: 0.85rem;">{% blocktrans with shown=documents|length total=total_documents %}Showing {{ shown }} of {{ total }} documents.{% endblocktrans %}</p>
+
+    <div class="callout-box callout-info" role="note" style="margin-bottom: 1.25rem;">
+      {% trans "Guidance exists only for the disease classes listed here. Healthy-crop results and the tomato spider-mite output have no guidance document: a healthy prediction is not a guarantee, and spider mites are a pest outside the supported disease scope. Verify any chemical product on the official local label with local extension services." %}
+    </div>
+
+    <div class="library-grid">
+      {% for document in documents %}
+        <article class="library-doc" id="doc-{{ document.source_id }}">
+          <span class="badge badge-green">{{ document.crop|title }}</span>
+          <h2>{{ document.label }}</h2>
+          <p style="margin: 0 0 0.5rem; font-size: 0.88rem; color: var(--ink);">{{ document.summary }}</p>
+          <div style="font-size: 0.8rem; color: var(--muted);">
+            <a href="{{ document.url }}" target="_blank" rel="noopener noreferrer" style="color: var(--brand); font-weight: 600;">{{ document.title }} ↗</a><br>
+            {{ document.publisher }}{% if document.date %} · {{ document.date }}{% endif %}
+          </div>
+          <details>
+            <summary>{% trans "Read the curated excerpt" %}</summary>
+            {% for section in document.sections %}
+              {% if section.heading %}<h3>{{ section.heading }}</h3>{% endif %}
+              {% for paragraph in section.paragraphs %}<p style="margin: 0 0 0.4rem;">{{ paragraph }}</p>{% endfor %}
+            {% endfor %}
+            <p style="font-size: 0.78rem; color: var(--muted);">{% trans "Source text is shown in its original language (English)." %}</p>
+          </details>
+        </article>
+      {% empty %}
+        <div class="chat-panel" style="grid-column: 1 / -1; text-align: center; color: var(--muted);">{% trans "No guidance documents match these filters." %}</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

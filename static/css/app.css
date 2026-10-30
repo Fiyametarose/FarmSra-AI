@@ -1841,3 +1841,30 @@ textarea.form-control {
     padding-right: 0.75rem !important;
   }
 }
+
+/* AI chat and guidance library */
+.chat-layout { max-width: 880px; margin: 0 auto; }
+.chat-panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem; margin-bottom: 1.25rem; }
+.chat-summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 0.9rem; color: var(--ink); }
+.chat-summary span { color: var(--muted); }
+.chat-thread { display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.25rem; }
+.chat-message { max-width: 88%; padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid var(--line); overflow-wrap: anywhere; line-height: 1.55; font-size: 0.93rem; }
+.chat-message-farmer { align-self: flex-end; background: var(--soft); border-color: var(--soft-border); }
+.chat-message-assistant { align-self: flex-start; background: var(--surface); }
+.chat-message-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.35rem; font-weight: 600; }
+.chat-warning { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px dashed var(--line); font-size: 0.78rem; color: var(--warning-ink); }
+.chat-sources { margin: 0.6rem 0 0; padding: 0; list-style: none; font-size: 0.82rem; }
+.chat-sources li { padding: 0.4rem 0; border-top: 1px solid var(--line); }
+.chat-sources a { color: var(--brand); font-weight: 600; }
+.chat-form textarea { width: 100%; resize: vertical; }
+.chat-form-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 0.6rem; }
+.chat-loading { display: none; font-size: 0.85rem; color: var(--muted); }
+.chat-form.is-submitting .chat-loading { display: inline; }
+.library-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem; align-items: end; }
+.library-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
+.library-doc { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem; }
+.library-doc h2 { font-size: 1.1rem; margin: 0.4rem 0; color: var(--ink); }
+.library-doc details { margin-top: 0.75rem; font-size: 0.88rem; line-height: 1.55; }
+.library-doc summary { cursor: pointer; font-weight: 700; color: var(--brand); }
+.library-doc h3 { font-size: 0.9rem; margin: 0.9rem 0 0.25rem; }
+@media (max-width: 640px) { .chat-message { max-width: 100%; } }

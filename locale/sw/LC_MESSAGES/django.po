@@ -2103,3 +2103,144 @@ msgid "No expert profiles are currently listed."
 msgstr "Hakuna wasifu wa wataalamu ulioorodheshwa kwa sasa."
 msgid "Grounded guidance retrieval starts automatically. Use the button below to retry if retrieval does not complete."
 msgstr "Urejeshaji wa mwongozo wenye ushahidi huanza kiotomatiki. Tumia kitufe kilicho hapa chini kujaribu tena ikiwa urejeshaji hautakamilika."
+
+msgid "AI Assistant"
+msgstr "Msaidizi wa AI"
+
+msgid "Ask follow-up questions about this case. Answers use your case details and cited agricultural sources."
+msgstr "Uliza maswali ya ziada kuhusu kesi hii. Majibu yanatumia maelezo ya kesi yako na vyanzo vya kilimo vilivyotajwa."
+
+msgid "Case summary"
+msgstr "Muhtasari wa kesi"
+
+msgid "Predicted condition"
+msgstr "Hali iliyotabiriwa"
+
+msgid "Case"
+msgstr "Kesi"
+
+msgid "Symptoms"
+msgstr "Dalili"
+
+msgid "Weather snapshot"
+msgstr "Taswira ya hali ya hewa"
+
+msgid "Model uncertainty: the confidence is below the %(threshold)s%% reliability threshold, so this result is uncertain."
+msgstr "Kutokuwa na uhakika kwa modeli: kiwango cha uhakika kiko chini ya kizingiti cha uaminifu cha %(threshold)s%%, kwa hivyo matokeo haya hayana uhakika."
+
+msgid "AI guidance is not a confirmed diagnosis."
+msgstr "Mwongozo wa AI si utambuzi uliothibitishwa."
+
+msgid "The model output is a tentative estimate and its confidence is not severity. Verify any chemical product on the official local label with your local extension service."
+msgstr "Matokeo ya modeli ni makadirio ya awali na kiwango chake cha uhakika si ukali wa ugonjwa. Thibitisha bidhaa yoyote ya kemikali kwenye lebo rasmi ya eneo lako ukishirikiana na huduma ya ugani ya eneo lako."
+
+msgid "Conversation"
+msgstr "Mazungumzo"
+
+msgid "You"
+msgstr "Wewe"
+
+msgid "Source excerpts"
+msgstr "Dondoo za vyanzo"
+
+msgid "Notice"
+msgstr "Taarifa"
+
+msgid "AI guidance, not a confirmed diagnosis. Verify any chemical product on the official local label with local extension services."
+msgstr "Mwongozo wa AI, si utambuzi uliothibitishwa. Thibitisha bidhaa yoyote ya kemikali kwenye lebo rasmi ya eneo lako na huduma za ugani za eneo lako."
+
+msgid "No messages yet. Ask your first question below."
+msgstr "Bado hakuna ujumbe. Uliza swali lako la kwanza hapa chini."
+
+msgid "Your question"
+msgstr "Swali lako"
+
+msgid "You can write in English, Swahili or Amharic. Up to %(limit)s characters. Replies use the language selected in the top bar."
+msgstr "Unaweza kuandika kwa Kiingereza, Kiswahili au Kiamhari. Hadi herufi %(limit)s. Majibu hutumia lugha iliyochaguliwa kwenye upau wa juu."
+
+msgid "Send"
+msgstr "Tuma"
+
+msgid "Finding sources and writing a reply…"
+msgstr "Inatafuta vyanzo na kuandika jibu…"
+
+msgid "Want a human opinion?"
+msgstr "Unataka maoni ya mtaalamu wa kibinadamu?"
+
+msgid "Expert review is voluntary. Nothing from this chat is sent to an expert unless you request a review yourself."
+msgstr "Tathmini ya mtaalamu ni ya hiari. Hakuna kitu kutoka kwenye mazungumzo haya kinachotumwa kwa mtaalamu isipokuwa uombe tathmini mwenyewe."
+
+msgid "View expert review status"
+msgstr "Tazama hali ya tathmini ya mtaalamu"
+
+msgid "Go to expert review options"
+msgstr "Nenda kwenye chaguo za tathmini ya mtaalamu"
+
+msgid "Ask AI Assistant"
+msgstr "Muulize Msaidizi wa AI"
+
+msgid "Guidance Library"
+msgstr "Maktaba ya Miongozo"
+
+msgid "Browse the curated disease guidance documents used as sources by the AI assistant. No diagnosis case is needed."
+msgstr "Vinjari nyaraka teule za mwongozo wa magonjwa zinazotumiwa kama vyanzo na msaidizi wa AI. Huhitaji kesi ya uchunguzi."
+
+msgid "All crops"
+msgstr "Mimea yote"
+
+msgid "Condition"
+msgstr "Hali"
+
+msgid "All conditions"
+msgstr "Hali zote"
+
+msgid "Filter"
+msgstr "Chuja"
+
+msgid "Reset"
+msgstr "Weka upya"
+
+msgid "Showing %(shown)s of %(total)s documents."
+msgstr "Inaonyesha nyaraka %(shown)s kati ya %(total)s."
+
+msgid "Guidance exists only for the disease classes listed here. Healthy-crop results and the tomato spider-mite output have no guidance document: a healthy prediction is not a guarantee, and spider mites are a pest outside the supported disease scope. Verify any chemical product on the official local label with local extension services."
+msgstr "Mwongozo upo tu kwa makundi ya magonjwa yaliyoorodheshwa hapa. Matokeo ya mmea wenye afya na matokeo ya utitiri wa nyanya hayana nyaraka za mwongozo: utabiri wa afya si hakikisho, na utitiri ni wadudu walio nje ya wigo wa magonjwa unaoungwa mkono. Thibitisha bidhaa yoyote ya kemikali kwenye lebo rasmi ya eneo lako na huduma za ugani za eneo lako."
+
+msgid "Read the curated excerpt"
+msgstr "Soma dondoo teule"
+
+msgid "Source text is shown in its original language (English)."
+msgstr "Maandishi ya chanzo yanaonyeshwa kwa lugha yake asili (Kiingereza)."
+
+msgid "No guidance documents match these filters."
+msgstr "Hakuna nyaraka za mwongozo zinazolingana na vichujio hivi."
+
+msgid "The AI assistant is available once the analysis has completed."
+msgstr "Msaidizi wa AI atapatikana baada ya uchambuzi kukamilika."
+
+msgid "This conversation has reached its question limit."
+msgstr "Mazungumzo haya yamefikia kikomo cha maswali."
+
+msgid "Too many questions in the last hour. Please try again later."
+msgstr "Maswali mengi sana katika saa iliyopita. Tafadhali jaribu tena baadaye."
+
+msgid "The model's output for this case (two-spotted spider mites) is a pest result outside the disease scope of this assistant, so no disease guidance is given for it. You can consult your local extension service or request a voluntary expert review."
+msgstr "Matokeo ya modeli kwa kesi hii (utitiri wa madoa mawili) ni ya wadudu na yako nje ya wigo wa magonjwa wa msaidizi huyu, kwa hivyo hakuna mwongozo wa magonjwa unaotolewa. Unaweza kushauriana na huduma ya ugani ya eneo lako au kuomba tathmini ya hiari ya mtaalamu."
+
+msgid "The model's confidence for this case is below the reliability threshold, so the result is uncertain and this assistant does not give disease-specific guidance for it. Consider taking a clearer photo of the affected leaf, consulting your local extension service, or requesting a voluntary expert review."
+msgstr "Kiwango cha uhakika cha modeli kwa kesi hii kiko chini ya kizingiti cha uaminifu, kwa hivyo matokeo hayana uhakika na msaidizi huyu hatoi mwongozo mahususi wa ugonjwa kwa kesi hii. Fikiria kupiga picha iliyo wazi zaidi ya jani lililoathirika, kushauriana na huduma ya ugani ya eneo lako, au kuomba tathmini ya hiari ya mtaalamu."
+
+msgid "The model's tentative result for this case is a healthy plant. That is not a guarantee, and this assistant answers only from disease guidance sources, so it cannot add advice for this case. If you see symptoms or they get worse, take a clear photo, consult your local extension service, or request a voluntary expert review."
+msgstr "Matokeo ya awali ya modeli kwa kesi hii ni mmea wenye afya. Hilo si hakikisho, na msaidizi huyu hujibu tu kutoka vyanzo vya mwongozo wa magonjwa, kwa hivyo hawezi kuongeza ushauri kwa kesi hii. Ukiona dalili au zikizidi kuwa mbaya, piga picha iliyo wazi, shauriana na huduma ya ugani ya eneo lako, au omba tathmini ya hiari ya mtaalamu."
+
+msgid "The retrieved sources do not answer this question, so no guidance is given. Please consult your local extension service or request a voluntary expert review."
+msgstr "Vyanzo vilivyopatikana havijibu swali hili, kwa hivyo hakuna mwongozo unaotolewa. Tafadhali shauriana na huduma ya ugani ya eneo lako au omba tathmini ya hiari ya mtaalamu."
+
+msgid "The AI writer is unavailable or its answer could not be verified. These excerpts from the cited sources are shown in their original language (English):"
+msgstr "Mwandishi wa AI hapatikani au jibu lake halikuweza kuthibitishwa. Dondoo hizi kutoka vyanzo vilivyotajwa zinaonyeshwa kwa lugha yake asili (Kiingereza):"
+
+msgid "The guidance sources are temporarily unavailable. Please try again later."
+msgstr "Vyanzo vya mwongozo havipatikani kwa muda. Tafadhali jaribu tena baadaye."
+
+msgid "No verified sources were found for this condition, so no answer can be given."
+msgstr "Hakuna vyanzo vilivyothibitishwa vilivyopatikana kwa hali hii, kwa hivyo hakuna jibu linaloweza kutolewa."
