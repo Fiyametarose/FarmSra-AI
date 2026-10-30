@@ -18,3 +18,6 @@ Eliminate volunteer tomato and potato plants which can harbor the disease.
 Avoid overhead watering if possible to keep foliage dry. Ensure good airflow through proper spacing.
 Monitor weather conditions closely, as the disease spreads rapidly in cool, wet weather.
 Consult your local agricultural extension office for region-specific cultural practices and guidance.
+
+## Treatment, monitoring and next steps
+Late blight requires urgent assessment because it can spread rapidly. Remove and safely dispose of infected material as locally advised; do not compost diseased tissue where it can persist. Fungicides are preventive rather than curative and must be selected with extension support. No local authorization is established here: verify official registration for tomato and follow the exact label in Kenya or Ethiopia.

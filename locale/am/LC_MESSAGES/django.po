@@ -1966,3 +1966,5 @@ msgstr "የባለሙያ ሪፈራል ሁኔታ"
 
 msgid "No expert profiles are currently listed."
 msgstr "በአሁኑ ጊዜ የተዘረዘሩ የባለሙያ መገለጫዎች የሉም።"
+msgid "Grounded guidance retrieval starts automatically. Use the button below to retry if retrieval does not complete."
+msgstr "በማስረጃ የተመሠረተ መመሪያ ማምጣት በራስ-ሰር ይጀምራል። ማምጣቱ ካልተጠናቀቀ ከታች ያለውን አዝራር ተጠቅመው እንደገና ይሞክሩ።"

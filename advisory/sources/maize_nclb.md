@@ -18,3 +18,6 @@ Plant resistant corn hybrids if available in your area.
 Manage crop residue, as the fungus overwinters in corn debris. Consider tillage practices that help bury residue.
 Rotate crops to non-host plants to reduce disease pressure in the next season.
 Consult your local agricultural extension office for region-specific cultural practices and guidance.
+
+## Treatment, monitoring and next steps
+Scout from lower leaves upward, especially near tasseling in humid conditions. Resistant hybrids, rotation and residue management are the foundation. Fungicides may be considered for susceptible hybrids under substantial disease risk, not as a routine cure. Confirm diagnosis and verify local registration and the maize use label with extension services.

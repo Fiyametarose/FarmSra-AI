@@ -20,3 +20,6 @@ Provide adequate plant spacing to increase air circulation and reduce humidity a
 Practice crop rotation so tomatoes and related crops (like potatoes) are not planted in the same area year after year.
 Remove and destroy infected lower leaves as soon as they appear.
 Consult your local agricultural extension office for region-specific cultural practices and guidance.
+
+## Treatment, monitoring and next steps
+There is no curative biological treatment established by this source. Protective fungicides may help slow new infections when disease risk is high, but cannot restore damaged leaves and are not always necessary. Scout lower leaves, remove affected tissue when dry, and seek expert confirmation before chemical control. Authorization in Kenya or Ethiopia is unverified; use only an officially registered tomato product and follow its label.

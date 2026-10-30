@@ -1,4 +1,6 @@
 from django.core.exceptions import PermissionDenied
+from django.conf import settings
+from datetime import timedelta
 
 from diagnoses.models import DiagnosisCase
 from users.models import User
@@ -17,6 +19,15 @@ def build_case_context(user, case):
         raise PermissionDenied
 
     weather = getattr(case, "weather_context", None)
+    weather_timing = None
+    if weather is not None:
+        capture_window = timedelta(minutes=settings.CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES)
+        if case.completed_at is None:
+            weather_timing = "completion_time_unknown"
+        elif abs(weather.observed_at - case.completed_at) <= capture_window:
+            weather_timing = "near_completion"
+        else:
+            weather_timing = "later_observation"
     history = (
         DiagnosisCase.objects.filter(
             farmer=user,
@@ -44,6 +55,8 @@ def build_case_context(user, case):
             "precipitation": weather.precipitation,
             "wind_speed": weather.wind_speed,
             "condition": weather.condition,
+            "timing": weather_timing,
+            "is_historical_context": weather_timing == "near_completion",
         },
         "history": [
             {
@@ -69,10 +82,14 @@ def retrieval_query_texts(case_context):
     weather = case_context["weather"]
     if weather:
         parts.append(
-            "Observed weather: "
-            f"{weather['condition']}, {weather['temperature']} C, "
-            f"{weather['humidity']}% humidity, {weather['precipitation']} mm precipitation"
+            f"Weather: {str(weather['condition'])[:12]}; {weather['temperature']}C; "
+            f"RH {weather['humidity']}%; rain {weather['precipitation']}mm"
         )
+        parts.append({
+            "near_completion": "Weather timing: near diagnosis completion",
+            "later_observation": "Weather timing: later observation, not diagnosis-time",
+            "completion_time_unknown": "Weather timing: diagnosis completion unknown",
+        }.get(weather.get("timing"), "Weather timing: unknown"))
     if case_context["symptoms"]:
         parts.append(f"Observed symptoms: {case_context['symptoms'][:60]}")
     return parts

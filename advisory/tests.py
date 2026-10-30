@@ -11,6 +11,7 @@ from diagnoses.models import DiagnosisCase
 from advisory.models import AdvisoryResult
 from advisory.services import retrieve_evidence, generate_advisory
 from advisory.context import build_case_context, retrieval_query_texts
+from advisory.management.commands.ingest_knowledge import parse_frontmatter
 
 class AdvisoryTests(TestCase):
     def setUp(self):
@@ -83,6 +84,28 @@ class AdvisoryTests(TestCase):
         self.assertFalse(advisory.is_generated)
         self.assertIn("Test passage.", advisory.content)
 
+    @patch('advisory.views.retrieve_evidence', return_value=None)
+    def test_chroma_failure_does_not_save_advisory(self, mock_retrieve):
+        self.client.login(email="f1@example.com", password="pwd")
+        response = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+        self.assertRedirects(response, reverse('case-detail', args=[self.case_normal.id]))
+        self.assertFalse(AdvisoryResult.objects.filter(diagnosis=self.case_normal).exists())
+
+    @patch('advisory.views.AdvisoryResult.objects.get_or_create')
+    @patch('advisory.views.retrieve_evidence')
+    def test_concurrent_save_loser_reuses_existing_advisory(self, mock_retrieve, mock_get_or_create):
+        mock_retrieve.return_value = [
+            {"title": "Test", "publisher": "Extension", "url": "https://test",
+             "text": "Evidence", "chunk_id": "1"}
+        ]
+        existing = AdvisoryResult(diagnosis=self.case_normal, content="Already saved")
+        mock_get_or_create.return_value = (existing, False)
+        self.client.login(email="f1@example.com", password="pwd")
+        with patch.dict(os.environ, clear=True):
+            response = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+        self.assertRedirects(response, reverse('case-detail', args=[self.case_normal.id]))
+        mock_get_or_create.assert_called_once()
+
     @patch('advisory.views.retrieve_evidence')
     @patch('advisory.services.genai.Client')
     def test_successful_gemini_generation(self, mock_genai, mock_retrieve):
@@ -134,6 +157,31 @@ class AdvisoryTests(TestCase):
         resp = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
         self.assertRedirects(resp, reverse('case-detail', args=[self.case_normal.id]))
 
+    def test_eligible_case_page_posts_automatic_advisory_once(self):
+        self.client.login(email="f1@example.com", password="pwd")
+        response = self.client.get(reverse("case-detail", args=[self.case_normal.id]))
+        self.assertContains(response, 'id="case-advisory-form"')
+        self.assertContains(response, f'advisory-auto-{self.case_normal.id}')
+        self.assertContains(response, 'document.getElementById("case-advisory-form").requestSubmit()')
+
+    def test_excluded_case_page_has_no_automatic_advisory_post(self):
+        self.client.login(email="f1@example.com", password="pwd")
+        response = self.client.get(reverse("case-detail", args=[self.case_healthy_tom.id]))
+        self.assertNotContains(response, f'advisory-auto-{self.case_healthy_tom.id}')
+
+    def test_recent_healthy_and_uncertain_cases_still_capture_weather_first(self):
+        from django.utils import timezone
+        for case in (self.case_healthy_tom, self.case_low_conf):
+            case.completed_at = timezone.now()
+            case.location = "Nakuru"
+            case.save(update_fields=["completed_at", "location"])
+        self.client.login(email="f1@example.com", password="pwd")
+        for case in (self.case_healthy_tom, self.case_low_conf):
+            response = self.client.get(reverse("case-detail", args=[case.id]))
+            self.assertContains(response, f'weather-capture-{case.id}')
+            self.assertContains(response, 'document.getElementById("case-weather-form").requestSubmit()')
+            self.assertNotContains(response, f'advisory-auto-{case.id}')
+
     def test_context_history_is_farmer_scoped_and_weather_is_optional(self):
         other = User.objects.create_user(email="other@example.com", password="pwd", role="farmer")
         DiagnosisCase.objects.create(
@@ -143,6 +191,96 @@ class AdvisoryTests(TestCase):
         context = build_case_context(self.farmer1, self.case_normal)
         self.assertTrue(context["missing"]["weather"])
         self.assertNotIn("Tomato_Other_farmer_only", [item["predicted_class"] for item in context["history"]])
+
+    def test_late_weather_is_not_historical_diagnosis_weather(self):
+        from datetime import timedelta
+        from django.utils import timezone
+        from weather.models import WeatherContext
+        self.case_normal.completed_at = timezone.now() - timedelta(days=2)
+        self.case_normal.save(update_fields=["completed_at"])
+        WeatherContext.objects.create(
+            diagnosis=self.case_normal, location_name="Plot", location_source="explicit",
+            latitude=1, longitude=2, provider="Open-Meteo", observed_at=timezone.now(),
+            temperature=20, humidity=80, precipitation=3, wind_speed=5, condition="Rain",
+        )
+        context = build_case_context(self.farmer1, self.case_normal)
+        self.assertEqual(context["weather"]["timing"], "later_observation")
+        self.assertFalse(context["weather"]["is_historical_context"])
+        query_parts = retrieval_query_texts(context)
+        self.assertIn("not diagnosis-time", " ".join(query_parts))
+        with patch("advisory.services.get_chroma_collection") as collection:
+            collection.return_value.query.return_value = {
+                "documents": [[]], "metadatas": [[]], "ids": [[]],
+            }
+            retrieve_evidence("tomato", self.case_normal.predicted_class, query_parts)
+        query = collection.return_value.query.call_args.kwargs["query_texts"][0]
+        self.assertLessEqual(len(query), 200)
+        for value in ("Tomato_Early_blight", "Rain", "20C", "RH 80%", "rain 3mm"):
+            self.assertIn(value, query)
+
+    @patch('advisory.services.genai.Client')
+    def test_unsupported_chemical_claim_is_rejected(self, mock_genai):
+        response = MagicMock()
+        response.text = json.dumps({
+            "explanation": "Condition summary", "management": "Apply a fungicide spray.",
+            "citations": ["chunk-1"],
+        })
+        mock_genai.return_value.models.generate_content.return_value = response
+        evidence = [{"chunk_id": "chunk-1", "title": "Source", "publisher": "Extension",
+                     "url": "https://example.test", "text": "Use clean seed and rotate crops."}]
+        with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
+            content, citations = generate_advisory("tomato", "Tomato_Bacterial_spot", evidence)
+        self.assertIsNone(content)
+        self.assertIsNone(citations)
+
+    @patch('advisory.services.genai.Client')
+    def test_evidence_grounded_fungicide_term_is_allowed(self, mock_genai):
+        response = MagicMock()
+        response.text = json.dumps({
+            "management": "A fungicide may protect healthy tissue; verify the local label.",
+            "citations": ["chunk-1"],
+        })
+        mock_genai.return_value.models.generate_content.return_value = response
+        evidence = [{"chunk_id": "chunk-1", "title": "Source", "publisher": "Extension",
+                     "url": "https://example.test", "text": "A fungicide may protect healthy tissue."}]
+        with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
+            content, citations = generate_advisory("maize", "Gray leaf spot", evidence)
+        self.assertIn("fungicide", content)
+        self.assertEqual(citations, ["chunk-1"])
+
+    @patch('advisory.services.genai.Client')
+    def test_generic_fungicide_evidence_cannot_bypass_operational_safety(self, mock_genai):
+        evidence = [{
+            "chunk_id": "chunk-1", "title": "Source", "publisher": "Extension",
+            "url": "https://example.test", "text": "A fungicide may protect healthy tissue.",
+        }]
+        unsafe_claims = [
+            "Apply BrandShield fungicide every 7 days.",
+            "Apply BrandShield every 7 days.",
+            "Apply azoxystrobin every 7 days.",
+            "Use a fungicide containing copper hydroxide.",
+            "Mix fungicide at 20 ml per litre.",
+            "Use a 2% fungicide concentration weekly.",
+        ]
+        with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
+            for claim in unsafe_claims:
+                response = MagicMock()
+                response.text = json.dumps({"management": claim, "citations": ["chunk-1"]})
+                mock_genai.return_value.models.generate_content.return_value = response
+                content, citations = generate_advisory("tomato", "Tomato_Bacterial_spot", evidence)
+                self.assertIsNone(content, claim)
+                self.assertIsNone(citations, claim)
+
+    def test_new_interface_translation_is_compiled(self):
+        from django.utils.translation import activate, deactivate, gettext
+        message = "Grounded guidance retrieval starts automatically. Use the button below to retry if retrieval does not complete."
+        try:
+            activate("sw")
+            self.assertIn("kiotomatiki", gettext(message))
+            activate("am")
+            self.assertIn("በራስ-ሰር", gettext(message))
+        finally:
+            deactivate()
 
     def test_context_rejects_another_farmer(self):
         other = User.objects.create_user(email="context-other@example.com", password="pwd", role="farmer")
@@ -211,7 +349,12 @@ class AdvisoryTests(TestCase):
         )
         query = mock_collection.return_value.query.call_args.kwargs["query_texts"][0]
         self.assertLessEqual(len(query), 200)
-        self.assertIn("Observed weather", query)
+        self.assertIn("Weather:", query)
+        self.assertIn("Heavy rain", query)
+        self.assertIn("19C", query)
+        self.assertIn("RH 95%", query)
+        self.assertIn("rain 12mm", query)
+        self.assertLessEqual(len(query), 200)
         self.assertIn("Heavy rain", query)
 
     @patch('advisory.views.retrieve_evidence')
@@ -254,6 +397,29 @@ class IngestionTests(TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_all_supported_disease_documents_match_model_metadata(self):
+        from django.conf import settings
+        expected = {
+            "tomato": {
+                "Tomato_Bacterial_spot", "Tomato_Early_blight", "Tomato_Late_blight",
+                "Tomato_Leaf_Mold", "Tomato_Septoria_leaf_spot", "Tomato__Target_Spot",
+                "Tomato__Tomato_YellowLeaf__Curl_Virus", "Tomato__Tomato_mosaic_virus",
+            },
+            "potato": {"Potato___Early_blight", "Potato___Late_blight"},
+            "maize": {
+                "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+                "Corn_(maize)___Common_rust_", "Corn_(maize)___Northern_Leaf_Blight",
+            },
+        }
+        found = {crop: set() for crop in expected}
+        for path in (Path(settings.BASE_DIR) / "advisory" / "sources").glob("*.md"):
+            metadata, body = parse_frontmatter(path.read_text(encoding="utf-8"))
+            self.assertTrue(body, path.name)
+            self.assertTrue(metadata["url"].startswith("https://"), path.name)
+            if metadata["crop"] in found:
+                found[metadata["crop"]].add(metadata["condition"])
+        self.assertEqual(found, expected)
 
     @patch('advisory.management.commands.ingest_knowledge.settings')
     def test_ingestion_update_guarantees(self, mock_settings):

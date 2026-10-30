@@ -226,9 +226,9 @@
         {% else %}
           <div style="text-align: center; padding: 2rem 1rem; background: var(--surface-alt); border-radius: 12px; border: 1px dashed var(--border);">
             <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.25rem 0;">
-              {% trans "Generate source-backed agricultural guidance for this assessment." %}
+              {% trans "Grounded guidance retrieval starts automatically. Use the button below to retry if retrieval does not complete." %}
             </p>
-            <form action="{% url 'generate-advisory' case.id %}" method="post">
+            <form action="{% url 'generate-advisory' case.id %}" method="post" id="case-advisory-form">
               {% csrf_token %}
               <button type="submit" class="button button-primary" style="padding: 0.75rem 1.75rem; font-size: 0.95rem; font-weight: 700;">
                 ⚡ {% trans "Retrieve Grounded Guidance" %}
@@ -365,15 +365,27 @@
 {% endblock %}
 
 {% block scripts %}
-  {% if weather_auto_capture_eligible and not case.weather_context and case.location %}
+  {% if weather_auto_capture_eligible and not case.weather_context and case.location or case.is_eligible_for_advisory and not case.advisory %}
     <script>
       window.addEventListener("load", () => {
-        const key = "weather-capture-{{ case.id }}";
-        if (!sessionStorage.getItem(key)) {
-          sessionStorage.setItem(key, "attempted");
+        const weatherKey = "weather-capture-{{ case.id }}";
+        {% if case.is_eligible_for_advisory and not case.advisory %}
+        const advisoryKey = "advisory-auto-{{ case.id }}";
+        {% endif %}
+        {% if weather_auto_capture_eligible and not case.weather_context and case.location %}
+        if (!sessionStorage.getItem(weatherKey)) {
+          sessionStorage.setItem(weatherKey, "attempted");
           document.getElementById("weather-capture-mode").value = "automatic";
           document.getElementById("case-weather-form").requestSubmit();
+          return;
         }
+        {% endif %}
+        {% if case.is_eligible_for_advisory and not case.advisory %}
+        if (!sessionStorage.getItem(advisoryKey)) {
+          sessionStorage.setItem(advisoryKey, "attempted");
+          document.getElementById("case-advisory-form").requestSubmit();
+        }
+        {% endif %}
       });
     </script>
   {% endif %}

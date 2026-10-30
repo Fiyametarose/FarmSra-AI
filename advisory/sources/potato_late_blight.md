@@ -18,3 +18,6 @@ Plant certified disease-free seed potatoes.
 Destroy volunteer potatoes and cull piles.
 Monitor weather conditions closely, as the disease spreads rapidly in cool, wet weather.
 Consult your local agricultural extension office for region-specific cultural practices and guidance.
+
+## Treatment, monitoring and next steps
+Inspect foliage and cull piles frequently during cool, wet weather and seek urgent expert confirmation. Fungicides can protect healthy tissue but do not cure infected plants or tubers. Destroy infected material according to local guidance. Use only an officially registered potato product and label; authorization in Kenya or Ethiopia is not established by this source.

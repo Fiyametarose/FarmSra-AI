@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
+from django.db import transaction
 from diagnoses.models import DiagnosisCase
 from .models import AdvisoryResult
 from .services import retrieve_evidence, generate_advisory
@@ -80,12 +81,16 @@ def generate_case_advisory(request, case_id):
                 'section': ev.get('section', '')
             })
 
-    advisory = AdvisoryResult.objects.create(
-        diagnosis=case,
-        is_generated=is_generated,
-        content=content.strip(),
-        retrieved_sources=saved_sources
-    )
+    with transaction.atomic():
+        advisory, created = AdvisoryResult.objects.get_or_create(
+            diagnosis=case,
+            defaults={
+                'is_generated': is_generated,
+                'content': content.strip(),
+                'retrieved_sources': saved_sources,
+            },
+        )
 
-    messages.success(request, "Agricultural advisory retrieved successfully.")
+    if created:
+        messages.success(request, "Agricultural advisory retrieved successfully.")
     return redirect('case-detail', case_id=case.id)

@@ -17,3 +17,6 @@ As pustules mature, they rupture the leaf epidermis and release powdery spores.
 Plant resistant hybrids if available in your area. This is the most effective management strategy.
 Monitor crops early in the season, especially during cool and moist weather.
 Consult your local agricultural extension office for region-specific cultural practices and guidance.
+
+## Treatment, monitoring and next steps
+Resistant hybrids are the primary control. Fungicide may be considered only when a susceptible crop, early disease, favorable weather and yield potential make treatment economically justified. It is not automatically needed. Seek extension advice and verify an official maize label and local registration before use; no Kenya or Ethiopia authorization is claimed here.

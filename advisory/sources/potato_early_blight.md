@@ -18,3 +18,6 @@ Ensure plants are adequately fertilized, as stressed plants are more susceptible
 Harvest mature tubers carefully to avoid injury.
 Rotate crops so potatoes and related crops are not planted in the same area year after year.
 Consult your local agricultural extension office for region-specific cultural practices and guidance.
+
+## Treatment, monitoring and next steps
+Maintain plant nutrition and water to reduce stress and monitor older leaves and tubers. Protective fungicides may be considered when evidence and disease pressure justify them, but do not repair infected tissue. Verify diagnosis and local registration for potato with extension services; no product authorization, rate or interval is asserted here.

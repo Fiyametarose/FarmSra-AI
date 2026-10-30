@@ -2101,3 +2101,5 @@ msgstr "Hali ya rufaa"
 
 msgid "No expert profiles are currently listed."
 msgstr "Hakuna wasifu wa wataalamu ulioorodheshwa kwa sasa."
+msgid "Grounded guidance retrieval starts automatically. Use the button below to retry if retrieval does not complete."
+msgstr "Urejeshaji wa mwongozo wenye ushahidi huanza kiotomatiki. Tumia kitufe kilicho hapa chini kujaribu tena ikiwa urejeshaji hautakamilika."
