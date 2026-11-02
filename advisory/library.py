@@ -1,17 +1,10 @@
-from pathlib import Path
-
-from django.conf import settings
-
-from .management.commands.ingest_knowledge import parse_frontmatter
+from .knowledge import eligible_versions
 
 CROP_PREFIXES = {
     "tomato": "Tomato_",
     "potato": "Potato___",
     "maize": "Corn_(maize)___",
 }
-REQUIRED_KEYS = ("crop", "condition", "title", "publisher", "url")
-
-
 def condition_label(crop, condition):
     prefix = CROP_PREFIXES.get(crop, "")
     label = condition[len(prefix):] if prefix and condition.startswith(prefix) else condition
@@ -32,31 +25,26 @@ def parse_sections(body):
 
 
 def load_documents():
-    sources_dir = Path(settings.BASE_DIR) / "advisory" / "sources"
     documents = []
-    for path in sorted(sources_dir.glob("*.md")):
-        metadata, body = parse_frontmatter(path.read_text(encoding="utf-8"))
-        if not all(metadata.get(key) for key in REQUIRED_KEYS) or not body:
-            continue
-        if not metadata["url"].startswith("https://") or metadata["crop"] not in CROP_PREFIXES:
-            continue
+    for version in eligible_versions().filter(indexing_status="indexed"):
+        document = version.document
+        body = version.extracted_text
         sections = parse_sections(body)
         headings = [
             line.lstrip("#").strip() for line in body.splitlines() if line.startswith("#")
         ]
-        documents.append({
-            "source_id": path.stem,
-            "crop": metadata["crop"],
-            "condition": metadata["condition"],
-            "label": condition_label(metadata["crop"], metadata["condition"]),
-            "title": metadata["title"],
-            "publisher": metadata["publisher"],
-            "url": metadata["url"],
-            "date": metadata.get("date", "").strip('"'),
-            "headings": headings,
-            "summary": sections[0]["paragraphs"][0] if sections else "",
-            "sections": sections,
-        })
+        for crop in document.crops:
+            for condition in document.diseases:
+                documents.append({
+                    "source_id": document.source_identity or str(document.id),
+                    "document_version_id": str(version.id), "version": version.version,
+                    "crop": crop, "condition": condition,
+                    "label": condition_label(crop, condition), "title": document.title,
+                    "publisher": document.publisher, "url": document.source_url,
+                    "date": str(document.publication_date or ""), "headings": headings,
+                    "summary": sections[0]["paragraphs"][0] if sections else "",
+                    "sections": sections,
+                })
     return sorted(documents, key=lambda d: (d["crop"], d["label"]))
 
 

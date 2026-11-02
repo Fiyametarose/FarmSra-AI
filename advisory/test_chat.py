@@ -7,13 +7,14 @@ from unittest.mock import MagicMock, patch
 import requests
 from django.conf import settings
 from django.db import connection
+from django.core.management import call_command
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
 from advisory import chat
 from advisory.library import filter_documents, load_documents
-from advisory.models import AIChatMessage, AIChatSession
+from advisory.models import AIChatMessage, AIChatSession, KnowledgeDocumentVersion
 from diagnoses.models import DiagnosisCase
 from expert_reviews.models import ExpertReferral
 from users.models import User
@@ -497,6 +498,17 @@ class NoAutomaticReferralTests(ChatTestCase):
 
 
 class GuidanceLibraryTests(ChatTestCase):
+    def setUp(self):
+        super().setUp()
+        call_command("import_legacy_knowledge", verbosity=0)
+        KnowledgeDocumentVersion.objects.update(
+            lifecycle_status=KnowledgeDocumentVersion.Lifecycle.APPROVED,
+            verification_status=KnowledgeDocumentVersion.Verification.VERIFIED,
+            expert_review_status=KnowledgeDocumentVersion.ExpertReview.REVIEWED,
+            is_active=True,
+            indexing_status=KnowledgeDocumentVersion.Indexing.INDEXED,
+        )
+
     def test_all_thirteen_documents_load_with_valid_links(self):
         documents = load_documents()
         self.assertEqual(len(documents), 13)

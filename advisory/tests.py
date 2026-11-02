@@ -419,84 +419,22 @@ class IngestionTests(TestCase):
                 found[metadata["crop"]].add(metadata["condition"])
         self.assertEqual(found, expected)
 
-    @patch('advisory.management.commands.ingest_knowledge.settings')
-    def test_ingestion_update_guarantees(self, mock_settings):
-        from django.conf import settings
-        mock_settings.BASE_DIR = settings.BASE_DIR
-        mock_settings.CHROMA_DB_DIR = Path(self.temp_dir) / 'chroma'
+    @patch("advisory.knowledge.index_document_version", return_value=True)
+    def test_ingestion_indexes_only_governed_eligible_versions(self, index):
+        from advisory.models import KnowledgeDocument, KnowledgeDocumentVersion
 
-        # We need to mock Path to return the real dir for valid_classes,
-        # but a temp dir for sources.
-        real_sources_dir = Path(settings.BASE_DIR) / 'advisory' / 'sources'
-        temp_sources_dir = Path(self.temp_dir) / 'sources'
-        temp_sources_dir.mkdir()
-
-        test_md = temp_sources_dir / 'test_src.md'
-        test_md.write_text(
-            "---\n"
-            "title: T1\n"
-            "publisher: P1\n"
-            "url: https://url\n"
-            "crop: tomato\n"
-            "condition: Tomato_Early_blight\n"
-            "---\n"
-            "Body content 1"
+        document = KnowledgeDocument.objects.create(
+            title="Approved", publisher="P1", crops=["tomato"],
+            diseases=["Tomato_Early_blight"],
         )
-
-        cmd = Command()
-
-        # We mock Path.glob to only return our test file
-        with patch('advisory.management.commands.ingest_knowledge.Path.glob', return_value=[test_md]):
-            # 1. Initial ingestion
-            with patch('sys.stdout', new=MagicMock()):
-                cmd.handle()
-
-        import chromadb
-        client = chromadb.PersistentClient(path=str(mock_settings.CHROMA_DB_DIR))
-        collection = client.get_collection("agricultural_advisory")
-        results1 = collection.get(where={"source_id": "test_src"})
-        self.assertEqual(len(results1['ids']), 1)
-        old_id = results1['ids'][0]
-
-        # 2. Update ingestion (successful replacement)
-        test_md.write_text(
-            "---\n"
-            "title: T1\n"
-            "publisher: P1\n"
-            "url: https://url\n"
-            "crop: tomato\n"
-            "condition: Tomato_Early_blight\n"
-            "---\n"
-            "Body content 2"
+        eligible = KnowledgeDocumentVersion.objects.create(
+            document=document, version=1, extracted_text="Body content",
+            extraction_status="succeeded", lifecycle_status="approved",
+            verification_status="verified", expert_review_status="reviewed", is_active=True,
         )
-        with patch('advisory.management.commands.ingest_knowledge.Path.glob', return_value=[test_md]):
-            with patch('sys.stdout', new=MagicMock()):
-                cmd.handle()
-
-        results2 = collection.get(where={"source_id": "test_src"})
-        self.assertEqual(len(results2['ids']), 1)
-        new_id = results2['ids'][0]
-        self.assertNotEqual(old_id, new_id) # Hash changed
-
-        # 3. Failed update should not delete the new chunks (mock collection.add to fail)
-        test_md.write_text(
-            "---\n"
-            "title: T1\n"
-            "publisher: P1\n"
-            "url: https://url\n"
-            "crop: tomato\n"
-            "condition: Tomato_Early_blight\n"
-            "---\n"
-            "Body content 3"
+        KnowledgeDocumentVersion.objects.create(
+            document=document, version=2, extracted_text="Unverified content",
+            extraction_status="succeeded",
         )
-        with patch.object(collection, 'add', side_effect=Exception("DB Failure")):
-            with patch('advisory.management.commands.ingest_knowledge.chromadb.PersistentClient') as mock_client:
-                mock_client.return_value.get_or_create_collection.return_value = collection
-                with patch('advisory.management.commands.ingest_knowledge.Path.glob', return_value=[test_md]):
-                    with patch('sys.stdout', new=MagicMock()):
-                        cmd.handle()
-
-        # Verify the version 2 is still there because version 3 failed
-        results3 = collection.get(where={"source_id": "test_src"})
-        self.assertEqual(len(results3['ids']), 1)
-        self.assertEqual(results3['ids'][0], new_id)
+        call_command("ingest_knowledge", verbosity=0)
+        index.assert_called_once_with(eligible)
