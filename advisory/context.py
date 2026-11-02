@@ -39,7 +39,18 @@ def build_case_context(user, case):
     )
     return {
         "crop": case.crop,
-        "registered_crop": case.registered_crop.name if case.registered_crop else None,
+        "image_reference": case.image.name if case.image else None,
+        "case_location": _bounded(case.location, 500) or None,
+        "farm_location": _bounded(user.farm_location, 500) or None,
+        "registered_crop": None if case.registered_crop is None else {
+            "name": case.registered_crop.name,
+            "location": _bounded(case.registered_crop.location, 500) or None,
+            "planting_date": (
+                case.registered_crop.planting_date.isoformat()
+                if case.registered_crop.planting_date else None
+            ),
+            "notes": _bounded(case.registered_crop.notes, 500) or None,
+        },
         "symptoms": _bounded(case.symptoms),
         "predicted_class": case.predicted_class,
         "confidence": case.model_confidence,
@@ -55,6 +66,7 @@ def build_case_context(user, case):
             "precipitation": weather.precipitation,
             "wind_speed": weather.wind_speed,
             "condition": weather.condition,
+            "forecast": weather.forecast,
             "timing": weather_timing,
             "is_historical_context": weather_timing == "near_completion",
         },

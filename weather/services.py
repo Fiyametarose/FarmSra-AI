@@ -222,3 +222,42 @@ def weather_observed_at(weather_data):
             tzinfo=datetime_timezone(timedelta(seconds=utc_offset_seconds))
         )
     return observed_at
+
+
+def capture_automatic_case_weather(case):
+    """Best-effort snapshot using case, registered-crop, then farm location."""
+    from .models import WeatherContext
+
+    if WeatherContext.objects.filter(diagnosis=case).exists():
+        return
+    candidates = [
+        (case.location, WeatherContext.LocationSource.EXPLICIT),
+        (case.registered_crop.location if case.registered_crop else "", WeatherContext.LocationSource.REGISTERED_CROP),
+        (case.farmer.farm_location, WeatherContext.LocationSource.FARM_PROFILE),
+    ]
+    location, source = next(((value.strip(), source) for value, source in candidates if value and value.strip()), ("", None))
+    if not location:
+        return
+    resolved, error = resolve_location(
+        location, case.farmer.country or None,
+        case.farmer.region if source == WeatherContext.LocationSource.FARM_PROFILE else None,
+        search_name=case.farmer.town if source == WeatherContext.LocationSource.FARM_PROFILE else None,
+    )
+    if error or not resolved:
+        return
+    data = get_weather_by_coords(resolved["lat"], resolved["lon"], resolved["name"])
+    observed_at = weather_observed_at(data or {})
+    if not data or observed_at is None:
+        return
+    WeatherContext.objects.get_or_create(
+        diagnosis=case,
+        defaults={
+            "location_name": resolved["name"], "location_source": source,
+            "latitude": resolved["lat"], "longitude": resolved["lon"],
+            "provider": data["provider"], "observed_at": observed_at,
+            "temperature": data.get("temperature"), "humidity": data.get("humidity"),
+            "precipitation": data.get("precipitation"), "wind_speed": data.get("wind_speed"),
+            "condition": data.get("condition", ""), "weather_code": data.get("weather_code"),
+            "forecast": data.get("forecast", []),
+        },
+    )

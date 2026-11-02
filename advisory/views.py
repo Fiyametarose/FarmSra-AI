@@ -2,6 +2,7 @@ import json
 from datetime import timedelta
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
@@ -30,78 +31,35 @@ def generate_case_advisory(request, case_id):
     if request.user.role != 'farmer':
         raise PermissionDenied
 
-    if hasattr(case, 'advisory'):
+    if hasattr(case, "advisory") and not case.advisory_versions.exists():
         return redirect('case-detail', case_id=case.id)
 
-    if not case.is_eligible_for_advisory:
-        if case.status != 'completed':
-            messages.error(request, "Advisory generation is only available for completed cases.")
-        elif not case.predicted_class:
-            messages.error(request, "Advisory generation requires a predicted class.")
-        elif case.model_confidence is None:
-            messages.error(request, "Advisory generation requires model confidence.")
-        elif case.predicted_class in ['Tomato_healthy', 'Potato___healthy', 'Corn_(maize)___healthy']:
-            messages.warning(request, "Advisory generation is not needed for healthy crops.")
-        else:
-            messages.warning(request, "Advisory generation is not available for this condition or confidence level.")
+    if case.status != DiagnosisCase.Status.COMPLETED or not case.predicted_class:
+        messages.error(request, "Advisory generation is only available for completed cases.")
         return redirect('case-detail', case_id=case.id)
 
-    case_context = build_case_context(request.user, case)
-    evidence = retrieve_evidence(
-        crop=case.crop,
-        condition=case.predicted_class,
-        query_texts=retrieval_query_texts(case_context),
-    )
-
-    if not evidence:
-        messages.error(request, "No verified agricultural sources found for this condition.")
-        return redirect('case-detail', case_id=case.id)
-
-    generated_text, citations = generate_advisory(
-        case.crop,
-        case.predicted_class,
-        evidence,
-        case_context=case_context,
-    )
-
-    is_generated = True
-    cited_chunks = []
-    if generated_text:
-        content = generated_text
-        cited_chunks = citations
-    else:
-        is_generated = False
-        content = "The following evidence was retrieved from trusted agricultural sources:\n\n"
-        for ev in evidence:
-            content += f"**{ev['title']}** ({ev['publisher']})\n{ev['text']}\n\n"
-        cited_chunks = [ev['chunk_id'] for ev in evidence]
-
-    saved_sources = []
-    for ev in evidence:
-        if ev['chunk_id'] in cited_chunks:
-            saved_sources.append({
-                'chunk_id': ev['chunk_id'],
-                'source_id': ev.get('source_id', ''),
-                'title': ev.get('title', ''),
-                'publisher': ev.get('publisher', ''),
-                'url': ev.get('url', ''),
-                'text': ev.get('text', ''),
-                'date': ev.get('date', ''),
-                'section': ev.get('section', '')
-            })
-
-    with transaction.atomic():
-        advisory, created = AdvisoryResult.objects.get_or_create(
-            diagnosis=case,
-            defaults={
-                'is_generated': is_generated,
-                'content': content.strip(),
-                'retrieved_sources': saved_sources,
-            },
+    from .workflow import generate_for_case
+    def generate_payload(crop, condition, evidence, context, language):
+        content, citations = generate_advisory(
+            crop, condition, evidence, case_context=context, language=language
         )
+        return content, citations, {}
 
-    if created:
-        messages.success(request, "Agricultural advisory retrieved successfully.")
+    job = generate_for_case(
+        case, request.user, retrieve_func=retrieve_evidence, generate_func=generate_payload
+    )
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({
+            "status": job.status,
+            "error": job.error_message,
+            "detail_url": request.build_absolute_uri(
+                redirect('case-detail', case_id=case.id).url
+            ),
+        })
+    if job.status == job.Status.SUCCEEDED:
+        messages.success(request, "Agricultural advisory generated successfully.")
+    else:
+        messages.error(request, job.error_message or "Advisory generation failed. Please retry.")
     return redirect('case-detail', case_id=case.id)
 
 

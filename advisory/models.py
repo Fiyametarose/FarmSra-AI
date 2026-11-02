@@ -21,6 +21,67 @@ class AdvisoryResult(models.Model):
         return f"Advisory for {self.diagnosis}"
 
 
+class AdvisoryVersion(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        RUNNING = "running", "Running"
+        SUCCEEDED = "succeeded", "Succeeded"
+        FAILED = "failed", "Failed"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    diagnosis = models.ForeignKey(
+        DiagnosisCase, on_delete=models.CASCADE, related_name="advisory_versions"
+    )
+    version = models.PositiveIntegerField()
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES)
+    status = models.CharField(max_length=10, choices=Status, default=Status.PENDING)
+    is_generated = models.BooleanField(default=False)
+    sections = models.JSONField(default=dict, blank=True)
+    content = models.TextField(blank=True)
+    citations = models.JSONField(default=list, blank=True)
+    context_snapshot = models.JSONField(default=dict, blank=True)
+    source_references = models.JSONField(default=list, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-version"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["diagnosis", "version"], name="advisory_version_unique_number"
+            )
+        ]
+
+
+class AdvisoryGenerationJob(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        RUNNING = "running", "Running"
+        SUCCEEDED = "succeeded", "Succeeded"
+        FAILED = "failed", "Failed"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    diagnosis = models.ForeignKey(
+        DiagnosisCase, on_delete=models.CASCADE, related_name="advisory_jobs"
+    )
+    idempotency_key = models.CharField(max_length=64, unique=True)
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES)
+    status = models.CharField(max_length=10, choices=Status, default=Status.PENDING)
+    advisory_version = models.ForeignKey(
+        AdvisoryVersion, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name="generation_jobs",
+    )
+    error_code = models.CharField(max_length=50, blank=True)
+    error_message = models.CharField(max_length=300, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["diagnosis", "status"])]
+
+
 class AIChatSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     case = models.OneToOneField(

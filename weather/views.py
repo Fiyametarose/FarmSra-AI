@@ -199,6 +199,7 @@ def capture_case_weather(request, case_id):
         "wind_speed": weather_data.get("wind_speed"),
         "condition": weather_data.get("condition", ""),
         "weather_code": weather_data.get("weather_code"),
+        "forecast": weather_data.get("forecast", []),
     }
     persist_weather_snapshot(case, values, replace=replace)
 

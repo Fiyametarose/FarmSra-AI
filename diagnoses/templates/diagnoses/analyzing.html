@@ -42,12 +42,12 @@
       <div>
         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
           <div class="spinner" style="width: 32px; height: 32px; border: 3px solid var(--brand-soft); border-top-color: var(--brand); border-radius: 50%; animation: spin 1s linear infinite;"></div>
-          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand); font-weight: 700;">
+          <span id="workflow-stage" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand); font-weight: 700;">
             {% trans "Running Deep Learning Inference" %}
           </span>
         </div>
 
-        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem 0; letter-spacing: -0.02em;">
+        <h1 id="workflow-title" style="font-size: 1.85rem; font-weight: 800; color: var(--text); margin: 0 0 0.5rem 0; letter-spacing: -0.02em;">
           {% if should_submit %}{% trans "Classifying Leaf Health..." %}{% else %}{% trans "Analysis in Progress..." %}{% endif %}
         </h1>
         <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.5rem 0; line-height: 1.5;">
@@ -111,8 +111,38 @@
 {% block scripts %}
   {% if should_submit %}
     <script>
-      window.setTimeout(() => {
-        document.getElementById("process-form").submit();
+      window.setTimeout(async () => {
+        const form = document.getElementById("process-form");
+        const title = document.getElementById("workflow-title");
+        const stage = document.getElementById("workflow-stage");
+        try {
+          title.textContent = "{% trans 'Classifying leaf health...' %}";
+          const request = fetch(form.action, {
+            method: "POST",
+            body: new FormData(form),
+            headers: {"X-Requested-With": "XMLHttpRequest"}
+          });
+          window.setTimeout(() => {
+            stage.textContent = "{% trans 'Building agricultural advisory' %}";
+            title.textContent = "{% trans 'Retrieving evidence and preparing guidance...' %}";
+          }, 900);
+          const response = await request;
+          if (!response.ok) throw new Error("workflow request failed");
+          const result = await response.json();
+          stage.textContent = "{% trans 'Opening completed case' %}";
+          title.textContent = result.advisory_status === "succeeded"
+            ? "{% trans 'Your advisory is ready' %}"
+            : "{% trans 'Diagnosis complete; advisory needs attention' %}";
+          const page = await fetch(result.detail_url, {headers: {"X-Requested-With": "XMLHttpRequest"}});
+          if (!page.ok) throw new Error("case page request failed");
+          document.open();
+          document.write(await page.text());
+          document.close();
+        } catch (error) {
+          stage.textContent = "{% trans 'Unable to finish automatically' %}";
+          title.textContent = "{% trans 'Open the case to retry' %}";
+          window.setTimeout(() => window.location.reload(), 1500);
+        }
       }, 500);
     </script>
   {% endif %}

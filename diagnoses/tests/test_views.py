@@ -100,8 +100,12 @@ class DiagnosisWorkflowTests(TestCase):
             f"{reverse('login')}?next={reverse('case-image', args=[case.id])}",
         )
 
+    @patch("advisory.workflow.generate_for_case")
+    @patch("weather.services.capture_automatic_case_weather")
     @patch("diagnoses.views.predict")
-    def test_successful_result_persists_and_appears_in_history(self, mocked_predict):
+    def test_successful_result_persists_and_appears_in_history(
+        self, mocked_predict, _mocked_weather, _mocked_advisory
+    ):
         case = self.create_case()
         mocked_predict.return_value = Prediction(
             "Tomato_Early_blight", 1, 0.82, "tomato_mobilenetv2_final.keras"

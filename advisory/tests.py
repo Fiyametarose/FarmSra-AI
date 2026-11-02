@@ -8,7 +8,7 @@ from django.urls import reverse
 from users.models import User
 from crops.models import Crop
 from diagnoses.models import DiagnosisCase
-from advisory.models import AdvisoryResult
+from advisory.models import AdvisoryGenerationJob, AdvisoryResult, AdvisoryVersion
 from advisory.services import retrieve_evidence, generate_advisory
 from advisory.context import build_case_context, retrieval_query_texts
 from advisory.management.commands.ingest_knowledge import parse_frontmatter
@@ -55,22 +55,24 @@ class AdvisoryTests(TestCase):
             self.assertRedirects(resp, reverse('case-detail', args=[case.id]))
             self.assertFalse(AdvisoryResult.objects.filter(diagnosis=case).exists())
 
-    def test_healthy_cases(self):
+    def test_healthy_cases_receive_safe_advisory(self):
         self.client.login(email="f1@example.com", password="pwd")
         for case in [self.case_healthy_tom]:
             resp = self.client.post(reverse('generate-advisory', args=[case.id]))
             self.assertRedirects(resp, reverse('case-detail', args=[case.id]))
-            self.assertFalse(AdvisoryResult.objects.filter(diagnosis=case).exists())
+            self.assertTrue(AdvisoryResult.objects.filter(diagnosis=case).exists())
+            self.assertIn("healthy-crop", case.advisory.content)
 
-    def test_low_confidence_and_spider_mites(self):
+    def test_low_confidence_and_spider_mites_receive_safe_advisory(self):
         self.client.login(email="f1@example.com", password="pwd")
         for case in [self.case_low_conf, self.case_spider_mite]:
             resp = self.client.post(reverse('generate-advisory', args=[case.id]))
             self.assertRedirects(resp, reverse('case-detail', args=[case.id]))
-            self.assertFalse(AdvisoryResult.objects.filter(diagnosis=case).exists())
+            self.assertTrue(AdvisoryResult.objects.filter(diagnosis=case).exists())
+            self.assertFalse(case.advisory.is_generated)
 
     @patch('advisory.views.retrieve_evidence')
-    def test_fallback_without_gemini(self, mock_retrieve):
+    def test_missing_gemini_records_retryable_failure(self, mock_retrieve):
         mock_retrieve.return_value = [
             {"title": "Test Title", "publisher": "Test Pub", "url": "https://test", "text": "Test passage.", "chunk_id": "1"}
         ]
@@ -80,9 +82,8 @@ class AdvisoryTests(TestCase):
             resp = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
 
         self.assertRedirects(resp, reverse('case-detail', args=[self.case_normal.id]))
-        advisory = AdvisoryResult.objects.get(diagnosis=self.case_normal)
-        self.assertFalse(advisory.is_generated)
-        self.assertIn("Test passage.", advisory.content)
+        self.assertFalse(AdvisoryResult.objects.filter(diagnosis=self.case_normal).exists())
+        self.assertEqual(self.case_normal.advisory_jobs.get().status, AdvisoryGenerationJob.Status.FAILED)
 
     @patch('advisory.views.retrieve_evidence', return_value=None)
     def test_chroma_failure_does_not_save_advisory(self, mock_retrieve):
@@ -91,20 +92,18 @@ class AdvisoryTests(TestCase):
         self.assertRedirects(response, reverse('case-detail', args=[self.case_normal.id]))
         self.assertFalse(AdvisoryResult.objects.filter(diagnosis=self.case_normal).exists())
 
-    @patch('advisory.views.AdvisoryResult.objects.get_or_create')
     @patch('advisory.views.retrieve_evidence')
-    def test_concurrent_save_loser_reuses_existing_advisory(self, mock_retrieve, mock_get_or_create):
+    def test_duplicate_generation_context_reuses_job(self, mock_retrieve):
         mock_retrieve.return_value = [
             {"title": "Test", "publisher": "Extension", "url": "https://test",
              "text": "Evidence", "chunk_id": "1"}
         ]
-        existing = AdvisoryResult(diagnosis=self.case_normal, content="Already saved")
-        mock_get_or_create.return_value = (existing, False)
         self.client.login(email="f1@example.com", password="pwd")
         with patch.dict(os.environ, clear=True):
-            response = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
-        self.assertRedirects(response, reverse('case-detail', args=[self.case_normal.id]))
-        mock_get_or_create.assert_called_once()
+            self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+            self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+        self.assertEqual(AdvisoryGenerationJob.objects.filter(diagnosis=self.case_normal).count(), 1)
+        self.assertEqual(AdvisoryVersion.objects.filter(diagnosis=self.case_normal).count(), 1)
 
     @patch('advisory.views.retrieve_evidence')
     @patch('advisory.services.genai.Client')
@@ -130,7 +129,7 @@ class AdvisoryTests(TestCase):
 
     @patch('advisory.views.retrieve_evidence')
     @patch('advisory.services.genai.Client')
-    def test_fabricated_citations_fallback(self, mock_genai, mock_retrieve):
+    def test_fabricated_citations_record_retryable_failure(self, mock_genai, mock_retrieve):
         mock_retrieve.return_value = [
             {"title": "Test Title", "publisher": "Test Pub", "url": "https://test", "text": "Test passage.", "chunk_id": "1"}
         ]
@@ -147,9 +146,8 @@ class AdvisoryTests(TestCase):
             self.client.login(email="f1@example.com", password="pwd")
             resp = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
 
-        advisory = AdvisoryResult.objects.get(diagnosis=self.case_normal)
-        self.assertFalse(advisory.is_generated)
-        self.assertIn("Test passage.", advisory.content)
+        self.assertFalse(AdvisoryResult.objects.filter(diagnosis=self.case_normal).exists())
+        self.assertEqual(self.case_normal.advisory_jobs.get().status, AdvisoryGenerationJob.Status.FAILED)
 
     def test_duplicate_requests_redirect(self):
         AdvisoryResult.objects.create(diagnosis=self.case_normal, is_generated=False, content="Existing")
@@ -162,12 +160,12 @@ class AdvisoryTests(TestCase):
         response = self.client.get(reverse("case-detail", args=[self.case_normal.id]))
         self.assertContains(response, 'id="case-advisory-form"')
         self.assertContains(response, f'advisory-auto-{self.case_normal.id}')
-        self.assertContains(response, 'document.getElementById("case-advisory-form").requestSubmit()')
+        self.assertContains(response, 'headers: {"X-Requested-With": "XMLHttpRequest"}')
 
-    def test_excluded_case_page_has_no_automatic_advisory_post(self):
+    def test_healthy_case_page_has_automatic_safety_advisory(self):
         self.client.login(email="f1@example.com", password="pwd")
         response = self.client.get(reverse("case-detail", args=[self.case_healthy_tom.id]))
-        self.assertNotContains(response, f'advisory-auto-{self.case_healthy_tom.id}')
+        self.assertContains(response, f'advisory-auto-{self.case_healthy_tom.id}')
 
     def test_recent_healthy_and_uncertain_cases_still_capture_weather_first(self):
         from django.utils import timezone
@@ -180,7 +178,7 @@ class AdvisoryTests(TestCase):
             response = self.client.get(reverse("case-detail", args=[case.id]))
             self.assertContains(response, f'weather-capture-{case.id}')
             self.assertContains(response, 'document.getElementById("case-weather-form").requestSubmit()')
-            self.assertNotContains(response, f'advisory-auto-{case.id}')
+            self.assertContains(response, f'advisory-auto-{case.id}')
 
     def test_context_history_is_farmer_scoped_and_weather_is_optional(self):
         other = User.objects.create_user(email="other@example.com", password="pwd", role="farmer")

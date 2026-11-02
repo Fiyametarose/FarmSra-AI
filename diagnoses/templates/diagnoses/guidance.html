@@ -69,11 +69,6 @@
                     <div style="color: var(--muted); font-size: 0.78rem; margin-bottom: 0.4rem;">
                       {{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}
                     </div>
-                    {% if source.text %}
-                      <div style="font-size: 0.82rem; color: var(--text); background: var(--surface-alt); padding: 0.5rem; border-radius: 4px; font-style: italic;">
-                        "{{ source.text }}"
-                      </div>
-                    {% endif %}
                   </div>
                 {% endfor %}
               </div>

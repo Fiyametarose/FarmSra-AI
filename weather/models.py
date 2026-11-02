@@ -27,6 +27,7 @@ class WeatherContext(models.Model):
     wind_speed = models.FloatField(null=True, blank=True)
     condition = models.CharField(max_length=100, blank=True)
     weather_code = models.IntegerField(null=True, blank=True)
+    forecast = models.JSONField(default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.utils import timezone
+from django.urls import reverse
 from datetime import timedelta
 
 from users.models import User
@@ -124,6 +125,7 @@ def analyzing(request, case_id):
 @require_POST
 def process_case(request, case_id):
     case = owned_case(request, case_id)
+    generated_job = None
     claimed_at = claim_case(case.id, request.user.id)
     if claimed_at is None:
         case.refresh_from_db(fields=["status"])
@@ -136,7 +138,23 @@ def process_case(request, case_id):
     except (ModelUnavailableError, InferenceError) as exc:
         fail_case(case.id, request.user.id, claimed_at, str(exc))
     else:
-        complete_case(case.id, request.user.id, claimed_at, prediction)
+        completed = complete_case(case.id, request.user.id, claimed_at, prediction)
+        if completed:
+            case.refresh_from_db()
+            from weather.services import capture_automatic_case_weather
+            from advisory.workflow import generate_for_case
+            capture_automatic_case_weather(case)
+            generated_job = generate_for_case(case, request.user)
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        case.refresh_from_db()
+        latest_job = generated_job or case.advisory_jobs.order_by("-created_at").first()
+        return JsonResponse({
+            "case_status": case.status,
+            "advisory_status": latest_job.status if latest_job else None,
+            "detail_url": request.build_absolute_uri(
+                reverse("case-detail", args=[case.id])
+            ),
+        })
     return redirect("case-detail", case_id=case.id)
 
 
@@ -189,6 +207,7 @@ def case_detail(request, case_id):
             "confidence_threshold_percent": round(
                 settings.DIAGNOSIS_CONFIDENCE_THRESHOLD * 100, 1
             ),
+            "latest_advisory_job": case.advisory_jobs.order_by("-created_at").first(),
         },
     )
 

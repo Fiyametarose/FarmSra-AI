@@ -180,7 +180,7 @@
     {% endif %}
 
     <!-- Agricultural Guidance Section -->
-    {% if case.is_eligible_for_advisory %}
+    {% if case.status == 'completed' and case.predicted_class %}
       <section class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -217,11 +217,6 @@
                     <div style="font-size: 0.78rem; color: var(--muted);">
                       {{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}
                     </div>
-                    {% if source.text %}
-                      <div style="margin-top: 0.5rem; font-size: 0.82rem; color: var(--text); background: var(--surface-alt); padding: 0.5rem; border-radius: 4px; font-style: italic;">
-                        "{{ source.text }}"
-                      </div>
-                    {% endif %}
                   </div>
                 {% endfor %}
               </div>
@@ -230,8 +225,12 @@
 
         {% else %}
           <div style="text-align: center; padding: 2rem 1rem; background: var(--surface-alt); border-radius: 12px; border: 1px dashed var(--border);">
-            <p style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.25rem 0;">
-              {% trans "Grounded guidance retrieval starts automatically. Use the button below to retry if retrieval does not complete." %}
+            <p id="advisory-progress" style="font-size: 0.95rem; color: var(--muted); margin: 0 0 1.25rem 0;">
+              {% if latest_advisory_job.status == 'failed' %}
+                {{ latest_advisory_job.error_message }}
+              {% else %}
+                {% trans "Grounded guidance generation starts automatically. This page will update when it is ready." %}
+              {% endif %}
             </p>
             <form action="{% url 'generate-advisory' case.id %}" method="post" id="case-advisory-form">
               {% csrf_token %}
@@ -370,11 +369,11 @@
 {% endblock %}
 
 {% block scripts %}
-  {% if weather_auto_capture_eligible and not case.weather_context and case.location or case.is_eligible_for_advisory and not case.advisory %}
+  {% if weather_auto_capture_eligible and not case.weather_context and case.location or case.status == 'completed' and case.predicted_class and not case.advisory %}
     <script>
-      window.addEventListener("load", () => {
+      window.addEventListener("load", async () => {
         const weatherKey = "weather-capture-{{ case.id }}";
-        {% if case.is_eligible_for_advisory and not case.advisory %}
+        {% if case.status == 'completed' and case.predicted_class and not case.advisory %}
         const advisoryKey = "advisory-auto-{{ case.id }}";
         {% endif %}
         {% if weather_auto_capture_eligible and not case.weather_context and case.location %}
@@ -385,10 +384,24 @@
           return;
         }
         {% endif %}
-        {% if case.is_eligible_for_advisory and not case.advisory %}
+        {% if case.status == 'completed' and case.predicted_class and not case.advisory %}
         if (!sessionStorage.getItem(advisoryKey)) {
           sessionStorage.setItem(advisoryKey, "attempted");
-          document.getElementById("case-advisory-form").requestSubmit();
+          const form = document.getElementById("case-advisory-form");
+          document.getElementById("advisory-progress").textContent = "{% trans 'Generating your agricultural advisory...' %}";
+          const response = await fetch(form.action, {
+            method: "POST", body: new FormData(form),
+            headers: {"X-Requested-With": "XMLHttpRequest"}
+          });
+          if (response.ok) {
+            const result = await response.json();
+            const page = await fetch(result.detail_url);
+            document.open();
+            document.write(await page.text());
+            document.close();
+          } else {
+            document.getElementById("advisory-progress").textContent = "{% trans 'Advisory generation failed. Use the retry button.' %}";
+          }
         }
         {% endif %}
       });
