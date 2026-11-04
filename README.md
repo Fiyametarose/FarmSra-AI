@@ -74,6 +74,18 @@ Build the local Chroma collection from the tracked agricultural source documents
 python manage.py ingest_knowledge
 ```
 
+### Educational-prototype knowledge archive (development only)
+
+`FarmSra_RAG_v6.zip` (23 topics x English/Swahili/Amharic = 69 Markdown documents) is imported as **educational-prototype** knowledge. It has no professional agronomist sign-off and no certified translation, so it is stored as unverified, inactive, non-expert-reviewed versions with `approval_scope=educational_prototype`. The production approval constraint and the governed workflow are unchanged, and `eligible_versions()` never returns these versions.
+
+```powershell
+python manage.py migrate
+python manage.py import_knowledge_archive --archive "D:\Project Ideas\FarmSra_RAG_v6.zip" --dry-run
+python manage.py import_knowledge_archive --archive "D:\Project Ideas\FarmSra_RAG_v6.zip" --index
+```
+
+The import is idempotent (changed files create a new version and supersede the old one). `--index` writes only to the separate `agricultural_advisory_prototype` Chroma collection. Retrieval from it is disabled unless `RAG_EDUCATIONAL_PROTOTYPE_MODE=true` is set in `.env`; evidence is then labelled "educational prototype" in advisories, chat sources and the guidance library.
+
 The generated `chroma_db/` directory is local runtime data and is not included in Git. Gemini-backed generation is optional and requires the environment variables described in `.env.example`; retrieved source material remains the evidence basis.
 
 Run the durable advisory worker in a second terminal during local development:

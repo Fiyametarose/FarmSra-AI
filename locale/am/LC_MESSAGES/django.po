@@ -2416,3 +2416,12 @@ msgid ""
 msgstr ""
 "የመጨረሻው የተቀመጠ ምልከታ ከ%(age)s በፊት ተወስዷል። የአየር ሁኔታው ለዚህ ጉዳይ ከተመዘገቡ ምልከታዎች ብቻ "
 "ይታያል፤ በራስ-ሰር አይታደስም፤ ደጋፊ አውድ እንጂ የበሽታ ማረጋገጫ አይደለም።"
+
+msgid "Educational prototype evidence, not professionally verified"
+msgstr "የትምህርት ናሙና ማስረጃ፤ በባለሙያ አልተረጋገጠም"
+
+msgid "educational prototype"
+msgstr "የትምህርት ናሙና"
+
+msgid "Educational prototype, not professionally verified"
+msgstr "የትምህርት ናሙና፤ በባለሙያ አልተረጋገጠም"

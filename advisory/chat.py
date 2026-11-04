@@ -128,6 +128,9 @@ def source_record(evidence):
         "document_id": evidence.get("document_id", ""),
         "document_version_id": evidence.get("document_version_id", ""),
         "document_version": evidence.get("document_version", ""),
+        "evidence_tier": evidence.get("evidence_tier", "production"),
+        "section": evidence.get("section", ""),
+        "references": evidence.get("references", []),
     }
 
 
@@ -201,7 +204,7 @@ def excerpt_fallback(evidence, language, query=""):
     """A short, deduplicated, readable extract of the retrieved sources."""
     candidates, seen = [], set()
     for item in evidence:
-        for sentence in _complete_sentences(item["text"]):
+        for sentence in _complete_sentences(item.get("text_en") or item["text"]):
             key = re.sub(r"\W+", " ", sentence.lower()).strip()
             if key not in seen:
                 seen.add(key)
@@ -314,8 +317,12 @@ def _stems(text):
     }
 
 
+def _evidence_text(item):
+    return f"{item['text']} {item.get('text_en') or ''}"
+
+
 def _sentences_are_grounded(answer_en, evidence, case_context):
-    haystack = _stems(" ".join(item["text"] for item in evidence))
+    haystack = _stems(" ".join(_evidence_text(item) for item in evidence))
     haystack |= _stems(json.dumps(case_context, ensure_ascii=False, default=str))
     haystack |= _GENERIC_STEMS
     for sentence in re.split(r"(?<=[.!?;])\s+", answer_en):
@@ -327,7 +334,7 @@ def _sentences_are_grounded(answer_en, evidence, case_context):
 
 
 def _numbers_and_schedules_supported(texts, evidence, case_context):
-    evidence_text = " ".join(item["text"] for item in evidence).lower()
+    evidence_text = " ".join(_evidence_text(item) for item in evidence).lower()
     context_numbers = set(re.findall(r"\d+(?:\.\d+)?", json.dumps(case_context, default=str)))
     for text in texts:
         for pattern in (_DOSE, _SCHEDULE):
@@ -466,6 +473,7 @@ def reply_to_question(user, case, question, language, history_messages, crop=Non
         ],
         n_results=EVIDENCE_CHUNKS,
         part_chars=120,
+        language=language,
     )
     with override(language):
         if evidence is None:

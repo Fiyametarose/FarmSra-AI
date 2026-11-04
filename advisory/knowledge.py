@@ -60,6 +60,7 @@ def extract_uploaded_document(version):
 
 def eligible_versions():
     return KnowledgeDocumentVersion.objects.filter(
+        approval_scope=KnowledgeDocumentVersion.ApprovalScope.PRODUCTION,
         lifecycle_status=KnowledgeDocumentVersion.Lifecycle.APPROVED,
         is_active=True,
         verification_status=KnowledgeDocumentVersion.Verification.VERIFIED,
@@ -76,6 +77,9 @@ def remove_version_chunks(version):
 
 
 def index_document_version(version):
+    if version.approval_scope == version.ApprovalScope.EDUCATIONAL_PROTOTYPE:
+        from .prototype import index_prototype_version
+        return index_prototype_version(version)
     if not version.is_retrieval_eligible:
         try:
             remove_version_chunks(version)

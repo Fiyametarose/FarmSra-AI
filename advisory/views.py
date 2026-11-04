@@ -285,7 +285,7 @@ def case_chat(request, case_id):
 
 @farmer_required
 def guidance_library(request):
-    documents = library.load_documents()
+    documents = library.load_documents(normalize_language(get_language()))
     crop = request.GET.get("crop", "")
     condition = request.GET.get("condition", "")
     query = request.GET.get("q", "")[:100]

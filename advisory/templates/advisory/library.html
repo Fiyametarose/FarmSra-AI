@@ -49,6 +49,7 @@
       {% for document in documents %}
         <article class="library-doc" id="doc-{{ document.source_id }}">
           <span class="badge badge-green">{{ document.crop|title }}</span>
+          {% if document.evidence_tier == 'educational_prototype' %}<span class="badge">{% trans "Educational prototype, not professionally verified" %}</span>{% endif %}
           <h2>{{ document.label }}</h2>
           <p style="margin: 0 0 0.5rem; font-size: 0.88rem; color: var(--ink);">{{ document.summary }}</p>
           <div style="font-size: 0.8rem; color: var(--muted);">

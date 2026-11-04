@@ -194,7 +194,8 @@ def execute_job(job, retrieve_func=None, generate_func=None):
         content = format_advisory(sections, [], language)
     else:
         evidence = retrieve_func(
-            case.crop, case.predicted_class, query_texts=retrieval_query_texts(context)
+            case.crop, case.predicted_class, query_texts=retrieval_query_texts(context),
+            language=language,
         )
         if evidence:
             AdvisoryGenerationJob.objects.filter(pk=job.pk, status=job.Status.RUNNING).update(stage="generating")

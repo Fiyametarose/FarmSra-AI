@@ -2582,3 +2582,12 @@ msgstr ""
 "hewa inaonyeshwa kutoka kwa uchunguzi uliorekodiwa kwa kesi hii pekee; "
 "haisasishwi kiotomatiki na ni muktadha wa kusaidia, si uthibitisho wa "
 "ugonjwa."
+
+msgid "Educational prototype evidence, not professionally verified"
+msgstr "Ushahidi wa mfano wa kielimu, haujahakikiwa kitaalamu"
+
+msgid "educational prototype"
+msgstr "mfano wa kielimu"
+
+msgid "Educational prototype, not professionally verified"
+msgstr "Mfano wa kielimu, haujahakikiwa kitaalamu"

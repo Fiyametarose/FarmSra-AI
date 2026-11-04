@@ -53,6 +53,7 @@
                   <li>
                     {% if source.url %}<a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.title }} ↗</a>{% else %}<strong>{{ source.title }}</strong>{% endif %}
                     <div style="color: var(--muted);">{{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}</div>
+                    {% if source.evidence_tier == 'educational_prototype' %}<div style="font-size: 0.75rem; color: #8a5a00;">{% trans "Educational prototype evidence, not professionally verified" %}</div>{% endif %}
                   </li>
                 {% endfor %}
               </ul>

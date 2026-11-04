@@ -230,6 +230,7 @@
                     <div style="font-size: 0.78rem; color: var(--muted);">
                       {{ source.publisher }}{% if source.date %} · {{ source.date }}{% endif %}
                     </div>
+                    {% if source.evidence_tier == 'educational_prototype' %}<div style="font-size: 0.75rem; color: #8a5a00;">{% trans "Educational prototype evidence, not professionally verified" %}</div>{% endif %}
                   </div>
                 {% endfor %}
               </div>

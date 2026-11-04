@@ -169,6 +169,9 @@ if CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES < 0:
         "CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES must be a non-negative integer."
     )
 CHROMA_DB_DIR = BASE_DIR / "chroma_db"
+# Development-only retrieval over imported educational-prototype guidance. It is never a
+# substitute for the governed expert-approval workflow and is off unless explicitly enabled.
+RAG_EDUCATIONAL_PROTOTYPE_MODE = os.getenv("RAG_EDUCATIONAL_PROTOTYPE_MODE", "false").lower() == "true"
 
 # External delivery is opt-in. In-app notifications remain available without SMTP.
 EMAIL_BACKEND = os.getenv(

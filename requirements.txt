@@ -8,5 +8,6 @@ google-genai~=0.3.0
 requests>=2.32,<3
 chromadb==1.5.9
 polib~=1.2.0
+PyYAML~=6.0
 pypdf~=5.0
 python-docx~=1.1

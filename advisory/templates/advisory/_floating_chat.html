@@ -54,7 +54,7 @@
   const render = () => {
     const session = selectedSession();
     messages.innerHTML = session?.messages.length ? session.messages.map(item =>
-      `<article class="floating-chat-message ${item.role}"><small>${item.role === "farmer" ? "{% trans 'You' %}" : "{% trans 'AI Assistant' %}"} · ${escape(item.language.toUpperCase())}</small><div>${escape(item.content)}</div>${item.sources?.length ? `<ul>${item.sources.map(source => `<li>${escape(source.title)}${source.publisher ? ` — ${escape(source.publisher)}` : ""}</li>`).join("")}</ul>` : ""}</article>`
+      `<article class="floating-chat-message ${item.role}"><small>${item.role === "farmer" ? "{% trans 'You' %}" : "{% trans 'AI Assistant' %}"} · ${escape(item.language.toUpperCase())}</small><div>${escape(item.content)}</div>${item.sources?.length ? `<ul>${item.sources.map(source => `<li>${escape(source.title)}${source.publisher ? ` — ${escape(source.publisher)}` : ""}${source.evidence_tier === "educational_prototype" ? ` (${escape("{% trans 'educational prototype' %}")})` : ""}</li>`).join("")}</ul>` : ""}</article>`
     ).join("") : `<p class="floating-chat-empty">{% trans "Ask your first agricultural question." %}</p>`;
     messages.scrollTop = messages.scrollHeight;
     const general = scope.value === "general";

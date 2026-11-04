@@ -215,6 +215,18 @@ class KnowledgeDocumentVersion(models.Model):
         upload_to=knowledge_file_path, validators=[validate_knowledge_file],
         null=True, blank=True,
     )
+    class ApprovalScope(models.TextChoices):
+        PRODUCTION = "production", "Production governance"
+        EDUCATIONAL_PROTOTYPE = "educational_prototype", "Educational prototype only"
+
+    approval_scope = models.CharField(
+        max_length=24, choices=ApprovalScope, default=ApprovalScope.PRODUCTION
+    )
+    prototype_approved = models.BooleanField(
+        default=False,
+        help_text="Educational-prototype retrieval flag. It never implies verification or expert review.",
+    )
+    metadata = models.JSONField(default=dict, blank=True)
     original_filename = models.CharField(max_length=255, blank=True)
     file_size = models.PositiveIntegerField(default=0)
     content_type = models.CharField(max_length=100, blank=True)
@@ -282,7 +294,8 @@ class KnowledgeDocumentVersion(models.Model):
     @property
     def is_retrieval_eligible(self):
         return (
-            self.lifecycle_status == self.Lifecycle.APPROVED
+            self.approval_scope == self.ApprovalScope.PRODUCTION
+            and self.lifecycle_status == self.Lifecycle.APPROVED
             and self.is_active
             and self.verification_status == self.Verification.VERIFIED
             and self.expert_review_status == self.ExpertReview.REVIEWED
