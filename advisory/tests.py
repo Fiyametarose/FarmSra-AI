@@ -12,6 +12,15 @@ from advisory.models import AdvisoryGenerationJob, AdvisoryResult, AdvisoryVersi
 from advisory.services import retrieve_evidence, generate_advisory
 from advisory.context import build_case_context, retrieval_query_texts
 from advisory.management.commands.ingest_knowledge import parse_frontmatter
+from advisory.workflow import claim_next_job, execute_job, generate_for_case
+
+COMPLETE_RESPONSE = {
+    "diagnosis_summary": "Gen exp", "symptoms_to_inspect": "Inspect lesions.",
+    "possible_causes": "Possible infection.", "immediate_actions": "Remove debris.",
+    "prevention": "Use sanitation.", "weather_context": "Weather is not available.",
+    "monitoring": "Monitor regularly.", "treatment_considerations": "Evidence is limited.",
+    "expert_consultation": "Consult an expert if decline continues.",
+}
 
 class AdvisoryTests(TestCase):
     def setUp(self):
@@ -59,6 +68,7 @@ class AdvisoryTests(TestCase):
         self.client.login(email="f1@example.com", password="pwd")
         for case in [self.case_healthy_tom]:
             resp = self.client.post(reverse('generate-advisory', args=[case.id]))
+            generate_for_case(case, self.farmer1)
             self.assertRedirects(resp, reverse('case-detail', args=[case.id]))
             self.assertTrue(AdvisoryResult.objects.filter(diagnosis=case).exists())
             self.assertIn("healthy-crop", case.advisory.content)
@@ -67,11 +77,12 @@ class AdvisoryTests(TestCase):
         self.client.login(email="f1@example.com", password="pwd")
         for case in [self.case_low_conf, self.case_spider_mite]:
             resp = self.client.post(reverse('generate-advisory', args=[case.id]))
+            generate_for_case(case, self.farmer1)
             self.assertRedirects(resp, reverse('case-detail', args=[case.id]))
             self.assertTrue(AdvisoryResult.objects.filter(diagnosis=case).exists())
             self.assertFalse(case.advisory.is_generated)
 
-    @patch('advisory.views.retrieve_evidence')
+    @patch('advisory.workflow.retrieve_evidence')
     def test_missing_gemini_records_retryable_failure(self, mock_retrieve):
         mock_retrieve.return_value = [
             {"title": "Test Title", "publisher": "Test Pub", "url": "https://test", "text": "Test passage.", "chunk_id": "1"}
@@ -80,19 +91,21 @@ class AdvisoryTests(TestCase):
 
         with patch.dict(os.environ, clear=True):
             resp = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+            execute_job(claim_next_job())
 
         self.assertRedirects(resp, reverse('case-detail', args=[self.case_normal.id]))
         self.assertFalse(AdvisoryResult.objects.filter(diagnosis=self.case_normal).exists())
         self.assertEqual(self.case_normal.advisory_jobs.get().status, AdvisoryGenerationJob.Status.FAILED)
 
-    @patch('advisory.views.retrieve_evidence', return_value=None)
+    @patch('advisory.workflow.retrieve_evidence', return_value=None)
     def test_chroma_failure_does_not_save_advisory(self, mock_retrieve):
         self.client.login(email="f1@example.com", password="pwd")
         response = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+        execute_job(claim_next_job())
         self.assertRedirects(response, reverse('case-detail', args=[self.case_normal.id]))
         self.assertFalse(AdvisoryResult.objects.filter(diagnosis=self.case_normal).exists())
 
-    @patch('advisory.views.retrieve_evidence')
+    @patch('advisory.workflow.retrieve_evidence')
     def test_duplicate_generation_context_reuses_job(self, mock_retrieve):
         mock_retrieve.return_value = [
             {"title": "Test", "publisher": "Extension", "url": "https://test",
@@ -105,7 +118,7 @@ class AdvisoryTests(TestCase):
         self.assertEqual(AdvisoryGenerationJob.objects.filter(diagnosis=self.case_normal).count(), 1)
         self.assertEqual(AdvisoryVersion.objects.filter(diagnosis=self.case_normal).count(), 1)
 
-    @patch('advisory.views.retrieve_evidence')
+    @patch('advisory.workflow.retrieve_evidence')
     @patch('advisory.services.genai.Client')
     def test_successful_gemini_generation(self, mock_genai, mock_retrieve):
         mock_retrieve.return_value = [
@@ -114,20 +127,19 @@ class AdvisoryTests(TestCase):
         mock_client = MagicMock()
         mock_genai.return_value = mock_client
         mock_response = MagicMock()
-        mock_response.text = json.dumps({
-            "explanation": "Gen exp", "citations": ["1"]
-        })
+        mock_response.text = json.dumps({**COMPLETE_RESPONSE, "citations": ["1"]})
         mock_client.models.generate_content.return_value = mock_response
 
         with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
             self.client.login(email="f1@example.com", password="pwd")
             resp = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+            execute_job(claim_next_job())
 
         advisory = AdvisoryResult.objects.get(diagnosis=self.case_normal)
         self.assertTrue(advisory.is_generated)
         self.assertIn("Gen exp", advisory.content)
 
-    @patch('advisory.views.retrieve_evidence')
+    @patch('advisory.workflow.retrieve_evidence')
     @patch('advisory.services.genai.Client')
     def test_fabricated_citations_record_retryable_failure(self, mock_genai, mock_retrieve):
         mock_retrieve.return_value = [
@@ -137,14 +149,13 @@ class AdvisoryTests(TestCase):
         mock_genai.return_value = mock_client
         mock_response = MagicMock()
         # Invalid citation ID '99'
-        mock_response.text = json.dumps({
-            "explanation": "Gen exp", "citations": ["99"]
-        })
+        mock_response.text = json.dumps({**COMPLETE_RESPONSE, "citations": ["99"]})
         mock_client.models.generate_content.return_value = mock_response
 
         with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
             self.client.login(email="f1@example.com", password="pwd")
             resp = self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+            execute_job(claim_next_job())
 
         self.assertFalse(AdvisoryResult.objects.filter(diagnosis=self.case_normal).exists())
         self.assertEqual(self.case_normal.advisory_jobs.get().status, AdvisoryGenerationJob.Status.FAILED)
@@ -159,13 +170,13 @@ class AdvisoryTests(TestCase):
         self.client.login(email="f1@example.com", password="pwd")
         response = self.client.get(reverse("case-detail", args=[self.case_normal.id]))
         self.assertContains(response, 'id="case-advisory-form"')
-        self.assertContains(response, f'advisory-auto-{self.case_normal.id}')
-        self.assertContains(response, 'headers: {"X-Requested-With": "XMLHttpRequest"}')
+        self.assertContains(response, reverse("advisory-status", args=[self.case_normal.id]))
+        self.assertNotContains(response, "document.write")
 
     def test_healthy_case_page_has_automatic_safety_advisory(self):
         self.client.login(email="f1@example.com", password="pwd")
         response = self.client.get(reverse("case-detail", args=[self.case_healthy_tom.id]))
-        self.assertContains(response, f'advisory-auto-{self.case_healthy_tom.id}')
+        self.assertContains(response, reverse("advisory-status", args=[self.case_healthy_tom.id]))
 
     def test_recent_healthy_and_uncertain_cases_still_capture_weather_first(self):
         from django.utils import timezone
@@ -178,7 +189,7 @@ class AdvisoryTests(TestCase):
             response = self.client.get(reverse("case-detail", args=[case.id]))
             self.assertContains(response, f'weather-capture-{case.id}')
             self.assertContains(response, 'document.getElementById("case-weather-form").requestSubmit()')
-            self.assertContains(response, f'advisory-auto-{case.id}')
+            self.assertContains(response, reverse("advisory-status", args=[case.id]))
 
     def test_context_history_is_farmer_scoped_and_weather_is_optional(self):
         other = User.objects.create_user(email="other@example.com", password="pwd", role="farmer")
@@ -220,7 +231,7 @@ class AdvisoryTests(TestCase):
     def test_unsupported_chemical_claim_is_rejected(self, mock_genai):
         response = MagicMock()
         response.text = json.dumps({
-            "explanation": "Condition summary", "management": "Apply a fungicide spray.",
+            **COMPLETE_RESPONSE, "treatment_considerations": "Apply a fungicide spray.",
             "citations": ["chunk-1"],
         })
         mock_genai.return_value.models.generate_content.return_value = response
@@ -235,7 +246,8 @@ class AdvisoryTests(TestCase):
     def test_evidence_grounded_fungicide_term_is_allowed(self, mock_genai):
         response = MagicMock()
         response.text = json.dumps({
-            "management": "A fungicide may protect healthy tissue; verify the local label.",
+            **COMPLETE_RESPONSE,
+            "treatment_considerations": "A fungicide may protect healthy tissue; verify the local label.",
             "citations": ["chunk-1"],
         })
         mock_genai.return_value.models.generate_content.return_value = response
@@ -263,7 +275,10 @@ class AdvisoryTests(TestCase):
         with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
             for claim in unsafe_claims:
                 response = MagicMock()
-                response.text = json.dumps({"management": claim, "citations": ["chunk-1"]})
+                response.text = json.dumps({
+                    **COMPLETE_RESPONSE, "treatment_considerations": claim,
+                    "citations": ["chunk-1"],
+                })
                 mock_genai.return_value.models.generate_content.return_value = response
                 content, citations = generate_advisory("tomato", "Tomato_Bacterial_spot", evidence)
                 self.assertIsNone(content, claim)
@@ -355,7 +370,7 @@ class AdvisoryTests(TestCase):
         self.assertLessEqual(len(query), 200)
         self.assertIn("Heavy rain", query)
 
-    @patch('advisory.views.retrieve_evidence')
+    @patch('advisory.workflow.retrieve_evidence')
     @patch('advisory.services.genai.Client')
     def test_generated_citations_saved_evidence(self, mock_genai, mock_retrieve):
         mock_retrieve.return_value = [
@@ -364,18 +379,13 @@ class AdvisoryTests(TestCase):
         mock_client = MagicMock()
         mock_genai.return_value = mock_client
         mock_response = MagicMock()
-        mock_response.text = json.dumps({
-            "explanation": "Gen exp",
-            "prevention": "prev",
-            "management": "mgmt",
-            "next_steps": "next",
-            "citations": ["1"]
-        })
+        mock_response.text = json.dumps({**COMPLETE_RESPONSE, "citations": ["1"]})
         mock_client.models.generate_content.return_value = mock_response
 
         with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
             self.client.login(email="f1@example.com", password="pwd")
             self.client.post(reverse('generate-advisory', args=[self.case_normal.id]))
+            execute_job(claim_next_job())
 
         advisory = AdvisoryResult.objects.get(diagnosis=self.case_normal)
         self.assertTrue(advisory.is_generated)

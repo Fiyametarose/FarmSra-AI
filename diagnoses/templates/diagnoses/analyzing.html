@@ -133,11 +133,7 @@
           title.textContent = result.advisory_status === "succeeded"
             ? "{% trans 'Your advisory is ready' %}"
             : "{% trans 'Diagnosis complete; advisory needs attention' %}";
-          const page = await fetch(result.detail_url, {headers: {"X-Requested-With": "XMLHttpRequest"}});
-          if (!page.ok) throw new Error("case page request failed");
-          document.open();
-          document.write(await page.text());
-          document.close();
+          window.location.assign(result.detail_url);
         } catch (error) {
           stage.textContent = "{% trans 'Unable to finish automatically' %}";
           title.textContent = "{% trans 'Open the case to retry' %}";

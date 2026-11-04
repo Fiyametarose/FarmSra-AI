@@ -9,15 +9,13 @@ from django.contrib import messages
 from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import get_language, gettext as _
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods
 from diagnoses.models import DiagnosisCase
 from users.models import normalize_language
 from users.views import farmer_required
 from . import chat, library
 from .forms import ChatQuestionForm
-from .models import AdvisoryResult, AIChatMessage, AIChatSession
-from .services import retrieve_evidence, generate_advisory
-from .context import build_case_context, retrieval_query_texts
+from .models import AIChatMessage, AIChatSession
 
 @login_required
 def generate_case_advisory(request, case_id):
@@ -38,16 +36,8 @@ def generate_case_advisory(request, case_id):
         messages.error(request, "Advisory generation is only available for completed cases.")
         return redirect('case-detail', case_id=case.id)
 
-    from .workflow import generate_for_case
-    def generate_payload(crop, condition, evidence, context, language):
-        content, citations = generate_advisory(
-            crop, condition, evidence, case_context=context, language=language
-        )
-        return content, citations, {}
-
-    job = generate_for_case(
-        case, request.user, retrieve_func=retrieve_evidence, generate_func=generate_payload
-    )
+    from .workflow import enqueue_for_case
+    job = enqueue_for_case(case, request.user, normalize_language(get_language()))
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return JsonResponse({
             "status": job.status,
@@ -56,11 +46,26 @@ def generate_case_advisory(request, case_id):
                 redirect('case-detail', case_id=case.id).url
             ),
         })
-    if job.status == job.Status.SUCCEEDED:
-        messages.success(request, "Agricultural advisory generated successfully.")
-    else:
-        messages.error(request, job.error_message or "Advisory generation failed. Please retry.")
+    messages.info(request, "Agricultural advisory generation has been queued.")
     return redirect('case-detail', case_id=case.id)
+
+
+@farmer_required
+@require_GET
+def advisory_status(request, case_id):
+    case = get_object_or_404(DiagnosisCase, id=case_id, farmer=request.user)
+    language = normalize_language(get_language())
+    version = case.advisory_versions.filter(language=language).order_by("-version").first()
+    job = case.advisory_jobs.filter(language=language).order_by("-created_at").first()
+    status = version.status if version else (job.status if job else "missing")
+    stage = job.stage if job else ("ready" if status == "succeeded" else "preparing")
+    return JsonResponse({
+        "status": status,
+        "stage": stage,
+        "error": job.error_message if job and job.status == job.Status.FAILED else "",
+        "retry_available": bool(job and job.status == job.Status.FAILED),
+        "detail_url": redirect("case-detail", case_id=case.id).url,
+    })
 
 
 def _chat_page(request, case, form, error=None, status=200):

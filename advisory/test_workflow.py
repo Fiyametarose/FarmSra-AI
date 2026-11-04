@@ -1,13 +1,19 @@
 from unittest.mock import MagicMock, patch
+from datetime import timedelta
+import json
+import os
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
+from django.test import override_settings
+from django.utils import timezone
 from django.urls import reverse
 
 from advisory.context import build_case_context
 from advisory.models import AdvisoryGenerationJob, AdvisoryResult, AdvisoryVersion
-from advisory.workflow import generate_for_case
+from advisory.workflow import claim_next_job, enqueue_for_case, generate_for_case
+from advisory.services import generate_advisory_payload
 from diagnoses.inference import Prediction
 from diagnoses.models import DiagnosisCase
 
@@ -116,7 +122,7 @@ class AdvisoryWorkflowTests(TestCase):
         response = self.client.post(reverse("generate-advisory", args=[self.case.id]))
         self.assertEqual(response.status_code, 403)
 
-    @patch("advisory.workflow.generate_for_case")
+    @patch("advisory.workflow.enqueue_for_case")
     @patch("weather.services.capture_automatic_case_weather")
     @patch("diagnoses.views.predict")
     def test_ajax_diagnosis_automatically_captures_weather_and_generates(self, predict, capture, generate):
@@ -124,14 +130,14 @@ class AdvisoryWorkflowTests(TestCase):
             farmer=self.farmer, crop="tomato", image="cases/new.jpg", location="Nakuru",
         )
         predict.return_value = Prediction("Tomato_Early_blight", 1, .9, "model.keras")
-        generate.return_value = MagicMock(status="succeeded")
+        generate.return_value = MagicMock(status="pending")
         self.client.force_login(self.farmer)
         response = self.client.post(
             reverse("case-process", args=[pending.id]),
             HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["advisory_status"], "succeeded")
+        self.assertEqual(response.json()["advisory_status"], "pending")
         capture.assert_called_once()
         generate.assert_called_once()
         pending.refresh_from_db()
@@ -145,4 +151,80 @@ class AdvisoryWorkflowTests(TestCase):
         response = self.client.get(reverse("case-analyzing", args=[pending.id]))
         self.assertContains(response, 'headers: {"X-Requested-With": "XMLHttpRequest"}')
         self.assertContains(response, "Your advisory is ready")
-        self.assertContains(response, "document.write(await page.text())")
+        self.assertNotContains(response, "document.write")
+        self.assertContains(response, "window.location.assign")
+
+    def test_enqueue_is_idempotent_and_claim_is_atomic(self):
+        first = enqueue_for_case(self.case, self.farmer)
+        second = enqueue_for_case(self.case, self.farmer)
+        self.assertEqual(first.pk, second.pk)
+        claimed = claim_next_job()
+        self.assertEqual(claimed.pk, first.pk)
+        self.assertIsNone(claim_next_job())
+
+    def test_status_endpoint_is_owner_only(self):
+        enqueue_for_case(self.case, self.farmer)
+        self.client.force_login(self.other)
+        response = self.client.get(reverse("advisory-status", args=[self.case.id]))
+        self.assertEqual(response.status_code, 404)
+
+    @override_settings(ADVISORY_JOB_STALE_AFTER_SECONDS=60)
+    def test_stale_running_job_is_reclaimed_without_new_version(self):
+        job = enqueue_for_case(self.case, self.farmer)
+        old = timezone.now() - timedelta(minutes=2)
+        AdvisoryGenerationJob.objects.filter(pk=job.pk).update(
+            status=AdvisoryGenerationJob.Status.RUNNING, claimed_at=old
+        )
+        reclaimed = claim_next_job()
+        self.assertEqual(reclaimed.pk, job.pk)
+        self.assertEqual(reclaimed.attempt_count, 1)
+        self.assertEqual(AdvisoryVersion.objects.filter(diagnosis=self.case).count(), 1)
+
+    def test_each_language_keeps_its_own_version(self):
+        english = enqueue_for_case(self.case, self.farmer, "en")
+        swahili = enqueue_for_case(self.case, self.farmer, "sw")
+        self.assertNotEqual(english.pk, swahili.pk)
+        self.assertEqual(
+            set(AdvisoryVersion.objects.values_list("language", flat=True)),
+            {"en", "sw"},
+        )
+
+    def test_owner_status_reports_pending_stage(self):
+        enqueue_for_case(self.case, self.farmer)
+        self.client.force_login(self.farmer)
+        response = self.client.get(reverse("advisory-status", args=[self.case.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "pending")
+        self.assertEqual(response.json()["stage"], "preparing")
+
+    @patch("advisory.services.genai.Client")
+    def test_incomplete_structured_response_is_rejected(self, client):
+        response = MagicMock()
+        response.text = json.dumps({"diagnosis_summary": "Tentative.", "citations": ["chunk-1"]})
+        client.return_value.models.generate_content.return_value = response
+        with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
+            content, citations, sections = generate_advisory_payload(
+                "tomato", "Tomato_Early_blight", EVIDENCE, {}, "en"
+            )
+        self.assertIsNone(content)
+        self.assertIsNone(citations)
+        self.assertIsNone(sections)
+
+    @patch("advisory.services.genai.Client")
+    def test_unknown_citation_is_rejected(self, client):
+        payload = {
+            key: "Evidence-supported guidance."
+            for key in (
+                "diagnosis_summary", "symptoms_to_inspect", "possible_causes",
+                "immediate_actions", "prevention", "weather_context", "monitoring",
+                "treatment_considerations", "expert_consultation",
+            )
+        }
+        payload["citations"] = ["unknown"]
+        response = MagicMock(text=json.dumps(payload))
+        client.return_value.models.generate_content.return_value = response
+        with patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}):
+            result = generate_advisory_payload(
+                "tomato", "Tomato_Early_blight", EVIDENCE, {}, "en"
+            )
+        self.assertEqual(result, (None, None, None))

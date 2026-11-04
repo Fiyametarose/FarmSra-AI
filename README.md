@@ -76,6 +76,14 @@ python manage.py ingest_knowledge
 
 The generated `chroma_db/` directory is local runtime data and is not included in Git. Gemini-backed generation is optional and requires the environment variables described in `.env.example`; retrieved source material remains the evidence basis.
 
+Run the durable advisory worker in a second terminal during local development:
+
+```powershell
+.\.venv\Scripts\python.exe manage.py run_advisory_worker
+```
+
+Use `--once` to claim at most one queued or stale job and exit. Advisory requests remain in PostgreSQL when the worker or web process restarts.
+
 ## Translations and tests
 
 After editing the existing PO catalogs, compile them with the repository workflow:

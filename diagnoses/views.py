@@ -5,10 +5,11 @@ from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.utils import timezone
+from django.utils.translation import get_language
 from django.urls import reverse
 from datetime import timedelta
 
-from users.models import User
+from users.models import User, normalize_language
 from expert_reviews.models import ExpertMessage, ExpertReferral
 from expert_reviews.forms import ExpertMessageForm, RequestReviewForm
 
@@ -142,9 +143,9 @@ def process_case(request, case_id):
         if completed:
             case.refresh_from_db()
             from weather.services import capture_automatic_case_weather
-            from advisory.workflow import generate_for_case
+            from advisory.workflow import enqueue_for_case
             capture_automatic_case_weather(case)
-            generated_job = generate_for_case(case, request.user)
+            generated_job = enqueue_for_case(case, request.user)
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         case.refresh_from_db()
         latest_job = generated_job or case.advisory_jobs.order_by("-created_at").first()
@@ -169,6 +170,21 @@ def recover_case(request, case_id):
 @farmer_required
 def case_detail(request, case_id):
     case = owned_case(request, case_id)
+    advisory_language = normalize_language(get_language())
+    advisory_version = case.advisory_versions.filter(
+        language=advisory_language, status="succeeded"
+    ).order_by("-version").first()
+    latest_advisory_job = case.advisory_jobs.filter(
+        language=advisory_language
+    ).order_by("-created_at").first()
+    if (
+        case.status == DiagnosisCase.Status.COMPLETED
+        and case.predicted_class
+        and advisory_version is None
+        and latest_advisory_job is None
+    ):
+        from advisory.workflow import enqueue_for_case
+        latest_advisory_job = enqueue_for_case(case, request.user, advisory_language)
     auto_capture_window = timedelta(
         minutes=settings.CASE_WEATHER_AUTO_CAPTURE_MAX_AGE_MINUTES
     )
@@ -207,7 +223,9 @@ def case_detail(request, case_id):
             "confidence_threshold_percent": round(
                 settings.DIAGNOSIS_CONFIDENCE_THRESHOLD * 100, 1
             ),
-            "latest_advisory_job": case.advisory_jobs.order_by("-created_at").first(),
+            "advisory_version": advisory_version,
+            "advisory_versions": case.advisory_versions.filter(status="succeeded"),
+            "latest_advisory_job": latest_advisory_job,
         },
     )
 
@@ -244,7 +262,9 @@ def case_image(request, case_id):
 @farmer_required
 def case_guidance(request, case_id):
     case = owned_case(request, case_id)
-    advisory = getattr(case, "advisory", None)
+    advisory = case.advisory_versions.filter(
+        language=normalize_language(get_language()), status="succeeded"
+    ).order_by("-version").first()
     return render(
         request,
         "diagnoses/guidance.html",

@@ -225,7 +225,7 @@ Return only valid JSON.
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 temperature=0.2,
-                max_output_tokens=600,
+                max_output_tokens=settings.GEMINI_ADVISORY_MAX_OUTPUT_TOKENS,
             )
         )
         try:
@@ -243,7 +243,7 @@ Return only valid JSON.
                 data[new] = data[old]
         for field in section_keys:
             val = data.get(field)
-            if val is not None and not isinstance(val, str):
+            if not isinstance(val, str) or not val.strip():
                 logger.error(f"Malformed JSON type for {field}.")
                 return None, None, None
 
@@ -267,7 +267,7 @@ Return only valid JSON.
             "sw": "Taarifa za kesi na ushahidi ulioidhinishwa hazitoshi kutoa mwongozo zaidi kwa sehemu hii.",
             "am": "ያለው የጉዳይ መረጃ እና የተፈቀደው ማስረጃ ለዚህ ክፍል ተጨማሪ መመሪያ ለመስጠት በቂ አይደለም።",
         }[language]
-        sections = {key: data.get(key) or missing_text for key in section_keys}
+        sections = {key: data[key].strip() for key in section_keys}
         return format_advisory(sections, citations, language), citations, sections
     except Exception as e:
         logger.error(f"Gemini generation failed: {e}")

@@ -1,7 +1,10 @@
 import hashlib
 import json
+from datetime import timedelta
 
+from django.conf import settings
 from django.db import transaction
+from django.db import models
 from django.db.models import Max
 from django.utils import timezone
 
@@ -96,43 +99,73 @@ def _safe_kind(case):
     return None
 
 
-def generate_for_case(case, farmer, language=None, retrieve_func=None, generate_func=None):
-    retrieve_func = retrieve_func or retrieve_evidence
-    generate_func = generate_func or generate_advisory_payload
+def enqueue_for_case(case, farmer, language=None):
     language = normalize_language(language or farmer.preferred_language)
     context = build_case_context(farmer, case)
     key = _context_key(case, language, context)
-    now = timezone.now()
-
     with transaction.atomic():
         type(case).objects.select_for_update().get(pk=case.pk)
         job = AdvisoryGenerationJob.objects.select_for_update().filter(idempotency_key=key).first()
-        if job and job.status == AdvisoryGenerationJob.Status.SUCCEEDED:
-            return job
-        if job and job.status == AdvisoryGenerationJob.Status.RUNNING:
+        if job and job.status != AdvisoryGenerationJob.Status.FAILED:
             return job
         if job is None:
             number = (AdvisoryVersion.objects.filter(diagnosis=case).aggregate(Max("version"))["version__max"] or 0) + 1
             version = AdvisoryVersion.objects.create(
                 diagnosis=case, version=number, language=language,
-                status=AdvisoryVersion.Status.RUNNING, context_snapshot=context, started_at=now,
+                status=AdvisoryVersion.Status.PENDING, context_snapshot=context,
             )
             job = AdvisoryGenerationJob.objects.create(
                 diagnosis=case, idempotency_key=key, language=language,
-                status=AdvisoryGenerationJob.Status.RUNNING, advisory_version=version,
-                started_at=now,
+                status=AdvisoryGenerationJob.Status.PENDING, advisory_version=version,
             )
         else:
             version = job.advisory_version
-            job.status = AdvisoryGenerationJob.Status.RUNNING
+            job.status = AdvisoryGenerationJob.Status.PENDING
+            job.stage = "preparing"
             job.error_code = job.error_message = ""
-            job.started_at = now
+            job.claimed_at = job.started_at = None
             job.completed_at = None
-            job.save(update_fields=["status", "error_code", "error_message", "started_at", "completed_at"])
-            version.status = AdvisoryVersion.Status.RUNNING
-            version.started_at = now
+            job.save(update_fields=["status", "stage", "error_code", "error_message", "claimed_at", "started_at", "completed_at"])
+            version.status = AdvisoryVersion.Status.PENDING
+            version.started_at = None
             version.completed_at = None
             version.save(update_fields=["status", "started_at", "completed_at"])
+    return job
+
+
+def claim_next_job():
+    stale = timezone.now() - timedelta(seconds=settings.ADVISORY_JOB_STALE_AFTER_SECONDS)
+    with transaction.atomic():
+        job = (
+            AdvisoryGenerationJob.objects.select_for_update(skip_locked=True)
+            .filter(status__in=[AdvisoryGenerationJob.Status.PENDING, AdvisoryGenerationJob.Status.RUNNING])
+            .filter(models.Q(status=AdvisoryGenerationJob.Status.PENDING) | models.Q(claimed_at__lte=stale))
+            .order_by("created_at").first()
+        )
+        if not job:
+            return None
+        now = timezone.now()
+        job.status = job.Status.RUNNING
+        job.stage = "retrieving"
+        job.claimed_at = job.started_at = now
+        job.attempt_count += 1
+        job.error_code = job.error_message = ""
+        job.save(update_fields=["status", "stage", "claimed_at", "started_at", "attempt_count", "error_code", "error_message"])
+        AdvisoryVersion.objects.filter(pk=job.advisory_version_id).update(
+            status=AdvisoryVersion.Status.RUNNING, started_at=now, completed_at=None
+        )
+        return job
+
+
+def execute_job(job, retrieve_func=None, generate_func=None):
+    retrieve_func = retrieve_func or retrieve_evidence
+    generate_func = generate_func or generate_advisory_payload
+    job.refresh_from_db()
+    claim_time = job.claimed_at
+    case = job.diagnosis
+    language = job.language
+    version = job.advisory_version
+    context = version.context_snapshot
 
     kind = _safe_kind(case)
     sources = []
@@ -158,6 +191,7 @@ def generate_for_case(case, farmer, language=None, retrieve_func=None, generate_
             case.crop, case.predicted_class, query_texts=retrieval_query_texts(context)
         )
         if evidence:
+            AdvisoryGenerationJob.objects.filter(pk=job.pk, status=job.Status.RUNNING).update(stage="generating")
             content, citations, sections = generate_func(
                 case.crop, case.predicted_class, evidence, context, language
             )
@@ -174,6 +208,8 @@ def generate_for_case(case, farmer, language=None, retrieve_func=None, generate_
     with transaction.atomic():
         version = AdvisoryVersion.objects.select_for_update().get(pk=version.pk)
         job = AdvisoryGenerationJob.objects.select_for_update().get(pk=job.pk)
+        if job.status != job.Status.RUNNING or job.claimed_at != claim_time:
+            return job
         if content:
             version.status = AdvisoryVersion.Status.SUCCEEDED
             version.is_generated = is_generated
@@ -188,13 +224,28 @@ def generate_for_case(case, farmer, language=None, retrieve_func=None, generate_
                 defaults={"is_generated": is_generated, "content": content, "retrieved_sources": sources},
             )
             job.status = AdvisoryGenerationJob.Status.SUCCEEDED
+            job.stage = "ready"
         else:
             version.status = AdvisoryVersion.Status.FAILED
             version.completed_at = finished
             version.save(update_fields=["status", "completed_at"])
             job.status = AdvisoryGenerationJob.Status.FAILED
+            job.stage = "unavailable"
             job.error_code = error_code
             job.error_message = error_message[:300]
         job.completed_at = finished
         job.save()
+    return job
+
+
+def generate_for_case(case, farmer, language=None, retrieve_func=None, generate_func=None):
+    """Compatibility helper for synchronous tests and administrative callers."""
+    job = enqueue_for_case(case, farmer, language)
+    if job.status in {job.Status.PENDING, job.Status.FAILED}:
+        now = timezone.now()
+        AdvisoryGenerationJob.objects.filter(pk=job.pk).update(
+            status=job.Status.RUNNING, claimed_at=now, started_at=now,
+            stage="retrieving", attempt_count=models.F("attempt_count") + 1,
+        )
+        return execute_job(job, retrieve_func, generate_func)
     return job

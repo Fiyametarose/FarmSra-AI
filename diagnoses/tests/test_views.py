@@ -100,7 +100,7 @@ class DiagnosisWorkflowTests(TestCase):
             f"{reverse('login')}?next={reverse('case-image', args=[case.id])}",
         )
 
-    @patch("advisory.workflow.generate_for_case")
+    @patch("advisory.workflow.enqueue_for_case")
     @patch("weather.services.capture_automatic_case_weather")
     @patch("diagnoses.views.predict")
     def test_successful_result_persists_and_appears_in_history(

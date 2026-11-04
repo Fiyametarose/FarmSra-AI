@@ -192,23 +192,23 @@
               <span style="font-size: 0.82rem; color: var(--muted);">{% trans "Grounded evidence retrieved from regional research literature" %}</span>
             </div>
           </div>
-          {% if case.advisory %}
+          {% if advisory_version %}
             <a href="{% url 'case-guidance' case.id %}" class="button button-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
               {% trans "Full Guidance View" %} →
             </a>
           {% endif %}
         </div>
 
-        {% if case.advisory %}
-          <div style="background: var(--surface-alt); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); font-size: 0.95rem; line-height: 1.65; color: var(--text); white-space: pre-wrap; margin-bottom: 1.5rem;">{{ case.advisory.content }}</div>
+        {% if advisory_version %}
+          <div style="background: var(--surface-alt); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); font-size: 0.95rem; line-height: 1.65; color: var(--text); white-space: pre-wrap; margin-bottom: 1.5rem;">{{ advisory_version.content }}</div>
 
-          {% if case.advisory.retrieved_sources %}
+          {% if advisory_version.source_references %}
             <div style="padding-top: 1rem; border-top: 1px solid var(--border);">
               <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 0.75rem 0; color: var(--text);">
                 {% trans "Retrieved Research Citations & Sources" %}
               </h3>
               <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                {% for source in case.advisory.retrieved_sources %}
+                {% for source in advisory_version.source_references %}
                   <div style="font-size: 0.85rem; background: var(--surface); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border);">
                     <div style="font-weight: 600; color: var(--text); margin-bottom: 0.25rem;">
                       {{ source.title }}
@@ -369,13 +369,10 @@
 {% endblock %}
 
 {% block scripts %}
-  {% if weather_auto_capture_eligible and not case.weather_context and case.location or case.status == 'completed' and case.predicted_class and not case.advisory %}
+  {% if weather_auto_capture_eligible and not case.weather_context and case.location or case.status == 'completed' and case.predicted_class and not advisory_version %}
     <script>
       window.addEventListener("load", async () => {
         const weatherKey = "weather-capture-{{ case.id }}";
-        {% if case.status == 'completed' and case.predicted_class and not case.advisory %}
-        const advisoryKey = "advisory-auto-{{ case.id }}";
-        {% endif %}
         {% if weather_auto_capture_eligible and not case.weather_context and case.location %}
         if (!sessionStorage.getItem(weatherKey)) {
           sessionStorage.setItem(weatherKey, "attempted");
@@ -384,25 +381,22 @@
           return;
         }
         {% endif %}
-        {% if case.status == 'completed' and case.predicted_class and not case.advisory %}
-        if (!sessionStorage.getItem(advisoryKey)) {
-          sessionStorage.setItem(advisoryKey, "attempted");
-          const form = document.getElementById("case-advisory-form");
-          document.getElementById("advisory-progress").textContent = "{% trans 'Generating your agricultural advisory...' %}";
-          const response = await fetch(form.action, {
-            method: "POST", body: new FormData(form),
-            headers: {"X-Requested-With": "XMLHttpRequest"}
-          });
-          if (response.ok) {
-            const result = await response.json();
-            const page = await fetch(result.detail_url);
-            document.open();
-            document.write(await page.text());
-            document.close();
-          } else {
-            document.getElementById("advisory-progress").textContent = "{% trans 'Advisory generation failed. Use the retry button.' %}";
-          }
-        }
+        {% if case.status == 'completed' and case.predicted_class and not advisory_version %}
+        const labels = {
+          preparing: "{% trans 'Preparing advisory.' %}",
+          retrieving: "{% trans 'Retrieving agricultural evidence.' %}",
+          generating: "{% trans 'Generating recommendations.' %}",
+          unavailable: "{% trans 'Advisory unavailable. Retry available.' %}"
+        };
+        const poll = async () => {
+          const response = await fetch("{% url 'advisory-status' case.id %}", {headers: {"X-Requested-With": "XMLHttpRequest"}});
+          if (!response.ok) return;
+          const result = await response.json();
+          document.getElementById("advisory-progress").textContent = result.error || labels[result.stage] || labels.preparing;
+          if (result.status === "succeeded") window.location.reload();
+          else if (result.status !== "failed") window.setTimeout(poll, 2000);
+        };
+        poll();
         {% endif %}
       });
     </script>
