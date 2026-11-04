@@ -273,7 +273,8 @@ class KnowledgeDocumentVersion(models.Model):
 class AIChatSession(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     case = models.OneToOneField(
-        DiagnosisCase, on_delete=models.CASCADE, related_name="ai_chat_session"
+        DiagnosisCase, null=True, blank=True, on_delete=models.CASCADE,
+        related_name="ai_chat_session"
     )
     farmer = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ai_chat_sessions"
@@ -281,8 +282,16 @@ class AIChatSession(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["farmer"], condition=models.Q(case__isnull=True),
+                name="advisory_one_general_chat_per_farmer",
+            )
+        ]
+
     def __str__(self):
-        return f"AI chat for {self.case}"
+        return f"AI chat for {self.case or self.farmer}"
 
 
 class AIChatMessage(models.Model):

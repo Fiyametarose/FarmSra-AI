@@ -9,12 +9,12 @@ from django.contrib import messages
 from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import get_language, gettext as _
-from django.views.decorators.http import require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from diagnoses.models import DiagnosisCase
 from users.models import normalize_language
 from users.views import farmer_required
 from . import chat, library
-from .forms import ChatQuestionForm
+from .forms import ChatQuestionForm, GlobalChatForm
 from .models import AIChatMessage, AIChatSession
 
 @login_required
@@ -132,6 +132,113 @@ def _send_question(request, case, question, token, language):
         )
         session.save(update_fields=["updated_at"])
     return None
+
+
+def _message_data(message):
+    return {
+        "id": message.id, "role": message.role, "kind": message.kind,
+        "content": message.content, "language": message.language,
+        "sources": message.sources, "created_at": message.created_at.isoformat(),
+    }
+
+
+def _session_data(session):
+    return {
+        "id": str(session.id),
+        "case_id": str(session.case_id) if session.case_id else None,
+        "messages": [_message_data(item) for item in session.messages.all()],
+    }
+
+
+@farmer_required
+@require_GET
+def global_chat_state(request):
+    if request.user.is_staff or request.user.is_superuser:
+        raise PermissionDenied
+    general, _created = AIChatSession.objects.get_or_create(
+        farmer=request.user, case=None
+    )
+    sessions = AIChatSession.objects.filter(farmer=request.user).select_related("case")
+    return JsonResponse({
+        "general_session": str(general.id),
+        "sessions": [_session_data(item) for item in sessions],
+        "cases": [
+            {
+                "id": str(case.id), "reference": case.reference,
+                "crop": case.crop, "crop_label": case.get_crop_display(),
+                "prediction": case.display_prediction,
+            }
+            for case in request.user.diagnosis_cases.filter(
+                status=DiagnosisCase.Status.COMPLETED
+            ).order_by("-created_at")[:30]
+        ],
+    })
+
+
+@farmer_required
+@require_POST
+def global_chat_send(request):
+    if request.user.is_staff or request.user.is_superuser:
+        raise PermissionDenied
+    form = GlobalChatForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse({"error": _("Check the question and selected crop or case.")}, status=400)
+    case_id = form.cleaned_data.get("case")
+    case = None
+    crop = form.cleaned_data.get("crop")
+    if case_id:
+        case = get_object_or_404(
+            DiagnosisCase, id=case_id, farmer=request.user,
+            status=DiagnosisCase.Status.COMPLETED,
+        )
+        crop = case.crop
+    elif not crop:
+        return JsonResponse({"error": _("Select tomato, potato or maize for a general question.")}, status=400)
+
+    with transaction.atomic():
+        session, _created = AIChatSession.objects.get_or_create(
+            farmer=request.user, case=case
+        )
+        session = AIChatSession.objects.select_for_update().get(
+            pk=session.pk, farmer=request.user
+        )
+        token = form.cleaned_data["token"]
+        existing = session.messages.filter(client_token=token).first()
+        if existing:
+            return JsonResponse({"duplicate": True, "session": _session_data(session)})
+        if session.messages.filter(role=AIChatMessage.Role.FARMER).count() >= chat.MAX_QUESTIONS_PER_CASE:
+            return JsonResponse({"error": _("This conversation has reached its question limit.")}, status=429)
+        recent = AIChatMessage.objects.filter(
+            session__farmer=request.user, role=AIChatMessage.Role.FARMER,
+            created_at__gte=timezone.now() - timedelta(hours=1),
+        ).count()
+        if recent >= chat.MAX_QUESTIONS_PER_HOUR:
+            return JsonResponse({"error": _("Too many questions in the last hour. Please try again later.")}, status=429)
+        history = list(session.messages.order_by("-created_at", "-id")[:20])[::-1]
+        question = form.cleaned_data["question"]
+        language = normalize_language(get_language())
+        AIChatMessage.objects.create(
+            session=session, role=AIChatMessage.Role.FARMER,
+            kind=AIChatMessage.Kind.QUESTION, content=question,
+            language=language, client_token=token,
+        )
+
+    try:
+        kind, content, sources = chat.reply_to_question(
+            request.user, case, question, language, history, crop=crop
+        )
+    except chat.ChatUnavailable as exc:
+        session.messages.filter(client_token=token).delete()
+        return JsonResponse({"error": str(exc), "retry": True}, status=503)
+    except Exception:
+        session.messages.filter(client_token=token).delete()
+        raise
+    AIChatMessage.objects.create(
+        session=session, role=AIChatMessage.Role.ASSISTANT, kind=kind,
+        content=content, language=language, sources=sources,
+    )
+    session.save(update_fields=["updated_at"])
+    return JsonResponse({"session": _session_data(session)})
 
 
 @farmer_required

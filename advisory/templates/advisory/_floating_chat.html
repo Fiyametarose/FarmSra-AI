@@ -1,0 +1,118 @@
+{% load i18n %}
+<div class="floating-chat" id="floatingChat">
+  <button class="floating-chat-launcher" id="floatingChatLauncher" type="button"
+          aria-controls="floatingChatPanel" aria-expanded="false">
+    <span aria-hidden="true">AI</span><span class="sr-only">{% trans "Open agricultural assistant" %}</span>
+  </button>
+  <section class="floating-chat-panel" id="floatingChatPanel" hidden
+           aria-label="{% trans 'Agricultural assistant' %}" aria-live="polite">
+    <header class="floating-chat-header">
+      <div><strong>{% trans "FarmSra Assistant" %}</strong><small>{% trans "Answers use approved agricultural sources" %}</small></div>
+      <button id="floatingChatClose" type="button" aria-label="{% trans 'Close agricultural assistant' %}">×</button>
+    </header>
+    <div class="floating-chat-controls">
+      <label for="floatingChatScope">{% trans "Conversation" %}</label>
+      <select id="floatingChatScope"><option value="general">{% trans "General crop question" %}</option></select>
+      <label for="floatingChatCrop" id="floatingChatCropLabel">{% trans "Crop" %}</label>
+      <select id="floatingChatCrop">
+        <option value="tomato">{% trans "Tomato" %}</option>
+        <option value="potato">{% trans "Potato" %}</option>
+        <option value="maize">{% trans "Maize" %}</option>
+      </select>
+    </div>
+    <div class="floating-chat-messages" id="floatingChatMessages" tabindex="0"></div>
+    <div class="floating-chat-error" id="floatingChatError" role="alert" hidden></div>
+    <form id="floatingChatForm" action="{% url 'global-chat-send' %}" method="post">
+      {% csrf_token %}
+      <textarea name="question" maxlength="500" rows="2" required
+                aria-label="{% trans 'Your agricultural question' %}"
+                placeholder="{% trans 'Ask about tomato, potato or maize…' %}"></textarea>
+      <input name="token" type="hidden">
+      <button type="submit">{% trans "Send" %}</button>
+      <span id="floatingChatLoading" role="status" hidden>{% trans "Finding approved evidence…" %}</span>
+    </form>
+  </section>
+</div>
+<script>
+(() => {
+  const root = document.getElementById("floatingChat");
+  const launcher = document.getElementById("floatingChatLauncher");
+  const panel = document.getElementById("floatingChatPanel");
+  const close = document.getElementById("floatingChatClose");
+  const scope = document.getElementById("floatingChatScope");
+  const crop = document.getElementById("floatingChatCrop");
+  const cropLabel = document.getElementById("floatingChatCropLabel");
+  const messages = document.getElementById("floatingChatMessages");
+  const form = document.getElementById("floatingChatForm");
+  const error = document.getElementById("floatingChatError");
+  const loading = document.getElementById("floatingChatLoading");
+  let state = null;
+  let retryQuestion = "";
+
+  const escape = (value) => { const node = document.createElement("div"); node.textContent = value || ""; return node.innerHTML; };
+  const selectedSession = () => state?.sessions.find(item => item.id === scope.value || (scope.value === "general" && item.case_id === null));
+  const render = () => {
+    const session = selectedSession();
+    messages.innerHTML = session?.messages.length ? session.messages.map(item =>
+      `<article class="floating-chat-message ${item.role}"><small>${item.role === "farmer" ? "{% trans 'You' %}" : "{% trans 'AI Assistant' %}"} · ${escape(item.language.toUpperCase())}</small><div>${escape(item.content)}</div>${item.sources?.length ? `<ul>${item.sources.map(source => `<li>${escape(source.title)}${source.publisher ? ` — ${escape(source.publisher)}` : ""}</li>`).join("")}</ul>` : ""}</article>`
+    ).join("") : `<p class="floating-chat-empty">{% trans "Ask your first agricultural question." %}</p>`;
+    messages.scrollTop = messages.scrollHeight;
+    const general = scope.value === "general";
+    crop.hidden = cropLabel.hidden = !general;
+    localStorage.setItem("farmsra-chat-session", scope.value);
+  };
+  const load = async () => {
+    try {
+      const response = await fetch("{% url 'global-chat-state' %}", {headers: {"X-Requested-With": "XMLHttpRequest"}});
+      if (!response.ok) throw new Error();
+      state = await response.json();
+      state.cases.forEach(item => {
+        const session = state.sessions.find(entry => entry.case_id === item.id);
+        const option = document.createElement("option");
+        option.value = session?.id || `case:${item.id}`;
+        option.dataset.case = item.id;
+        option.textContent = `${item.crop_label} · ${item.reference} · ${item.prediction}`;
+        scope.appendChild(option);
+      });
+      const saved = localStorage.getItem("farmsra-chat-session");
+      if ([...scope.options].some(item => item.value === saved)) scope.value = saved;
+      render();
+    } catch (_) {
+      error.textContent = "{% trans 'The assistant could not load. Close and try again.' %}"; error.hidden = false;
+    }
+  };
+  const setOpen = open => {
+    panel.hidden = !open; launcher.setAttribute("aria-expanded", String(open));
+    localStorage.setItem("farmsra-chat-open", open ? "1" : "0");
+    if (open) { if (!state) load(); setTimeout(() => form.elements.question.focus(), 0); }
+    else launcher.focus();
+  };
+  launcher.addEventListener("click", () => setOpen(panel.hidden));
+  close.addEventListener("click", () => setOpen(false));
+  scope.addEventListener("change", render);
+  document.addEventListener("keydown", event => { if (event.key === "Escape" && !panel.hidden) setOpen(false); });
+  form.addEventListener("submit", async event => {
+    event.preventDefault(); if (form.dataset.busy === "1") return;
+    form.dataset.busy = "1"; loading.hidden = false; error.hidden = true;
+    const data = new FormData(form); const option = scope.selectedOptions[0];
+    data.set("token", crypto.randomUUID());
+    if (scope.value === "general") data.set("crop", crop.value);
+    else data.set("case", option.dataset.case);
+    retryQuestion = data.get("question");
+    try {
+      const response = await fetch(form.action, {method: "POST", body: data, headers: {"X-Requested-With": "XMLHttpRequest"}});
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "{% trans 'The assistant is unavailable. Retry your question.' %}");
+      const index = state.sessions.findIndex(item => item.id === result.session.id);
+      if (index >= 0) state.sessions[index] = result.session; else state.sessions.push(result.session);
+      if (result.session.case_id) { option.value = result.session.id; scope.value = result.session.id; }
+      else scope.value = "general";
+      form.reset(); render();
+    } catch (problem) {
+      form.elements.question.value = retryQuestion;
+      error.textContent = problem.message; error.hidden = false;
+    } finally { form.dataset.busy = "0"; loading.hidden = true; }
+  });
+  if (localStorage.getItem("farmsra-chat-open") === "1") setOpen(true);
+})();
+</script>

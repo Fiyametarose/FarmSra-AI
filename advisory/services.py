@@ -13,19 +13,16 @@ def get_chroma_collection():
     client = chromadb.PersistentClient(path=str(settings.CHROMA_DB_DIR))
     return client.get_or_create_collection(name="agricultural_advisory")
 
-def retrieve_evidence(crop, condition, query_texts=None, n_results=3, part_chars=60):
+def retrieve_evidence(crop, condition=None, query_texts=None, n_results=3, part_chars=60):
     try:
         collection = get_chroma_collection()
     except Exception as e:
         logger.error(f"Chroma DB infrastructure failure: {e}")
         return None
 
-    where_filter = {
-        "$and": [
-            {"crop": {"$eq": crop}},
-            {"condition": {"$eq": condition}}
-        ]
-    }
+    where_filter = {"crop": {"$eq": crop}}
+    if condition:
+        where_filter = {"$and": [where_filter, {"condition": {"$eq": condition}}]}
 
     query_string = (
         " ".join(str(part).strip()[:part_chars] for part in query_texts)

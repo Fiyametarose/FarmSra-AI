@@ -4,6 +4,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from .chat import MAX_QUESTION_CHARS
+from diagnoses.models import DiagnosisCase
 
 
 class ChatQuestionForm(forms.Form):
@@ -19,3 +20,9 @@ class ChatQuestionForm(forms.Form):
         }),
     )
     token = forms.UUIDField(widget=forms.HiddenInput, initial=uuid.uuid4)
+
+
+class GlobalChatForm(ChatQuestionForm):
+    session = forms.UUIDField(required=False)
+    case = forms.UUIDField(required=False)
+    crop = forms.ChoiceField(choices=DiagnosisCase.Crop.choices, required=False)
