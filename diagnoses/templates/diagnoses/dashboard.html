@@ -199,18 +199,16 @@
 
       <!-- Weather Widget Card -->
       <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 0.5rem;">
           <h2 style="font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--text);">{% trans "Local Weather" %}</h2>
-          <span style="font-size: 0.78rem; color: var(--muted); font-weight: 500;">Open-Meteo</span>
-        </div>
-        <div id="weather-container">
-          <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
-            {% trans "Weather context helps assess fungal and pest risks for your registered crops." %}
-          </p>
-          <button class="button button-primary" onclick="loadWeather()" id="load-weather-btn" style="width: 100%; padding: 0.65rem; font-size: 0.88rem; font-weight: 600;">
-            🌤 {% trans "Check Weather Forecast" %}
+          <button class="button button-outline button-small" onclick="refreshWeather()" id="load-weather-btn" type="button" style="font-size: 0.8rem;">
+            ↻ {% trans "Refresh" %}
           </button>
         </div>
+        <div id="weather-container" aria-live="polite">
+          <p style="font-size: 0.85rem; color: var(--muted);">{% trans "Loading weather..." %}</p>
+        </div>
+        <span style="font-size: 0.72rem; color: var(--muted);">Open-Meteo</span>
       </section>
 
       <!-- Detailed Guidance RAG Card -->
@@ -248,6 +246,26 @@
 
 {% block scripts %}
 <script>
+  const weatherUrl = '{% url "weather:widget" %}';
+  const weatherCsrf = '{{ csrf_token }}';
+  const weatherText = {
+    loading: '{% trans "Loading weather..." %}',
+    failed: '{% trans "Weather could not be loaded. Check your connection and try again." %}',
+    gpsUnsupported: '{% trans "This browser does not support device location. Search for a town instead." %}',
+    gpsDenied: '{% trans "Device location was not shared. Search for a town instead." %}',
+    gpsName: '{% trans "Device location" %}',
+    searching: '{% trans "Searching..." %}',
+  };
+
+  function showWeatherMessage(text) {
+    const container = document.getElementById('weather-container');
+    container.textContent = '';
+    const p = document.createElement('p');
+    p.style.cssText = 'font-size: 0.85rem; color: var(--muted);';
+    p.textContent = text;
+    container.appendChild(p);
+  }
+
   function renderWeatherHTML(html) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -258,57 +276,77 @@
     });
   }
 
-  function loadWeather() {
+  function requestWeather(url, options) {
     const btn = document.getElementById('load-weather-btn');
-    if (btn) {
-      btn.disabled = true;
-      btn.innerText = '{% trans "Loading..." %}';
-    } else {
-      document.getElementById('weather-container').innerHTML = '<p>{% trans "Loading..." %}</p>';
-    }
-
-    fetch('{% url "weather:widget" %}')
+    if (btn) btn.disabled = true;
+    return fetch(url, Object.assign({credentials: 'same-origin'}, options))
       .then(response => {
         if (!response.ok) throw new Error('Network error');
         return response.text();
       })
       .then(html => renderWeatherHTML(html))
-      .catch(err => {
-        if (btn) {
-          btn.disabled = false;
-          btn.innerText = '🌤 {% trans "Check Weather" %}';
-        }
-        alert('{% trans "Failed to load weather." %}');
-      });
+      .catch(() => showWeatherMessage(weatherText.failed))
+      .finally(() => { if (btn) btn.disabled = false; });
+  }
+
+  function postWeatherLocation(lat, lon, name, source) {
+    showWeatherMessage(weatherText.loading);
+    const body = new URLSearchParams({lat: lat, lon: lon, name: name, source: source});
+    return requestWeather(weatherUrl, {
+      method: 'POST',
+      headers: {'X-CSRFToken': weatherCsrf, 'Content-Type': 'application/x-www-form-urlencoded'},
+      body: body,
+    });
+  }
+
+  // Loads the saved selection or the farm profile location; never asks for GPS.
+  function loadWeather() {
+    showWeatherMessage(weatherText.loading);
+    return requestWeather(weatherUrl);
+  }
+
+  function refreshWeather() {
+    const widget = document.getElementById('weather-widget');
+    if (!widget || !widget.dataset.lat) {
+      return loadWeather();
+    }
+    const params = new URLSearchParams({
+      lat: widget.dataset.lat, lon: widget.dataset.lon, name: widget.dataset.name,
+      source: widget.dataset.source, refresh: '1',
+    });
+    showWeatherMessage(weatherText.loading);
+    return requestWeather(weatherUrl + '?' + params.toString());
+  }
+
+  function useDeviceLocation() {
+    if (!navigator.geolocation) {
+      showWeatherMessage(weatherText.gpsUnsupported);
+      return;
+    }
+    showWeatherMessage(weatherText.loading);
+    navigator.geolocation.getCurrentPosition(
+      position => postWeatherLocation(position.coords.latitude, position.coords.longitude, weatherText.gpsName, 'device_gps'),
+      () => showWeatherMessage(weatherText.gpsDenied),
+      {timeout: 15000, maximumAge: 300000}
+    );
   }
 
   function fetchWeatherManual() {
-    const container = document.getElementById('weather-container');
-    container.innerHTML = '<p>{% trans "Loading..." %}</p>';
-    fetch('{% url "weather:widget" %}?search=')
-        .then(res => res.text())
-        .then(html => renderWeatherHTML(html))
-        .catch(err => container.innerHTML = '<p>{% trans "Failed to load weather." %}</p>');
+    showWeatherMessage(weatherText.loading);
+    requestWeather(weatherUrl + '?search=');
   }
 
   function searchWeather() {
     const term = document.getElementById('weather-search-input').value;
     if (!term) return;
-    const container = document.getElementById('weather-container');
-    container.innerHTML = '<p>{% trans "Searching..." %}</p>';
-    fetch(`{% url 'weather:widget' %}?search=${encodeURIComponent(term)}`)
-        .then(res => res.text())
-        .then(html => renderWeatherHTML(html))
-        .catch(err => container.innerHTML = '<p>{% trans "Failed to search." %}</p>');
+    showWeatherMessage(weatherText.searching);
+    requestWeather(weatherUrl + '?search=' + encodeURIComponent(term));
   }
 
   function fetchWeatherCoords(lat, lon, name) {
-    const container = document.getElementById('weather-container');
-    container.innerHTML = '<p>{% trans "Loading..." %}</p>';
-    fetch(`{% url 'weather:widget' %}?lat=${lat}&lon=${lon}&name=${encodeURIComponent(name)}`)
-        .then(res => res.text())
-        .then(html => renderWeatherHTML(html))
-        .catch(err => container.innerHTML = '<p>{% trans "Failed to load weather." %}</p>');
+    postWeatherLocation(lat, lon, name, 'selected');
   }
+
+  document.addEventListener('DOMContentLoaded', () => loadWeather());
 </script>
 {% endblock %}

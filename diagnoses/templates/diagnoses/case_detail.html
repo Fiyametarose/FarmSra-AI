@@ -78,6 +78,19 @@
             {% trans "This is a later current-weather lookup, not weather recorded at the original diagnosis time." %}
           </p>
         {% endif %}
+        <p style="font-size: 0.78rem; color: var(--muted); margin: 0 0 1rem;">
+          {% blocktrans with age=case.weather_context.observed_at|timesince %}Latest saved observation was taken {{ age }} ago. Weather is shown only from observations recorded for this case; it is not refreshed automatically and is supporting context, not proof of disease.{% endblocktrans %}
+        </p>
+        {% if weather_snapshots|length > 1 %}
+          <details style="margin: 0 0 1rem;">
+            <summary style="cursor: pointer; font-weight: 700; font-size: 0.88rem;">{% trans "Weather observation history" %}</summary>
+            <ul style="margin: 0.5rem 0 0; padding-left: 1.2rem; font-size: 0.82rem;">
+              {% for item in weather_snapshots %}
+                <li>{{ item.observed_at|date:"d M Y, H:i" }} · {{ item.location_name }} · {{ item.temperature|default_if_none:"—" }}°C · {{ item.humidity|default_if_none:"—" }}% · {{ item.precipitation|default_if_none:"—" }} mm · {{ item.condition }}</li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% endif %}
       {% else %}
         <p style="font-size: 0.88rem; color: var(--muted);">
           {% if weather_auto_capture_eligible %}

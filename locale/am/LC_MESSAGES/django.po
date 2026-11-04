@@ -2339,3 +2339,80 @@ msgstr "የምልከታ ጊዜ ወደፊት መሆን አይችልም።"
 
 msgid "Add symptoms, a photograph, notes, or actions taken."
 msgstr "ምልክቶችን፣ ፎቶን፣ ማስታወሻን ወይም የተወሰዱ እርምጃዎችን ያክሉ።"
+
+msgid "Device location"
+msgstr "የመሣሪያ አካባቢ"
+
+msgid "Refresh"
+msgstr "አድስ"
+
+msgid "Device location was not shared. Search for a town instead."
+msgstr "የመሣሪያ አካባቢ አልተጋራም። በምትኩ ከተማ ይፈልጉ።"
+
+msgid "Weather is currently unavailable from the provider for"
+msgstr "የአየር ሁኔታ በአሁኑ ጊዜ ከአቅራቢው አይገኝም፦"
+
+msgid "Location source"
+msgstr "የአካባቢ ምንጭ"
+
+msgid "No forecast is available."
+msgstr "ምንም ትንበያ አይገኝም።"
+
+msgid "Loading weather..."
+msgstr "የአየር ሁኔታ በመጫን ላይ..."
+
+msgid "No earlier observation is available to show."
+msgstr "የሚታይ የቀድሞ ምልከታ የለም።"
+
+msgid "Weather could not be loaded. Check your connection and try again."
+msgstr "የአየር ሁኔታን መጫን አልተቻለም። ግንኙነትዎን ያረጋግጡ እና እንደገና ይሞክሩ።"
+
+msgid "Your browser will ask for permission only after you press this button."
+msgstr "አሳሽዎ ፈቃድ የሚጠይቀው ይህን ቁልፍ ከተጫኑ በኋላ ብቻ ነው።"
+
+msgid "Weather observation history"
+msgstr "የአየር ሁኔታ ምልከታ ታሪክ"
+
+msgid "Farm profile (approximate town-level location)"
+msgstr "የእርሻ መገለጫ (በከተማ ደረጃ ግምታዊ አካባቢ)"
+
+msgid "Change location"
+msgstr "አካባቢ ቀይር"
+
+msgid "Use my current location"
+msgstr "አሁን ያለሁበትን አካባቢ ተጠቀም"
+
+msgid "Try again"
+msgstr "እንደገና ሞክር"
+
+msgid "Last successful update"
+msgstr "መጨረሻ የተሳካ ዝመና"
+
+msgid "Selected location"
+msgstr "የተመረጠ አካባቢ"
+
+msgid ""
+"This browser does not support device location. Search for a town instead."
+msgstr "ይህ አሳሽ የመሣሪያ አካባቢን አይደግፍም። በምትኩ ከተማ ይፈልጉ።"
+
+msgid ""
+"No farm location is saved on your profile. Search for a town or use your "
+"device location to see local weather."
+msgstr ""
+"በመገለጫዎ ላይ የእርሻ አካባቢ አልተቀመጠም። የአካባቢ የአየር ሁኔታን ለማየት ከተማ ይፈልጉ ወይም የመሣሪያ አካባቢን "
+"ይጠቀሙ።"
+
+msgid ""
+"Showing the last successful observation. Live weather could not be "
+"refreshed, so these values may be out of date."
+msgstr ""
+"የመጨረሻው የተሳካ ምልከታ እየታየ ነው። የቀጥታ የአየር ሁኔታን ማደስ አልተቻለም፤ ስለዚህ እነዚህ እሴቶች ያረጁ ሊሆኑ "
+"ይችላሉ።"
+
+msgid ""
+"Latest saved observation was taken %(age)s ago. Weather is shown only from "
+"observations recorded for this case; it is not refreshed automatically and "
+"is supporting context, not proof of disease."
+msgstr ""
+"የመጨረሻው የተቀመጠ ምልከታ ከ%(age)s በፊት ተወስዷል። የአየር ሁኔታው ለዚህ ጉዳይ ከተመዘገቡ ምልከታዎች ብቻ "
+"ይታያል፤ በራስ-ሰር አይታደስም፤ ደጋፊ አውድ እንጂ የበሽታ ማረጋገጫ አይደለም።"

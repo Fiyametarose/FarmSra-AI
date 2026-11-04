@@ -19,6 +19,16 @@ def request_reassessment(follow_up_id, farmer):
     the existing classification pipeline processes; otherwise only an advisory job is queued.
     Repeated requests for the same follow-up return the first outcome without new work.
     """
+    waiting = (
+        CaseFollowUp.objects.filter(
+            pk=follow_up_id, diagnosis__farmer=farmer, reassessment_requested_at__isnull=True,
+            diagnosis__parent_case__isnull=True,
+            diagnosis__status=DiagnosisCase.Status.COMPLETED,
+        ).select_related("diagnosis", "diagnosis__farmer", "diagnosis__registered_crop").first()
+    )
+    if waiting and not waiting.image:
+        from weather.services import refresh_case_weather
+        refresh_case_weather(waiting.diagnosis)
     with transaction.atomic():
         follow_up = (
             CaseFollowUp.objects.select_for_update()

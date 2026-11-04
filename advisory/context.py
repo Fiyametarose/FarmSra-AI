@@ -41,6 +41,39 @@ def _follow_up_context(root, case):
     }
 
 
+def _snapshot_id(case, weather):
+    from weather.models import WeatherSnapshot
+
+    snapshot = WeatherSnapshot.objects.filter(
+        diagnosis=case, observed_at=weather.observed_at,
+        latitude=weather.latitude, longitude=weather.longitude,
+    ).first()
+    return str(snapshot.id) if snapshot else None
+
+
+def _weather_history(case, family_ids, current):
+    from weather.models import WeatherSnapshot
+
+    snapshots = WeatherSnapshot.objects.filter(diagnosis_id__in=family_ids).order_by("-observed_at")
+    if current is not None:
+        snapshots = snapshots.exclude(
+            diagnosis=case, observed_at=current.observed_at,
+            latitude=current.latitude, longitude=current.longitude,
+        )
+    return [
+        {
+            "case_reference": str(item.diagnosis.reference),
+            "location": item.location_name,
+            "observed_at": item.observed_at.isoformat(),
+            "temperature": item.temperature,
+            "humidity": item.humidity,
+            "precipitation": item.precipitation,
+            "condition": item.condition,
+        }
+        for item in snapshots.select_related("diagnosis")[:3]
+    ]
+
+
 def _tracking_context(user, case, root, family_ids):
     actions = RecommendationAction.objects.filter(
         farmer=user, advisory_version__diagnosis_id__in=family_ids
@@ -152,6 +185,8 @@ def build_case_context(user, case):
             "forecast": weather.forecast,
             "timing": weather_timing,
             "is_historical_context": weather_timing == "near_completion",
+            "snapshot_id": _snapshot_id(case, weather),
+            "previous_observations": _weather_history(case, family_ids, weather),
         },
         "history": [
             {

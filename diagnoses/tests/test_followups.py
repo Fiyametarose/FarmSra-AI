@@ -250,3 +250,42 @@ class FollowUpTests(TestCase):
         with self.assertRaises(Exception):
             build_case_context(self.other, self.case)
         self.assertEqual(RecommendationAction.objects.get(pk=action.pk).status, "completed")
+
+    @patch("weather.services.get_weather_by_coords")
+    @patch("weather.services.resolve_location")
+    def test_symptoms_only_reassessment_records_new_weather_in_advisory_context(self, resolve, weather):
+        from weather.models import WeatherContext, WeatherSnapshot
+        from weather.services import persist_weather_snapshot
+        resolve.return_value = ({"name": "Nakuru", "lat": 0.3, "lon": 36.0}, None)
+        self.case.location = "Nakuru"
+        self.case.save(update_fields=["location"])
+        earlier = timezone.now().replace(microsecond=0) - timezone.timedelta(days=1)
+        persist_weather_snapshot(self.case, {
+            "location_name": "Nakuru", "location_source": "explicit", "latitude": 0.3,
+            "longitude": 36.0, "provider": "Open-Meteo", "observed_at": earlier, "temperature": 19,
+        })
+        now = timezone.now().replace(microsecond=0)
+        weather.return_value = {
+            "provider": "Open-Meteo", "timestamp": now.isoformat(), "temperature": 27,
+            "humidity": 80, "precipitation": 2, "wind_speed": 3, "condition": "Rain",
+            "weather_code": 61, "forecast": [],
+        }
+        self.post_follow_up()
+        follow_up = self.case.follow_ups.get()
+        url = reverse("case-reassess", args=[self.case.id, follow_up.id])
+        self.client.post(url)
+        self.client.post(url)
+        self.assertEqual(weather.call_count, 1)
+        self.assertEqual(WeatherSnapshot.objects.filter(diagnosis=self.case).count(), 2)
+        self.assertEqual(WeatherContext.objects.get(diagnosis=self.case).temperature, 27)
+        used = AdvisoryGenerationJob.objects.get().advisory_version.context_snapshot["weather"]
+        self.assertEqual(used["observed_at"], now.isoformat())
+        self.assertEqual(used["previous_observations"][0]["temperature"], 19)
+
+    @patch("weather.services.fetch_case_weather", side_effect=RuntimeError("provider down"))
+    def test_weather_failure_does_not_block_symptoms_only_reassessment(self, _fetch):
+        self.post_follow_up()
+        follow_up = self.case.follow_ups.get()
+        self.client.post(reverse("case-reassess", args=[self.case.id, follow_up.id]))
+        self.assertEqual(AdvisoryGenerationJob.objects.count(), 1)
+        self.assertIsNone(AdvisoryGenerationJob.objects.get().advisory_version.context_snapshot["weather"])

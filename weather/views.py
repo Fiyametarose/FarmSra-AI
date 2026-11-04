@@ -1,9 +1,8 @@
 from django.contrib import messages
 from django.conf import settings
-from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotAllowed
 from django.views.decorators.http import require_POST
 from django.utils.translation import gettext as _
 from django.utils import timezone
@@ -15,60 +14,117 @@ from .models import WeatherContext
 from .services import (
     geocode_town,
     get_weather_by_coords,
+    persist_weather_snapshot,
     resolve_location,
     valid_coordinates,
+    weather_fetched_at,
+    weather_is_stale,
     weather_observed_at,
 )
 from users.models import User
+
+WEATHER_SOURCES = {"selected", "device_gps", "farm_profile"}
+SESSION_KEY = "weather_location"
+
+
+def _selection_from(params):
+    """Validated (lat, lon, name, source) from request parameters, or None."""
+    try:
+        lat = float(params.get("lat"))
+        lon = float(params.get("lon"))
+    except (TypeError, ValueError):
+        return None
+    name = (params.get("name") or "").strip()[:200]
+    if not name or not valid_coordinates(lat, lon):
+        return None
+    source = params.get("source")
+    source = source if source in WEATHER_SOURCES else "selected"
+    if source == "device_gps":
+        lat, lon = round(lat, 2), round(lon, 2)
+    return lat, lon, name, source
+
+
+def _weather_response(request, lat, lon, name, source, force_refresh=False):
+    data = get_weather_by_coords(lat, lon, name, force_refresh=force_refresh, allow_stale=True)
+    context = {
+        "weather": data, "town": name, "lat": lat, "lon": lon, "source": source,
+        "stale": weather_is_stale(data),
+    }
+    if data:
+        timestamp = (data.get("timestamp") or "").replace("T", " ")
+        context["observed_label"] = f"{timestamp} {data.get('timezone_abbreviation') or ''}".strip()
+        context["last_update"] = weather_fetched_at(data)
+    response = render(request, "weather/widget.html", context)
+    response["Cache-Control"] = "private, no-store"
+    return response
+
+
+def _search_response(request, **context):
+    response = render(request, "weather/search.html", context)
+    response["Cache-Control"] = "private, no-store"
+    return response
+
 
 @login_required
 def weather_widget(request):
     if request.user.role != User.Role.FARMER:
         return HttpResponseForbidden("Only farmers can access weather.")
 
-    lat = request.GET.get('lat')
-    lon = request.GET.get('lon')
-    name = request.GET.get('name')
+    if request.method == "POST":
+        if request.POST.get("reset") == "1":
+            request.session.pop(SESSION_KEY, None)
+            return redirect("weather:widget")
+        selection = _selection_from(request.POST)
+        if selection is None:
+            return HttpResponseBadRequest("Invalid location.")
+        request.session[SESSION_KEY] = list(selection)
+        return _weather_response(request, *selection)
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET", "POST"])
 
-    if lat is not None and lon is not None and name:
-        try:
-            flat = float(lat)
-            flon = float(lon)
-            import math
-            if math.isfinite(flat) and math.isfinite(flon) and -90 <= flat <= 90 and -180 <= flon <= 180:
-                data = get_weather_by_coords(flat, flon, name)
-                return render(request, 'weather/widget.html', {'weather': data, 'town': name})
-        except ValueError:
-            pass
+    force_refresh = request.GET.get("refresh") == "1"
+    selection = _selection_from(request.GET)
+    if selection:
+        return _weather_response(request, *selection, force_refresh=force_refresh)
 
     if 'search' in request.GET:
         search = request.GET.get('search', '').strip()
         if not search:
-            return render(request, 'weather/search.html')
+            return _search_response(request)
         options = geocode_town(search, None, None)
-        return render(request, 'weather/options.html', {'options': options})
+        response = render(request, 'weather/options.html', {'options': options})
+        response["Cache-Control"] = "private, no-store"
+        return response
+
+    saved = request.session.get(SESSION_KEY)
+    if saved:
+        lat, lon, name, source = saved
+        return _weather_response(request, lat, lon, name, source, force_refresh=force_refresh)
 
     town = request.user.town
     country = request.user.country
     region = request.user.region
 
     if not town:
-        return render(request, 'weather/search.html')
+        return _search_response(request, missing_location=True)
 
     options = geocode_town(town, country, region)
     if not options:
-        return render(request, 'weather/search.html', {'error': 'Location not found'})
+        return _search_response(request, error='Location not found')
 
-    if len(options) == 1:
-        data = get_weather_by_coords(options[0]['lat'], options[0]['lon'], options[0]['name'])
-        return render(request, 'weather/widget.html', {'weather': data, 'town': options[0]['name']})
-    if region:
+    chosen = options[0] if len(options) == 1 else None
+    if chosen is None and region:
         exact = [o for o in options if o['admin1'].lower() == region.lower()]
-        if len(exact) == 1:
-            data = get_weather_by_coords(exact[0]['lat'], exact[0]['lon'], exact[0]['name'])
-            return render(request, 'weather/widget.html', {'weather': data, 'town': exact[0]['name']})
+        chosen = exact[0] if len(exact) == 1 else None
+    if chosen:
+        return _weather_response(
+            request, chosen['lat'], chosen['lon'], chosen['name'], "farm_profile",
+            force_refresh=force_refresh,
+        )
 
-    return render(request, 'weather/options.html', {'options': options})
+    response = render(request, 'weather/options.html', {'options': options})
+    response["Cache-Control"] = "private, no-store"
+    return response
 
 
 def automatic_capture_allowed(case):
@@ -101,20 +157,6 @@ def location_source(case, location, requested_source, coordinates_supplied, exis
     if existing:
         return existing.location_source
     return WeatherContext.LocationSource.EXPLICIT
-
-
-def persist_weather_snapshot(case, values, replace=False):
-    with transaction.atomic():
-        if replace:
-            snapshot = WeatherContext.objects.select_for_update().filter(
-                diagnosis=case
-            ).first()
-            if snapshot:
-                for field, value in values.items():
-                    setattr(snapshot, field, value)
-                snapshot.save(update_fields=list(values))
-                return snapshot, False
-        return WeatherContext.objects.get_or_create(diagnosis=case, defaults=values)
 
 
 @login_required

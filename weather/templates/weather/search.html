@@ -3,9 +3,15 @@
     {% if error %}
     <div style="color: var(--error); margin-bottom: 0.5rem;">{% trans error %}</div>
     {% endif %}
+    {% if missing_location %}
+    <p>{% trans "No farm location is saved on your profile. Search for a town or use your device location to see local weather." %}</p>
+    {% else %}
     <p>{% trans "Please enter a city or town name to check the weather:" %}</p>
+    {% endif %}
     <div style="display: flex; gap: 0.5rem;">
         <input type="text" id="weather-search-input" class="input" placeholder="{% trans 'e.g. Nairobi' %}">
         <button class="button" onclick="searchWeather()">{% trans "Search" %}</button>
     </div>
+    <button type="button" class="button button-secondary button-small" onclick="useDeviceLocation()" style="margin-top: 0.75rem;">{% trans "Use my current location" %}</button>
+    <p style="font-size: 0.75rem; color: gray; margin: 0.35rem 0 0;">{% trans "Your browser will ask for permission only after you press this button." %}</p>
 </div>

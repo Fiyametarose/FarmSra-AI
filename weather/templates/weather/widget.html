@@ -1,10 +1,15 @@
-{% load i18n %}
+{% load i18n tz %}
 {% if weather %}
-    <div style="background: rgba(var(--primary-rgb), 0.05); padding: 1rem; border-radius: 8px;">
+    <div id="weather-widget" data-lat="{{ lat|stringformat:'s' }}" data-lon="{{ lon|stringformat:'s' }}" data-name="{{ town }}" data-source="{{ source }}" style="background: rgba(var(--primary-rgb), 0.05); padding: 1rem; border-radius: 8px;">
+        {% if stale %}
+        <div role="alert" style="background: #fff8e1; color: #8a5a00; border: 1px solid #ffe0a3; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.82rem; margin-bottom: 0.75rem;">
+            {% trans "Showing the last successful observation. Live weather could not be refreshed, so these values may be out of date." %}
+        </div>
+        {% endif %}
         <div style="display: flex; align-items: center; gap: 1rem;">
             <div style="font-size: 2rem;">🌡</div>
             <div>
-                <strong style="display: block;">{{ weather.town }}</strong>
+                <strong style="display: block;">{{ town }}</strong>
                 <span>{{ weather.temperature }}°C, {% trans weather.condition %}</span>
                 <div style="font-size: 0.85rem; color: gray;">
                     {% trans "Humidity:" %} {{ weather.humidity }}% |
@@ -13,6 +18,13 @@
                 </div>
             </div>
         </div>
+
+        <dl style="display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.75rem; font-size: 0.8rem; color: gray; margin: 0.75rem 0 0;">
+            <dt>{% trans "Location source" %}</dt>
+            <dd style="margin: 0;">{% if source == 'device_gps' %}{% trans "Browser coordinates (unverified)" %}{% elif source == 'farm_profile' %}{% trans "Farm profile (approximate town-level location)" %}{% else %}{% trans "Selected location" %}{% endif %}</dd>
+            {% if observed_label %}<dt>{% trans "Observed" %}</dt><dd style="margin: 0;">{{ observed_label }}</dd>{% endif %}
+            {% if last_update %}<dt>{% trans "Last successful update" %}</dt><dd style="margin: 0;">{% timezone "UTC" %}{{ last_update|date:"d M Y, H:i" }} UTC{% endtimezone %}</dd>{% endif %}
+        </dl>
 
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
             <strong style="font-size: 0.85rem;">{% trans "3-Day Forecast" %}</strong>
@@ -24,16 +36,25 @@
                     <div style="color: gray;">{% trans day.condition %}</div>
                     <div style="color: gray; font-size: 0.75rem;">{% if day.precip %}{{ day.precip }} mm{% else %}0 mm{% endif %}</div>
                 </div>
+                {% empty %}
+                <div style="grid-column: 1 / -1; color: gray;">{% trans "No forecast is available." %}</div>
                 {% endfor %}
             </div>
         </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem;">
+            <button type="button" class="button button-secondary button-small" onclick="fetchWeatherManual()">{% trans "Change location" %}</button>
+            <button type="button" class="button button-secondary button-small" onclick="useDeviceLocation()">{% trans "Use my current location" %}</button>
+        </div>
         <div style="font-size: 0.7rem; color: gray; margin-top: 0.5rem; text-align: right;">
-            {% trans "Weather data provided by" %} {{ weather.provider }} {% if weather.timestamp %}({{ weather.timestamp }}){% endif %}
+            {% trans "Weather data provided by" %} {{ weather.provider }}
         </div>
     </div>
 {% else %}
-    <div style="padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: gray;">
-        <em>{% trans "Weather currently unavailable for" %} {{ town|default:_("your location") }}.</em>
-        <button class="button button-secondary button-small" onclick="fetchWeatherManual()" style="margin-top: 0.5rem;">{% trans "Try another city" %}</button>
+    <div id="weather-widget" data-lat="{{ lat|stringformat:'s' }}" data-lon="{{ lon|stringformat:'s' }}" data-name="{{ town }}" data-source="{{ source }}" role="alert" style="padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: gray;">
+        <em>{% trans "Weather is currently unavailable from the provider for" %} {{ town|default:_("your location") }}. {% trans "No earlier observation is available to show." %}</em>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+            <button type="button" class="button button-secondary button-small" onclick="refreshWeather()">{% trans "Try again" %}</button>
+            <button type="button" class="button button-secondary button-small" onclick="fetchWeatherManual()">{% trans "Try another city" %}</button>
+        </div>
     </div>
 {% endif %}

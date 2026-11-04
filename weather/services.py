@@ -4,12 +4,17 @@ import json
 import logging
 import math
 from datetime import timedelta, timezone as datetime_timezone
+from django.conf import settings
 from django.core.cache import cache
+from django.db import transaction
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
 logger = logging.getLogger(__name__)
+
+REFRESH_MIN_INTERVAL = timedelta(seconds=60)
+LAST_GOOD_TTL = 7 * 24 * 3600
 
 COUNTRY_CODES = {
     "ethiopia": "ET",
@@ -69,11 +74,41 @@ def geocode_town(town, country_code=None, region=None):
         logger.error(f"Geocoding fetch failed: {e}")
         return []
 
-def get_weather_by_coords(lat, lon, name):
+def weather_fetched_at(data):
+    return parse_datetime((data or {}).get("fetched_at") or "")
+
+
+def weather_is_stale(data):
+    """True when the data is a retained earlier observation or older than the stale limit."""
+    if not data:
+        return False
+    if data.get("stale"):
+        return True
+    fetched_at = weather_fetched_at(data)
+    if fetched_at is None:
+        return False
+    limit = timedelta(minutes=getattr(settings, "WEATHER_STALE_AFTER_MINUTES", 60))
+    return timezone.now() - fetched_at > limit
+
+
+def get_weather_by_coords(lat, lon, name, force_refresh=False, allow_stale=False):
+    """Fetch current weather, cached for 30 minutes.
+
+    force_refresh bypasses the cache at most once per minute. allow_stale returns the last
+    successful observation, flagged stale, when the provider fails; case capture never uses it.
+    """
     cache_key = f'weather_{lat}_{lon}'
+    last_key = f'weather_last_{lat}_{lon}'
     cached = cache.get(cache_key)
     if cached:
-        return cached
+        fetched_at = weather_fetched_at(cached)
+        recently_fetched = fetched_at is not None and timezone.now() - fetched_at < REFRESH_MIN_INTERVAL
+        if not force_refresh or recently_fetched:
+            return cached
+
+    def failed():
+        last = cache.get(last_key) if allow_stale else None
+        return {**last, "stale": True} if last else None
 
     try:
         weather_url = (
@@ -90,7 +125,7 @@ def get_weather_by_coords(lat, lon, name):
         current = weather_data.get('current', {})
         daily = weather_data.get('daily', {})
         if not current:
-            return None
+            return failed()
 
         wmo_codes = {
             0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
@@ -132,13 +167,15 @@ def get_weather_by_coords(lat, lon, name):
             'utc_offset_seconds': weather_data.get('utc_offset_seconds'),
             'timezone': weather_data.get('timezone', ''),
             'timezone_abbreviation': weather_data.get('timezone_abbreviation', ''),
+            'fetched_at': timezone.now().isoformat(),
         }
         cache.set(cache_key, data, 1800)
+        cache.set(last_key, data, LAST_GOOD_TTL)
         return data
 
     except Exception as e:
         logger.error(f"Weather fetch failed: {e}")
-        return None
+        return failed()
 
 
 def valid_coordinates(latitude, longitude):
@@ -224,12 +261,53 @@ def weather_observed_at(weather_data):
     return observed_at
 
 
-def capture_automatic_case_weather(case):
-    """Best-effort snapshot using case, registered-crop, then farm location."""
+def case_weather_values(data, resolved, source):
+    return {
+        "location_name": resolved["name"],
+        "location_source": source,
+        "latitude": resolved["lat"],
+        "longitude": resolved["lon"],
+        "provider": data["provider"],
+        "observed_at": weather_observed_at(data),
+        "temperature": data.get("temperature"),
+        "humidity": data.get("humidity"),
+        "precipitation": data.get("precipitation"),
+        "wind_speed": data.get("wind_speed"),
+        "condition": data.get("condition", ""),
+        "weather_code": data.get("weather_code"),
+        "forecast": data.get("forecast", []),
+    }
+
+
+def persist_weather_snapshot(case, values, replace=False):
+    """Save the latest observation in WeatherContext and append it to the case history."""
+    from .models import WeatherContext, WeatherSnapshot
+
+    created = False
+    with transaction.atomic():
+        context = None
+        if replace:
+            context = WeatherContext.objects.select_for_update().filter(diagnosis=case).first()
+            if context:
+                for field, value in values.items():
+                    setattr(context, field, value)
+                context.save(update_fields=list(values))
+        if context is None:
+            context, created = WeatherContext.objects.get_or_create(diagnosis=case, defaults=values)
+        if replace or created:
+            history = {k: v for k, v in values.items() if k not in {"observed_at", "latitude", "longitude"}}
+            WeatherSnapshot.objects.get_or_create(
+                diagnosis=case, observed_at=values["observed_at"],
+                latitude=values["latitude"], longitude=values["longitude"],
+                defaults=history,
+            )
+    return context, created
+
+
+def fetch_case_weather(case, force_refresh=False):
+    """Observation values for the case location (case, registered crop, then farm profile)."""
     from .models import WeatherContext
 
-    if WeatherContext.objects.filter(diagnosis=case).exists():
-        return
     candidates = [
         (case.location, WeatherContext.LocationSource.EXPLICIT),
         (case.registered_crop.location if case.registered_crop else "", WeatherContext.LocationSource.REGISTERED_CROP),
@@ -237,27 +315,57 @@ def capture_automatic_case_weather(case):
     ]
     location, source = next(((value.strip(), source) for value, source in candidates if value and value.strip()), ("", None))
     if not location:
-        return
+        return None
     resolved, error = resolve_location(
         location, case.farmer.country or None,
         case.farmer.region if source == WeatherContext.LocationSource.FARM_PROFILE else None,
         search_name=case.farmer.town if source == WeatherContext.LocationSource.FARM_PROFILE else None,
     )
     if error or not resolved:
+        return None
+    if (
+        source == WeatherContext.LocationSource.EXPLICIT
+        and case.location_source == "browser_geolocation"
+    ):
+        source = WeatherContext.LocationSource.DEVICE_GPS
+    data = get_weather_by_coords(resolved["lat"], resolved["lon"], resolved["name"], force_refresh=force_refresh)
+    if not data or weather_observed_at(data) is None:
+        return None
+    return case_weather_values(data, resolved, source)
+
+
+def capture_automatic_case_weather(case):
+    """Best-effort first snapshot; never raises and never replaces an existing one."""
+    from .models import WeatherContext
+
+    if WeatherContext.objects.filter(diagnosis=case).exists():
         return
-    data = get_weather_by_coords(resolved["lat"], resolved["lon"], resolved["name"])
-    observed_at = weather_observed_at(data or {})
-    if not data or observed_at is None:
-        return
-    WeatherContext.objects.get_or_create(
-        diagnosis=case,
-        defaults={
-            "location_name": resolved["name"], "location_source": source,
-            "latitude": resolved["lat"], "longitude": resolved["lon"],
-            "provider": data["provider"], "observed_at": observed_at,
-            "temperature": data.get("temperature"), "humidity": data.get("humidity"),
-            "precipitation": data.get("precipitation"), "wind_speed": data.get("wind_speed"),
-            "condition": data.get("condition", ""), "weather_code": data.get("weather_code"),
-            "forecast": data.get("forecast", []),
-        },
-    )
+    try:
+        values = fetch_case_weather(case)
+        if values:
+            persist_weather_snapshot(case, values)
+    except Exception:
+        logger.exception("Automatic case weather capture failed")
+
+
+def refresh_case_weather(case):
+    """Best-effort new observation for a reassessment.
+
+    On failure the previous observation is retained unchanged. Returns True when a new
+    observation time was recorded.
+    """
+    from .models import WeatherSnapshot
+
+    try:
+        values = fetch_case_weather(case, force_refresh=True)
+        if not values:
+            return False
+        known = WeatherSnapshot.objects.filter(
+            diagnosis=case, observed_at=values["observed_at"],
+            latitude=values["latitude"], longitude=values["longitude"],
+        ).exists()
+        persist_weather_snapshot(case, values, replace=True)
+        return not known
+    except Exception:
+        logger.exception("Reassessment weather refresh failed")
+        return False

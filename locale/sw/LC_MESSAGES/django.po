@@ -2501,3 +2501,84 @@ msgstr "Muda wa uchunguzi hauwezi kuwa wa baadaye."
 
 msgid "Add symptoms, a photograph, notes, or actions taken."
 msgstr "Ongeza dalili, picha, maelezo, au hatua zilizochukuliwa."
+
+msgid "Device location"
+msgstr "Mahali pa kifaa"
+
+msgid "Refresh"
+msgstr "Onyesha upya"
+
+msgid "Device location was not shared. Search for a town instead."
+msgstr "Mahali pa kifaa hakukushirikiwa. Tafuta mji badala yake."
+
+msgid "Weather is currently unavailable from the provider for"
+msgstr "Hali ya hewa haipatikani kwa sasa kutoka kwa mtoa huduma kwa"
+
+msgid "Location source"
+msgstr "Chanzo cha mahali"
+
+msgid "No forecast is available."
+msgstr "Hakuna utabiri unaopatikana."
+
+msgid "Loading weather..."
+msgstr "Inapakia hali ya hewa..."
+
+msgid "No earlier observation is available to show."
+msgstr "Hakuna uchunguzi wa awali wa kuonyesha."
+
+msgid "Weather could not be loaded. Check your connection and try again."
+msgstr ""
+"Hali ya hewa haikuweza kupakiwa. Angalia muunganisho wako kisha ujaribu "
+"tena."
+
+msgid "Your browser will ask for permission only after you press this button."
+msgstr "Kivinjari chako kitaomba ruhusa tu baada ya kubonyeza kitufe hiki."
+
+msgid "Weather observation history"
+msgstr "Historia ya uchunguzi wa hali ya hewa"
+
+msgid "Farm profile (approximate town-level location)"
+msgstr "Wasifu wa shamba (mahali pa takriban ngazi ya mji)"
+
+msgid "Change location"
+msgstr "Badilisha mahali"
+
+msgid "Use my current location"
+msgstr "Tumia mahali nilipo sasa"
+
+msgid "Try again"
+msgstr "Jaribu tena"
+
+msgid "Last successful update"
+msgstr "Sasisho la mwisho lililofanikiwa"
+
+msgid "Selected location"
+msgstr "Mahali palipochaguliwa"
+
+msgid ""
+"This browser does not support device location. Search for a town instead."
+msgstr "Kivinjari hiki hakitumii mahali pa kifaa. Tafuta mji badala yake."
+
+msgid ""
+"No farm location is saved on your profile. Search for a town or use your "
+"device location to see local weather."
+msgstr ""
+"Hakuna mahali pa shamba palipohifadhiwa kwenye wasifu wako. Tafuta mji au "
+"tumia mahali pa kifaa kuona hali ya hewa ya eneo lako."
+
+msgid ""
+"Showing the last successful observation. Live weather could not be "
+"refreshed, so these values may be out of date."
+msgstr ""
+"Inaonyesha uchunguzi wa mwisho uliofanikiwa. Hali ya hewa ya sasa haikuweza "
+"kusasishwa, kwa hivyo thamani hizi zinaweza kuwa zimepitwa na wakati."
+
+msgid ""
+"Latest saved observation was taken %(age)s ago. Weather is shown only from "
+"observations recorded for this case; it is not refreshed automatically and "
+"is supporting context, not proof of disease."
+msgstr ""
+"Uchunguzi wa mwisho uliohifadhiwa ulichukuliwa %(age)s zilizopita. Hali ya "
+"hewa inaonyeshwa kutoka kwa uchunguzi uliorekodiwa kwa kesi hii pekee; "
+"haisasishwi kiotomatiki na ni muktadha wa kusaidia, si uthibitisho wa "
+"ugonjwa."

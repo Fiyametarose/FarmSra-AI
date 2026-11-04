@@ -253,6 +253,7 @@ def render_case_detail(request, case, follow_up_form=None, status=200):
             "expert_messages": active_referral.messages.select_related("sender") if active_referral else (),
             "revoked_messages": ExpertMessage.objects.filter(referral__diagnosis=case, referral__state=ExpertReferral.State.REVOKED).select_related("sender"),
             "message_form": ExpertMessageForm(),
+            "weather_snapshots": list(case.weather_snapshots.all()),
             "weather_auto_capture_eligible": weather_auto_capture_eligible,
             "weather_is_late_lookup": weather_is_late_lookup,
             "confidence_threshold_percent": round(
