@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -13,9 +13,14 @@ from users.models import User, normalize_language
 from expert_reviews.models import ExpertMessage, ExpertReferral
 from expert_reviews.forms import ExpertMessageForm, RequestReviewForm
 
-from .forms import DiagnosisUploadForm
+from django.contrib import messages
+from django.http import Http404
+from django.utils.translation import gettext as _
+
+from .followups import ReassessmentUnavailable, request_reassessment
+from .forms import CaseFollowUpForm, DiagnosisUploadForm
 from .inference import InferenceError, ModelUnavailableError, predict
-from .models import DiagnosisCase
+from .models import CaseFollowUp, DiagnosisCase
 from .processing import (
     claim_case,
     complete_case,
@@ -49,11 +54,11 @@ def owned_case(request, case_id):
 @farmer_required
 def dashboard(request):
     recent_cases = request.user.diagnosis_cases.filter(
-        status=DiagnosisCase.Status.COMPLETED
+        status=DiagnosisCase.Status.COMPLETED, parent_case__isnull=True
     )[:3]
     recent_crops = request.user.registered_crops.all()[:3]
     crop_count = request.user.registered_crops.count()
-    total_diagnoses_count = request.user.diagnosis_cases.count()
+    total_diagnoses_count = request.user.diagnosis_cases.filter(parent_case__isnull=True).count()
     return render(request, "diagnoses/dashboard.html", {
         "recent_cases": recent_cases,
         "recent_crops": recent_crops,
@@ -169,7 +174,10 @@ def recover_case(request, case_id):
 
 @farmer_required
 def case_detail(request, case_id):
-    case = owned_case(request, case_id)
+    return render_case_detail(request, owned_case(request, case_id))
+
+
+def render_case_detail(request, case, follow_up_form=None, status=200):
     advisory_language = normalize_language(get_language())
     advisory_version = case.advisory_versions.filter(
         language=advisory_language, status="succeeded"
@@ -202,6 +210,33 @@ def case_detail(request, case_id):
             or abs(weather_context.observed_at - case.completed_at) > auto_capture_window
         )
     )
+    from advisory.actions import ensure_actions
+    from advisory.forms import RecommendationActionForm
+    from advisory.models import RecommendationAction
+    from advisory.services import SECTION_LABELS
+
+    root_case = case.parent_case or case
+    family_ids = [root_case.id, *root_case.reassessments.values_list("id", flat=True)]
+    tracked_actions = []
+    if advisory_version:
+        ensure_actions(advisory_version, request.user)
+        tracked_actions = list(advisory_version.tracked_actions.filter(farmer=request.user))
+        labels = SECTION_LABELS[advisory_version.language]
+        for action in tracked_actions:
+            action.form = RecommendationActionForm(instance=action)
+            action.section_label = labels.get(action.section_key, action.section_key)
+    action_history = RecommendationAction.objects.filter(
+        farmer=request.user, advisory_version__diagnosis_id__in=family_ids
+    ).exclude(advisory_version=advisory_version).select_related(
+        "advisory_version", "advisory_version__diagnosis"
+    ).order_by("-created_at")
+    follow_ups = list(root_case.follow_ups.select_related("reassessment"))
+    assessments = [root_case, *root_case.reassessments.order_by("created_at")]
+    advisory_updating = bool(
+        advisory_version and latest_advisory_job
+        and latest_advisory_job.status in {"pending", "running"}
+    )
+
     active_referral = case.expert_referrals.exclude(state='revoked').first()
     revoked_referrals = case.expert_referrals.filter(state='revoked', review__isnull=False).order_by('-revoked_at')
     if active_referral:
@@ -226,8 +261,62 @@ def case_detail(request, case_id):
             "advisory_version": advisory_version,
             "advisory_versions": case.advisory_versions.filter(status="succeeded"),
             "latest_advisory_job": latest_advisory_job,
+            "root_case": root_case,
+            "tracked_actions": tracked_actions,
+            "action_history": action_history,
+            "follow_ups": follow_ups,
+            "follow_up_form": follow_up_form or (CaseFollowUpForm() if not case.parent_case_id else None),
+            "assessments": assessments,
+            "advisory_updating": advisory_updating,
         },
+        status=status,
     )
+
+
+@farmer_required
+@require_POST
+def add_follow_up(request, case_id):
+    case = owned_case(request, case_id)
+    if case.parent_case_id or case.status != DiagnosisCase.Status.COMPLETED:
+        raise PermissionDenied
+    try:
+        repeated = case.follow_ups.filter(request_token=request.POST.get("request_token")).exists()
+    except (ValueError, ValidationError):
+        repeated = False
+    if repeated:
+        return redirect(reverse("case-detail", args=[case.id]) + "#follow-ups")
+    form = CaseFollowUpForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return render_case_detail(request, case, follow_up_form=form, status=400)
+    follow_up = form.save(commit=False)
+    follow_up.diagnosis = case
+    follow_up.save()
+    messages.success(request, _("Follow-up observation saved."))
+    return redirect(reverse("case-detail", args=[case.id]) + "#follow-ups")
+
+
+@farmer_required
+@require_POST
+def reassess_case(request, case_id, follow_up_id):
+    case = owned_case(request, case_id)
+    get_object_or_404(CaseFollowUp, id=follow_up_id, diagnosis=case)
+    try:
+        follow_up, new_case, _job = request_reassessment(follow_up_id, request.user)
+    except ReassessmentUnavailable:
+        raise PermissionDenied
+    if new_case is not None and new_case.status == DiagnosisCase.Status.PENDING:
+        return redirect("case-analyzing", case_id=new_case.id)
+    messages.info(request, _("Reassessment requested. Updated guidance will appear on this page when ready."))
+    return redirect(reverse("case-detail", args=[case.id]) + "#follow-ups")
+
+
+@farmer_required
+def follow_up_image(request, case_id, follow_up_id):
+    case = owned_case(request, case_id)
+    follow_up = get_object_or_404(CaseFollowUp, id=follow_up_id, diagnosis=case)
+    if not follow_up.image:
+        raise Http404
+    return image_response(follow_up.image)
 
 
 @farmer_required
@@ -235,28 +324,31 @@ def history(request):
     return render(
         request,
         "diagnoses/history.html",
-        {"cases": request.user.diagnosis_cases.all()},
+        {"cases": request.user.diagnosis_cases.filter(parent_case__isnull=True)},
     )
+
+
+def image_response(field):
+    from PIL import Image
+
+    field.open("rb")
+    try:
+        with Image.open(field) as image:
+            image_format = image.format
+    finally:
+        field.close()
+    content_type = IMAGE_MIME_TYPES.get(image_format)
+    if content_type is None:
+        raise PermissionDenied
+    response = FileResponse(field.open("rb"), content_type=content_type)
+    response["Content-Disposition"] = "inline"
+    response["X-Content-Type-Options"] = "nosniff"
+    return response
 
 
 @farmer_required
 def case_image(request, case_id):
-    case = owned_case(request, case_id)
-    from PIL import Image
-
-    case.image.open("rb")
-    try:
-        with Image.open(case.image) as image:
-            image_format = image.format
-    finally:
-        case.image.close()
-    content_type = IMAGE_MIME_TYPES.get(image_format)
-    if content_type is None:
-        raise PermissionDenied
-    response = FileResponse(case.image.open("rb"), content_type=content_type)
-    response["Content-Disposition"] = "inline"
-    response["X-Content-Type-Options"] = "nosniff"
-    return response
+    return image_response(owned_case(request, case_id).image)
 
 
 @farmer_required

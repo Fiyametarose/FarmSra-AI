@@ -4,6 +4,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from .chat import MAX_QUESTION_CHARS
+from .models import RecommendationAction
 from diagnoses.models import DiagnosisCase
 
 
@@ -26,3 +27,10 @@ class GlobalChatForm(ChatQuestionForm):
     session = forms.UUIDField(required=False)
     case = forms.UUIDField(required=False)
     crop = forms.ChoiceField(choices=DiagnosisCase.Crop.choices, required=False)
+
+
+class RecommendationActionForm(forms.ModelForm):
+    class Meta:
+        model = RecommendationAction
+        fields = ("status", "farmer_notes")
+        widgets = {"farmer_notes": forms.Textarea(attrs={"rows": 2, "maxlength": 1000})}

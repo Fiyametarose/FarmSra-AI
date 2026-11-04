@@ -9,6 +9,11 @@ def case_image_path(instance, filename):
     return f"cases/{instance.farmer_id}/{instance.id}.{extension}"
 
 
+def follow_up_image_path(instance, filename):
+    extension = filename.rsplit(".", 1)[-1].lower()
+    return f"cases/{instance.diagnosis.farmer_id}/follow-ups/{instance.id}.{extension}"
+
+
 class DiagnosisCase(models.Model):
     class LocationSource(models.TextChoices):
         BROWSER_GEOLOCATION = "browser_geolocation", "Browser coordinates (unverified)"
@@ -36,6 +41,10 @@ class DiagnosisCase(models.Model):
         null=True,
         blank=True,
         related_name="diagnoses",
+    )
+    parent_case = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.PROTECT,
+        related_name="reassessments",
     )
     crop = models.CharField(max_length=10, choices=Crop)
     image = models.ImageField(upload_to=case_image_path)
@@ -109,3 +118,28 @@ class DiagnosisCase(models.Model):
 
     def __str__(self):
         return f"{self.get_crop_display()} {self.reference}"
+
+
+class CaseFollowUp(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    diagnosis = models.ForeignKey(
+        DiagnosisCase, on_delete=models.CASCADE, related_name="follow_ups"
+    )
+    symptoms = models.TextField(blank=True)
+    image = models.ImageField(upload_to=follow_up_image_path, null=True, blank=True)
+    observed_at = models.DateTimeField()
+    notes = models.TextField(blank=True)
+    actions_taken = models.TextField(blank=True)
+    request_token = models.UUIDField(unique=True)
+    reassessment = models.OneToOneField(
+        DiagnosisCase, null=True, blank=True, on_delete=models.PROTECT,
+        related_name="source_follow_up",
+    )
+    reassessment_requested_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["observed_at", "created_at"]
+
+    def __str__(self):
+        return f"Follow-up for {self.diagnosis} at {self.observed_at}"

@@ -1,14 +1,41 @@
 import warnings
 import math
+import uuid
+from datetime import timedelta
 
 from django import forms
 from django.conf import settings
+from django.utils import timezone
 from PIL import Image, UnidentifiedImageError
 from django.utils.translation import gettext_lazy as _
 
 from crops.models import Crop
 
-from .models import DiagnosisCase
+from .models import CaseFollowUp, DiagnosisCase
+
+
+def validate_crop_image(upload):
+    if upload.size > settings.MAX_UPLOAD_SIZE:
+        limit = "10 MB" if settings.MAX_UPLOAD_SIZE == 10 * 1024 * 1024 else f"{settings.MAX_UPLOAD_SIZE} bytes"
+        raise forms.ValidationError(_("The image must be %(limit)s or smaller.") % {"limit": limit})
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", Image.DecompressionBombWarning)
+            image = Image.open(upload)
+            width, height = image.size
+            image_format = image.format
+            if width * height > settings.MAX_DECODED_IMAGE_PIXELS:
+                raise forms.ValidationError(_("The decoded image dimensions are too large."))
+            image.verify()
+    except forms.ValidationError:
+        raise
+    except (Image.DecompressionBombError, Image.DecompressionBombWarning, UnidentifiedImageError, OSError, SyntaxError):
+        raise forms.ValidationError(_("Upload a valid, uncorrupted image.")) from None
+    finally:
+        upload.seek(0)
+    if image_format not in {"JPEG", "PNG", "WEBP"}:
+        raise forms.ValidationError(_("Use a JPEG, PNG, or WebP image."))
+    return upload
 
 
 class DiagnosisUploadForm(forms.ModelForm):
@@ -66,38 +93,39 @@ class DiagnosisUploadForm(forms.ModelForm):
         return cleaned_data
 
     def clean_image(self):
-        upload = self.cleaned_data["image"]
-        if upload.size > settings.MAX_UPLOAD_SIZE:
-            max_size = settings.MAX_UPLOAD_SIZE
-            if max_size == 10 * 1024 * 1024:
-                limit = "10 MB"
-            else:
-                limit = f"{max_size} bytes"
-            raise forms.ValidationError(_("The image must be %(limit)s or smaller.") % {'limit': limit})
-        try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("error", Image.DecompressionBombWarning)
-                image = Image.open(upload)
-                width, height = image.size
-                image_format = image.format
-                if width * height > settings.MAX_DECODED_IMAGE_PIXELS:
-                    raise forms.ValidationError(
-                        _("The decoded image dimensions are too large.")
-                    )
-                image.verify()
-        except forms.ValidationError:
-            raise
-        except (
-            Image.DecompressionBombError,
-            Image.DecompressionBombWarning,
-            UnidentifiedImageError,
-            OSError,
-            SyntaxError,
-        ):
-            raise forms.ValidationError(_("Upload a valid, uncorrupted image.")) from None
-        finally:
-            upload.seek(0)
+        return validate_crop_image(self.cleaned_data["image"])
 
-        if image_format not in {"JPEG", "PNG", "WEBP"}:
-            raise forms.ValidationError(_("Use a JPEG, PNG, or WebP image."))
-        return upload
+
+class CaseFollowUpForm(forms.ModelForm):
+    request_token = forms.UUIDField(widget=forms.HiddenInput, initial=uuid.uuid4)
+
+    class Meta:
+        model = CaseFollowUp
+        fields = ("symptoms", "image", "observed_at", "notes", "actions_taken", "request_token")
+        widgets = {
+            "observed_at": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "symptoms": forms.Textarea(attrs={"rows": 3}),
+            "notes": forms.Textarea(attrs={"rows": 2}),
+            "actions_taken": forms.Textarea(attrs={"rows": 2}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["observed_at"].widget.format = "%Y-%m-%dT%H:%M"
+        self.fields["observed_at"].initial = lambda: timezone.localtime().replace(second=0, microsecond=0)
+
+    def clean_image(self):
+        upload = self.cleaned_data.get("image")
+        return validate_crop_image(upload) if upload else None
+
+    def clean_observed_at(self):
+        observed_at = self.cleaned_data["observed_at"]
+        if observed_at > timezone.now() + timedelta(minutes=5):
+            raise forms.ValidationError(_("The observation time cannot be in the future."))
+        return observed_at
+
+    def clean(self):
+        cleaned = super().clean()
+        if not any(cleaned.get(field) for field in ("symptoms", "image", "notes", "actions_taken")):
+            raise forms.ValidationError(_("Add symptoms, a photograph, notes, or actions taken."))
+        return cleaned

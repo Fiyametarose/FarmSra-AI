@@ -18,5 +18,8 @@ urlpatterns = [
     path("experts/", views.agricultural_experts, name="agricultural-experts"),
     path("cases/<uuid:case_id>/", views.case_detail, name="case-detail"),
     path("cases/<uuid:case_id>/image/", views.case_image, name="case-image"),
+    path("cases/<uuid:case_id>/follow-ups/", views.add_follow_up, name="case-follow-up"),
+    path("cases/<uuid:case_id>/follow-ups/<uuid:follow_up_id>/image/", views.follow_up_image, name="follow-up-image"),
+    path("cases/<uuid:case_id>/follow-ups/<uuid:follow_up_id>/reassess/", views.reassess_case, name="case-reassess"),
     path("history/", views.history, name="history"),
 ]

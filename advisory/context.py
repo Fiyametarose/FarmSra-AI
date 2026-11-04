@@ -5,9 +5,87 @@ from datetime import timedelta
 from diagnoses.models import DiagnosisCase
 from users.models import User
 
+from .models import AdvisoryVersion, RecommendationAction
+
 
 def _bounded(value, length=1000):
     return (value or "").strip()[:length]
+
+
+def _follow_up_context(root, case):
+    follow_ups = list(root.follow_ups.order_by("-observed_at", "-created_at")[:10])
+    reassessment = None
+    if case.parent_case_id:
+        reassessment = {"kind": "photo", "new_image_classified": True}
+    else:
+        pending = next(
+            (item for item in follow_ups
+             if item.reassessment_requested_at and item.reassessment_id is None),
+            None,
+        )
+        if pending:
+            reassessment = {"kind": "symptoms_only", "new_image_classified": False}
+    return {
+        "follow_ups": [
+            {
+                "observed_at": item.observed_at.isoformat(),
+                "symptoms": _bounded(item.symptoms, 500),
+                "notes": _bounded(item.notes, 500),
+                "actions_taken": _bounded(item.actions_taken, 500),
+                "has_photo": bool(item.image),
+                "reassessment_requested": item.reassessment_requested_at is not None,
+            }
+            for item in reversed(follow_ups)
+        ],
+        "reassessment": reassessment,
+    }
+
+
+def _tracking_context(user, case, root, family_ids):
+    actions = RecommendationAction.objects.filter(
+        farmer=user, advisory_version__diagnosis_id__in=family_ids
+    ).select_related("advisory_version").order_by("-created_at")[:20]
+    versions = AdvisoryVersion.objects.filter(
+        diagnosis_id__in=family_ids, status=AdvisoryVersion.Status.SUCCEEDED
+    ).select_related("diagnosis").order_by("-completed_at", "-version")[:3]
+    assessments = DiagnosisCase.objects.filter(
+        id__in=family_ids, status=DiagnosisCase.Status.COMPLETED
+    ).exclude(id=case.id).order_by("completed_at")
+    return {
+        "recommended_actions": [
+            {
+                "advisory_version": action.advisory_version.version,
+                "section": action.section_key,
+                "recommendation": _bounded(action.recommendation, 300),
+                "status": action.status,
+                "farmer_notes": _bounded(action.farmer_notes, 300),
+                "status_changed_at": action.status_changed_at.isoformat(),
+            }
+            for action in actions
+        ],
+        "previous_advisories": [
+            {
+                "case_reference": str(version.diagnosis.reference),
+                "version": version.version,
+                "language": version.language,
+                "created_at": version.created_at.isoformat(),
+                "diagnosis_summary": _bounded(version.sections.get("diagnosis_summary"), 400),
+                "immediate_actions": _bounded(version.sections.get("immediate_actions"), 400),
+                "monitoring": _bounded(version.sections.get("monitoring"), 300),
+            }
+            for version in versions
+        ],
+        "previous_assessments": [
+            {
+                "case_reference": str(item.reference),
+                "type": "original" if item.id == root.id else "photo_reassessment",
+                "predicted_class": item.predicted_class,
+                "confidence": item.model_confidence,
+                "assessed_at": item.completed_at.isoformat() if item.completed_at else None,
+            }
+            for item in assessments
+        ],
+    }
 
 
 def build_case_context(user, case):
@@ -28,16 +106,21 @@ def build_case_context(user, case):
             weather_timing = "near_completion"
         else:
             weather_timing = "later_observation"
+    root = case.parent_case or case
+    family_ids = [root.id, *root.reassessments.values_list("id", flat=True)]
     history = (
         DiagnosisCase.objects.filter(
             farmer=user,
             crop=case.crop,
             status=DiagnosisCase.Status.COMPLETED,
+            parent_case__isnull=True,
         )
-        .exclude(id=case.id)
+        .exclude(id__in=family_ids)
         .order_by("-created_at")[:5]
     )
     return {
+        **_follow_up_context(root, case),
+        **_tracking_context(user, case, root, family_ids),
         "crop": case.crop,
         "image_reference": case.image.name if case.image else None,
         "case_location": _bounded(case.location, 500) or None,

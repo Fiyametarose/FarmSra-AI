@@ -99,6 +99,39 @@ class AdvisoryGenerationJob(models.Model):
         indexes = [models.Index(fields=["diagnosis", "status"])]
 
 
+class RecommendationAction(models.Model):
+    class Status(models.TextChoices):
+        NOT_STARTED = "not_started", "Not Started"
+        IN_PROGRESS = "in_progress", "In Progress"
+        COMPLETED = "completed", "Completed"
+        SKIPPED = "skipped", "Skipped"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    advisory_version = models.ForeignKey(
+        AdvisoryVersion, on_delete=models.PROTECT, related_name="tracked_actions"
+    )
+    farmer = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name="recommendation_actions",
+    )
+    section_key = models.CharField(max_length=40)
+    recommendation = models.TextField()
+    status = models.CharField(max_length=12, choices=Status, default=Status.NOT_STARTED)
+    farmer_notes = models.TextField(blank=True)
+    status_changed_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["advisory_version", "farmer", "section_key"],
+                name="advisory_unique_tracked_section",
+            )
+        ]
+
+
 class KnowledgeDocument(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=300)

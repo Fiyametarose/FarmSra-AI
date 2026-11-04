@@ -243,6 +243,112 @@
       </section>
     {% endif %}
 
+    {% if case.parent_case_id %}
+      <section class="card" style="padding: 1.25rem 1.5rem; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 2rem;">
+        {% trans "This is a photo reassessment of an earlier case. The original diagnosis and its history are preserved." %}
+        <a href="{% url 'case-detail' case.parent_case_id %}" style="color: var(--brand); font-weight: 600;">{% trans "View original case" %} →</a>
+      </section>
+    {% endif %}
+
+    {% if advisory_updating %}
+      <section class="card" style="padding: 1rem 1.5rem; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 2rem;">
+        {% trans "Updated guidance is being prepared. The previous advisory remains available below." %}
+      </section>
+    {% endif %}
+
+    {% if case.status == 'completed' and case.predicted_class and advisory_version %}
+      <section id="action-tracking" class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 0.35rem 0;">{% trans "Recommended Action Tracking" %}</h2>
+        <p style="font-size: 0.88rem; color: var(--muted); margin: 0 0 1.25rem 0;">{% blocktrans with version=advisory_version.version %}Track what you do for advisory version {{ version }}. Only you can change these statuses.{% endblocktrans %}</p>
+        {% for action in tracked_actions %}
+          <form method="post" action="{% url 'update-action' action.id %}" style="padding: 1rem; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.75rem;">
+            {% csrf_token %}
+            <strong style="font-size: 0.9rem;">{{ action.section_label }}</strong>
+            <p style="white-space: pre-wrap; font-size: 0.9rem; margin: 0.35rem 0 0.75rem;">{{ action.recommendation }}</p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end;">
+              <label style="font-size: 0.82rem;">{% trans "Status" %}<br>{{ action.form.status }}</label>
+              <label style="font-size: 0.82rem; flex: 1; min-width: 200px;">{% trans "Notes (optional)" %}<br>{{ action.form.farmer_notes }}</label>
+              <button type="submit" class="button button-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem;">{% trans "Update" %}</button>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--muted);">{% trans "Status changed" %}: {{ action.status_changed_at|date:"d M Y, H:i" }}</span>
+          </form>
+        {% empty %}
+          <p style="color: var(--muted);">{% trans "This advisory has no trackable actions." %}</p>
+        {% endfor %}
+        {% if action_history %}
+          <details style="margin-top: 1rem;">
+            <summary style="cursor: pointer; font-weight: 700;">{% trans "Action history from other advisory versions" %}</summary>
+            <ul style="margin: 0.75rem 0 0; padding-left: 1.2rem; font-size: 0.88rem;">
+              {% for action in action_history %}
+                <li style="margin-bottom: 0.5rem;">
+                  <strong>{{ action.get_status_display }}</strong> · {% trans "Advisory version" %} {{ action.advisory_version.version }} · {{ action.advisory_version.diagnosis.reference }} · {{ action.status_changed_at|date:"d M Y, H:i" }}<br>
+                  {{ action.recommendation|truncatechars:160 }}{% if action.farmer_notes %}<br><em>{{ action.farmer_notes }}</em>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    {% if case.status == 'completed' and case.predicted_class %}
+      <section id="follow-ups" class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 1rem 0;">{% trans "Follow-up Observations and Reassessment" %}</h2>
+
+        {% if assessments|length > 1 %}
+          <h3 style="font-size: 1rem; margin: 0 0 0.5rem;">{% trans "Assessments" %}</h3>
+          <ul style="margin: 0 0 1.25rem; padding-left: 1.2rem; font-size: 0.9rem;">
+            {% for item in assessments %}
+              <li>
+                <a href="{% url 'case-detail' item.id %}" style="color: var(--brand); font-weight: 600;">{% if item.id == root_case.id %}{% trans "Original assessment" %}{% else %}{% trans "Photo reassessment" %}{% endif %}</a>
+                · {{ item.completed_at|default:item.created_at|date:"d M Y, H:i" }}
+                · {% if item.status == 'completed' %}{{ item.predicted_class }}{% if item.confidence_percent is not None %} ({{ item.confidence_percent }}% {% trans "model confidence" %}){% endif %}{% else %}{{ item.get_status_display }}{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% for item in follow_ups %}
+          <article style="border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem;">
+            <strong>{{ item.observed_at|date:"d M Y, H:i" }}</strong>
+            {% if item.symptoms %}<p style="margin: 0.4rem 0 0;"><strong>{% trans "Symptoms" %}:</strong> {{ item.symptoms|linebreaksbr }}</p>{% endif %}
+            {% if item.notes %}<p style="margin: 0.4rem 0 0;"><strong>{% trans "Progress notes" %}:</strong> {{ item.notes|linebreaksbr }}</p>{% endif %}
+            {% if item.actions_taken %}<p style="margin: 0.4rem 0 0;"><strong>{% trans "Actions taken" %}:</strong> {{ item.actions_taken|linebreaksbr }}</p>{% endif %}
+            {% if item.image %}<img src="{% url 'follow-up-image' root_case.id item.id %}" alt="{% trans 'Follow-up photograph' %}" style="display: block; max-width: 220px; border-radius: 10px; margin-top: 0.6rem;">{% endif %}
+            <div style="margin-top: 0.75rem;">
+              {% if item.reassessment_requested_at %}
+                <span style="font-size: 0.85rem; color: var(--muted);">
+                  {% trans "Reassessment requested" %}: {{ item.reassessment_requested_at|date:"d M Y, H:i" }}
+                  {% if item.reassessment %}· <a href="{% url 'case-detail' item.reassessment_id %}" style="color: var(--brand);">{% trans "View reassessment" %}</a>{% else %}· {% trans "Symptoms-based guidance update, no new image classification" %}{% endif %}
+                </span>
+              {% elif not case.parent_case_id %}
+                <form method="post" action="{% url 'case-reassess' root_case.id item.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="button button-primary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">{% trans "Request Reassessment" %}</button>
+                  <span style="font-size: 0.78rem; color: var(--muted);">{% if item.image %}{% trans "The new photograph will be classified." %}{% else %}{% trans "No photograph: guidance is updated from your observations; no new image classification." %}{% endif %}</span>
+                </form>
+              {% endif %}
+            </div>
+          </article>
+        {% empty %}
+          <p style="color: var(--muted);">{% trans "No follow-up observations yet." %}</p>
+        {% endfor %}
+
+        {% if follow_up_form %}
+          <form method="post" enctype="multipart/form-data" action="{% url 'case-follow-up' case.id %}" style="margin-top: 1.25rem; display: grid; gap: 0.75rem;">
+            {% csrf_token %}
+            <h3 style="font-size: 1rem; margin: 0;">{% trans "Add a follow-up" %}</h3>
+            {{ follow_up_form.non_field_errors }}
+            {{ follow_up_form.request_token }}
+            {% for field in follow_up_form.visible_fields %}
+              <label style="font-size: 0.85rem;">{{ field.label }}<br>{{ field }}{{ field.errors }}</label>
+            {% endfor %}
+            <div><button type="submit" class="button button-outline" style="padding: 0.5rem 1.1rem; font-size: 0.88rem;">{% trans "Save Follow-up" %}</button></div>
+          </form>
+        {% endif %}
+      </section>
+    {% endif %}
+
     <!-- Expert Review Section -->
     <section id="expert-review" class="card" style="border-radius: 16px; border: 1px solid var(--border); background: var(--surface); padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
@@ -369,6 +475,7 @@
 {% endblock %}
 
 {% block scripts %}
+  {% if advisory_updating %}<script>window.setTimeout(() => window.location.reload(), 5000);</script>{% endif %}
   {% if weather_auto_capture_eligible and not case.weather_context and case.location or case.status == 'completed' and case.predicted_class and not advisory_version %}
     <script>
       window.addEventListener("load", async () => {

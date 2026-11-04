@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.db import transaction
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import get_language, gettext as _
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
@@ -14,8 +15,8 @@ from diagnoses.models import DiagnosisCase
 from users.models import normalize_language
 from users.views import farmer_required
 from . import chat, library
-from .forms import ChatQuestionForm, GlobalChatForm
-from .models import AIChatMessage, AIChatSession
+from .forms import ChatQuestionForm, GlobalChatForm, RecommendationActionForm
+from .models import AIChatMessage, AIChatSession, RecommendationAction
 
 @login_required
 def generate_case_advisory(request, case_id):
@@ -48,6 +49,25 @@ def generate_case_advisory(request, case_id):
         })
     messages.info(request, "Agricultural advisory generation has been queued.")
     return redirect('case-detail', case_id=case.id)
+
+
+@farmer_required
+@require_POST
+def update_action(request, action_id):
+    action = get_object_or_404(RecommendationAction, id=action_id, farmer=request.user)
+    previous_status = action.status
+    form = RecommendationActionForm(request.POST, instance=action)
+    if form.is_valid():
+        action = form.save(commit=False)
+        if action.status != previous_status:
+            action.status_changed_at = timezone.now()
+        action.save()
+        messages.success(request, _("Action updated."))
+    else:
+        messages.error(request, _("The action could not be updated."))
+    return redirect(
+        reverse("case-detail", args=[action.advisory_version.diagnosis_id]) + "#action-tracking"
+    )
 
 
 @farmer_required

@@ -81,9 +81,19 @@ SAFE_SECTIONS = {
 }
 
 
+NOT_APPLICABLE = {
+    "en": "Not applicable to this result.",
+    "sw": "Haitumiki kwa matokeo haya.",
+    "am": "ለዚህ ውጤት አይመለከትም።",
+}
+
+
 def _context_key(case, language, context):
     payload = json.dumps(
-        {"case": str(case.id), "language": language, "context": context},
+        {
+            "case": str(case.id), "language": language,
+            "context": {k: v for k, v in context.items() if k != "previous_advisories"},
+        },
         ensure_ascii=False, sort_keys=True, separators=(",", ":"),
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -176,11 +186,7 @@ def execute_job(job, retrieve_func=None, generate_func=None):
     error_code = ""
     error_message = ""
     if kind:
-        unavailable = {
-            "en": "Not applicable to this result.",
-            "sw": "Haitumiki kwa matokeo haya.",
-            "am": "ለዚህ ውጤት አይመለከትም።",
-        }[language]
+        unavailable = NOT_APPLICABLE[language]
         sections = {
             key: SAFE_SECTIONS[language][kind].get(key, unavailable)
             for key in SECTION_LABELS[language] if key != "sources"
