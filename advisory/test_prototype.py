@@ -176,6 +176,7 @@ class ArchiveTests(TestCase):
 
 
 @unittest.skipUnless(ARCHIVE.exists(), "FarmSra_RAG_v6.zip is not available")
+@override_settings(RAG_EDUCATIONAL_PROTOTYPE_MODE=False)
 class PrototypeRetrievalTests(TestCase):
     @classmethod
     def setUpTestData(cls):
