@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import transaction
 from django.urls import reverse
+from django.utils.translation import gettext, override
 
 from notifications.models import Notification
 from users.models import User
@@ -20,10 +21,20 @@ def notify(recipient, event_type, event_key, metadata, subject=None, message=Non
     )
     if created and subject and recipient.email:
         link = f"{settings.APP_BASE_URL}{path}" if path else settings.APP_BASE_URL
+        language = recipient.preferred_language
 
         def deliver():
             try:
-                send_mail(subject, f"{message}\n\nSign in to FarmSra AI: {link}", settings.DEFAULT_FROM_EMAIL, [recipient.email])
+                with override(language):
+                    localized_subject = gettext(subject)
+                    localized_message = gettext(message)
+                    sign_in = gettext("Sign in to FarmSra AI")
+                send_mail(
+                    localized_subject,
+                    f"{localized_message}\n\n{sign_in}: {link}",
+                    settings.DEFAULT_FROM_EMAIL,
+                    [recipient.email],
+                )
             except Exception:
                 logger.exception("Transactional email delivery failed for notification %s", notification.id)
 

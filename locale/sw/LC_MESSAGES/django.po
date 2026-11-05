@@ -2591,3 +2591,143 @@ msgstr "mfano wa kielimu"
 
 msgid "Educational prototype, not professionally verified"
 msgstr "Mfano wa kielimu, haujahakikiwa kitaalamu"
+msgid "Advisory generation is only available for completed cases."
+msgstr "Uundaji wa ushauri unapatikana tu kwa kesi zilizokamilika."
+
+msgid "Agricultural advisory generation has been queued."
+msgstr "Uundaji wa ushauri wa kilimo umewekwa kwenye foleni."
+
+msgid "The advisory could not be generated in the selected language. Please retry."
+msgstr "Ushauri haukuweza kuundwa katika lugha iliyochaguliwa. Tafadhali jaribu tena."
+
+msgid "Approved agricultural evidence is currently unavailable. Please retry later."
+msgstr "Ushahidi wa kilimo ulioidhinishwa haupatikani kwa sasa. Tafadhali jaribu baadaye."
+
+msgid "Sign in to FarmSra AI"
+msgstr "Ingia kwenye FarmSra AI"
+
+msgid "Understand Your <br><span style=\"color: var(--brand); font-style: italic;\">Crop's Health</span>"
+msgstr "Elewa <br><span style=\"color: var(--brand); font-style: italic;\">Afya ya Zao Lako</span>"
+
+msgid "Tomato · Potato · Maize"
+msgstr "Nyanya · Viazi · Mahindi"
+
+msgid "East Africa"
+msgstr "Afrika Mashariki"
+
+msgid "Clear sky"
+msgstr "Anga safi"
+
+msgid "Mainly clear"
+msgstr "Anga safi kwa kiasi kikubwa"
+
+msgid "Partly cloudy"
+msgstr "Mawingu kiasi"
+
+msgid "Overcast"
+msgstr "Mawingu mazito"
+
+msgid "Fog"
+msgstr "Ukungu"
+
+msgid "Depositing rime fog"
+msgstr "Ukungu unaogandisha"
+
+msgid "Light drizzle"
+msgstr "Manyunyu mepesi"
+
+msgid "Moderate drizzle"
+msgstr "Manyunyu ya wastani"
+
+msgid "Dense drizzle"
+msgstr "Manyunyu mazito"
+
+msgid "Light freezing drizzle"
+msgstr "Manyunyu mepesi yanayoganda"
+
+msgid "Dense freezing drizzle"
+msgstr "Manyunyu mazito yanayoganda"
+
+msgid "Slight rain"
+msgstr "Mvua ndogo"
+
+msgid "Moderate rain"
+msgstr "Mvua ya wastani"
+
+msgid "Heavy rain"
+msgstr "Mvua kubwa"
+
+msgid "Light freezing rain"
+msgstr "Mvua nyepesi inayoganda"
+
+msgid "Heavy freezing rain"
+msgstr "Mvua kubwa inayoganda"
+
+msgid "Slight snow"
+msgstr "Theluji kidogo"
+
+msgid "Moderate snow"
+msgstr "Theluji ya wastani"
+
+msgid "Heavy snow"
+msgstr "Theluji nyingi"
+
+msgid "Snow grains"
+msgstr "Chembe za theluji"
+
+msgid "Slight rain showers"
+msgstr "Manyunyu madogo ya mvua"
+
+msgid "Moderate rain showers"
+msgstr "Manyunyu ya mvua ya wastani"
+
+msgid "Violent rain showers"
+msgstr "Manyunyu makali ya mvua"
+
+msgid "Slight snow showers"
+msgstr "Manyunyu madogo ya theluji"
+
+msgid "Heavy snow showers"
+msgstr "Manyunyu makubwa ya theluji"
+
+msgid "Thunderstorm"
+msgstr "Mvua ya radi"
+
+msgid "Thunderstorm with slight hail"
+msgstr "Mvua ya radi yenye mvua ndogo ya mawe"
+
+msgid "Thunderstorm with heavy hail"
+msgstr "Mvua ya radi yenye mvua kubwa ya mawe"
+
+msgid "Unknown"
+msgstr "Haijulikani"
+
+msgid "FarmSra AI case assignment"
+msgstr "Ugawaji wa kesi wa FarmSra AI"
+
+msgid "A crop-health case has been assigned to you."
+msgstr "Umepewa kesi ya afya ya zao."
+
+msgid "FarmSra AI expert assignment"
+msgstr "Ugawaji wa mtaalamu wa FarmSra AI"
+
+msgid "Your expert-review request has been assigned."
+msgstr "Ombi lako la ukaguzi wa mtaalamu limekabidhiwa."
+
+msgid "FarmSra AI referral awaiting assignment"
+msgstr "Rufaa ya FarmSra AI inasubiri kukabidhiwa"
+
+msgid "A farmer requested any available expert. Sign in to assign the request."
+msgstr "Mkulima ameomba mtaalamu yeyote anayepatikana. Ingia ili kukabidhi ombi."
+
+msgid "New FarmSra AI message"
+msgstr "Ujumbe mpya wa FarmSra AI"
+
+msgid "You have a new message about a crop-health case."
+msgstr "Una ujumbe mpya kuhusu kesi ya afya ya zao."
+
+msgid "FarmSra AI expert review submitted"
+msgstr "Ukaguzi wa mtaalamu wa FarmSra AI umewasilishwa"
+
+msgid "An expert has submitted a review for your crop-health case."
+msgstr "Mtaalamu amewasilisha ukaguzi wa kesi yako ya afya ya zao."

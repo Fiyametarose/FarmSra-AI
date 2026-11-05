@@ -2425,3 +2425,143 @@ msgstr "የትምህርት ናሙና"
 
 msgid "Educational prototype, not professionally verified"
 msgstr "የትምህርት ናሙና፤ በባለሙያ አልተረጋገጠም"
+msgid "Advisory generation is only available for completed cases."
+msgstr "ምክር ማዘጋጀት ለተጠናቀቁ ጉዳዮች ብቻ ይገኛል።"
+
+msgid "Agricultural advisory generation has been queued."
+msgstr "የግብርና ምክር ማዘጋጀት ወረፋ ውስጥ ገብቷል።"
+
+msgid "The advisory could not be generated in the selected language. Please retry."
+msgstr "ምክሩ በተመረጠው ቋንቋ ሊዘጋጅ አልቻለም። እባክዎ እንደገና ይሞክሩ።"
+
+msgid "Approved agricultural evidence is currently unavailable. Please retry later."
+msgstr "የተፈቀደ የግብርና ማስረጃ አሁን አይገኝም። እባክዎ ቆይተው ይሞክሩ።"
+
+msgid "Sign in to FarmSra AI"
+msgstr "ወደ FarmSra AI ይግቡ"
+
+msgid "Understand Your <br><span style=\"color: var(--brand); font-style: italic;\">Crop's Health</span>"
+msgstr "የሰብልዎን <br><span style=\"color: var(--brand); font-style: italic;\">ጤንነት ይረዱ</span>"
+
+msgid "Tomato · Potato · Maize"
+msgstr "ቲማቲም · ድንች · በቆሎ"
+
+msgid "East Africa"
+msgstr "ምሥራቅ አፍሪካ"
+
+msgid "Clear sky"
+msgstr "ጥርት ያለ ሰማይ"
+
+msgid "Mainly clear"
+msgstr "በአብዛኛው ጥርት ያለ"
+
+msgid "Partly cloudy"
+msgstr "በከፊል ደመናማ"
+
+msgid "Overcast"
+msgstr "ሙሉ ደመናማ"
+
+msgid "Fog"
+msgstr "ጭጋግ"
+
+msgid "Depositing rime fog"
+msgstr "በረዶ የሚያስቀምጥ ጭጋግ"
+
+msgid "Light drizzle"
+msgstr "ቀላል ጠብታማ ዝናብ"
+
+msgid "Moderate drizzle"
+msgstr "መካከለኛ ጠብታማ ዝናብ"
+
+msgid "Dense drizzle"
+msgstr "ከባድ ጠብታማ ዝናብ"
+
+msgid "Light freezing drizzle"
+msgstr "ቀላል በረዶ ሰሪ ጠብታማ ዝናብ"
+
+msgid "Dense freezing drizzle"
+msgstr "ከባድ በረዶ ሰሪ ጠብታማ ዝናብ"
+
+msgid "Slight rain"
+msgstr "ቀላል ዝናብ"
+
+msgid "Moderate rain"
+msgstr "መካከለኛ ዝናብ"
+
+msgid "Heavy rain"
+msgstr "ከባድ ዝናብ"
+
+msgid "Light freezing rain"
+msgstr "ቀላል በረዶ ሰሪ ዝናብ"
+
+msgid "Heavy freezing rain"
+msgstr "ከባድ በረዶ ሰሪ ዝናብ"
+
+msgid "Slight snow"
+msgstr "ቀላል በረዶ"
+
+msgid "Moderate snow"
+msgstr "መካከለኛ በረዶ"
+
+msgid "Heavy snow"
+msgstr "ከባድ በረዶ"
+
+msgid "Snow grains"
+msgstr "የበረዶ ቅንጣቶች"
+
+msgid "Slight rain showers"
+msgstr "ቀላል የዝናብ ሻወር"
+
+msgid "Moderate rain showers"
+msgstr "መካከለኛ የዝናብ ሻወር"
+
+msgid "Violent rain showers"
+msgstr "ኃይለኛ የዝናብ ሻወር"
+
+msgid "Slight snow showers"
+msgstr "ቀላል የበረዶ ሻወር"
+
+msgid "Heavy snow showers"
+msgstr "ከባድ የበረዶ ሻወር"
+
+msgid "Thunderstorm"
+msgstr "ነጎድጓዳማ ዝናብ"
+
+msgid "Thunderstorm with slight hail"
+msgstr "ቀላል በረዶ ያለው ነጎድጓዳማ ዝናብ"
+
+msgid "Thunderstorm with heavy hail"
+msgstr "ከባድ በረዶ ያለው ነጎድጓዳማ ዝናብ"
+
+msgid "Unknown"
+msgstr "ያልታወቀ"
+
+msgid "FarmSra AI case assignment"
+msgstr "የFarmSra AI ጉዳይ ምደባ"
+
+msgid "A crop-health case has been assigned to you."
+msgstr "የሰብል ጤና ጉዳይ ተመድቦልዎታል።"
+
+msgid "FarmSra AI expert assignment"
+msgstr "የFarmSra AI ባለሙያ ምደባ"
+
+msgid "Your expert-review request has been assigned."
+msgstr "የባለሙያ ግምገማ ጥያቄዎ ተመድቧል።"
+
+msgid "FarmSra AI referral awaiting assignment"
+msgstr "የFarmSra AI ሪፈራል ምደባ በመጠበቅ ላይ ነው"
+
+msgid "A farmer requested any available expert. Sign in to assign the request."
+msgstr "አንድ ገበሬ ማንኛውንም የሚገኝ ባለሙያ ጠይቋል። ጥያቄውን ለመመደብ ይግቡ።"
+
+msgid "New FarmSra AI message"
+msgstr "አዲስ የFarmSra AI መልዕክት"
+
+msgid "You have a new message about a crop-health case."
+msgstr "ስለ ሰብል ጤና ጉዳይ አዲስ መልዕክት አለዎት።"
+
+msgid "FarmSra AI expert review submitted"
+msgstr "የFarmSra AI ባለሙያ ግምገማ ቀርቧል"
+
+msgid "An expert has submitted a review for your crop-health case."
+msgstr "አንድ ባለሙያ ለሰብል ጤና ጉዳይዎ ግምገማ አቅርቧል።"

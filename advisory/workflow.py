@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.db import transaction
+from django.utils.translation import gettext as _, override
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
@@ -207,9 +208,13 @@ def execute_job(job, retrieve_func=None, generate_func=None):
                 cited = {str(item) for item in citations}
                 sources = [item for item in evidence if str(item.get("chunk_id")) in cited]
             else:
-                error_code, error_message = "generation_unavailable", "The advisory could not be generated in the selected language. Please retry."
+                error_code = "generation_unavailable"
+                with override(language):
+                    error_message = _("The advisory could not be generated in the selected language. Please retry.")
         else:
-            error_code, error_message = "evidence_unavailable", "Approved agricultural evidence is currently unavailable. Please retry later."
+            error_code = "evidence_unavailable"
+            with override(language):
+                error_message = _("Approved agricultural evidence is currently unavailable. Please retry later.")
 
     finished = timezone.now()
     with transaction.atomic():

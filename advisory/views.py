@@ -34,7 +34,7 @@ def generate_case_advisory(request, case_id):
         return redirect('case-detail', case_id=case.id)
 
     if case.status != DiagnosisCase.Status.COMPLETED or not case.predicted_class:
-        messages.error(request, "Advisory generation is only available for completed cases.")
+        messages.error(request, _("Advisory generation is only available for completed cases."))
         return redirect('case-detail', case_id=case.id)
 
     from .workflow import enqueue_for_case
@@ -47,7 +47,7 @@ def generate_case_advisory(request, case_id):
                 redirect('case-detail', case_id=case.id).url
             ),
         })
-    messages.info(request, "Agricultural advisory generation has been queued.")
+    messages.info(request, _("Agricultural advisory generation has been queued."))
     return redirect('case-detail', case_id=case.id)
 
 
