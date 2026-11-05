@@ -321,6 +321,7 @@ class AdvisoryTests(TestCase):
         self.assertEqual(context["weather"]["location_source"], "explicit")
         self.assertIn("observed_at", context["weather"])
 
+    @override_settings(RAG_EDUCATIONAL_PROTOTYPE_MODE=False)
     @patch("advisory.services.get_chroma_collection")
     def test_retrieval_keeps_crop_and_condition_filters(self, mock_collection):
         mock_collection.return_value.query.return_value = {

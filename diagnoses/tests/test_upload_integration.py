@@ -1,4 +1,7 @@
-from django.test import TestCase, override_settings
+import tempfile
+
+from django.conf import settings
+from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from diagnoses.models import DiagnosisCase
@@ -14,6 +17,11 @@ def image_upload(image_format="PNG", size=(20, 20), name="leaf.png"):
 
 class DiagnosisUploadIntegrationTests(TestCase):
     def setUp(self):
+        self.media_directory = tempfile.TemporaryDirectory(dir=settings.BASE_DIR)
+        self.addCleanup(self.media_directory.cleanup)
+        media_override = self.settings(MEDIA_ROOT=self.media_directory.name)
+        media_override.enable()
+        self.addCleanup(media_override.disable)
         self.farmer1 = User.objects.create_user(
             "f1@test.com", "pwd", role=User.Role.FARMER, town="Profile Town", country="KE"
         )
@@ -27,7 +35,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         self.client.login(email="f1@test.com", password="pwd")
         self.url = reverse("case-upload", kwargs={"crop": "tomato"})
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_upload_with_own_matching_crop(self):
         response = self.client.post(self.url, {
             "image": image_upload(),
@@ -38,7 +45,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         case = DiagnosisCase.objects.get()
         self.assertEqual(case.registered_crop, self.tomato1)
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_upload_with_other_farmer_crop_rejected(self):
         response = self.client.post(self.url, {
             "image": image_upload(),
@@ -49,7 +55,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         self.assertContains(response, "Select a valid choice. That choice is not one of the available choices.")
         self.assertEqual(DiagnosisCase.objects.count(), 0)
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_upload_with_different_species_rejected(self):
         response = self.client.post(self.url, {
             "image": image_upload(),
@@ -60,7 +65,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         self.assertContains(response, "Select a valid choice. That choice is not one of the available choices.")
         self.assertEqual(DiagnosisCase.objects.count(), 0)
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_upload_without_registered_crop_supported(self):
         response = self.client.post(self.url, {
             "image": image_upload(),
@@ -71,7 +75,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         case = DiagnosisCase.objects.get()
         self.assertIsNone(case.registered_crop)
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_explicit_case_location_overrides_crop_and_profile(self):
         self.client.post(self.url, {
             "image": image_upload(),
@@ -80,7 +83,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         })
         self.assertEqual(DiagnosisCase.objects.get().location, "Field Override")
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_crop_location_precedes_profile_fallback(self):
         self.client.post(self.url, {
             "image": image_upload(),
@@ -89,7 +91,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         })
         self.assertEqual(DiagnosisCase.objects.get().location, "Crop Plot")
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_profile_location_is_last_fallback(self):
         self.client.post(self.url, {
             "image": image_upload(),
@@ -103,7 +104,6 @@ class DiagnosisUploadIntegrationTests(TestCase):
         self.assertContains(response, 'id="use-device-location"')
         self.assertNotContains(response, "getCurrentPosition(")
 
-    @override_settings(MEDIA_ROOT="/tmp")
     def test_browser_geolocation_provenance_is_saved_as_unverified(self):
         self.client.post(self.url, {
             "image": image_upload(),
