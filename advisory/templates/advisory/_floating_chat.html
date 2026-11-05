@@ -7,8 +7,11 @@
   <section class="floating-chat-panel" id="floatingChatPanel" hidden
            aria-label="{% trans 'Agricultural assistant' %}" aria-live="polite">
     <header class="floating-chat-header">
-      <div><strong>{% trans "FarmSra Assistant" %}</strong><small>{% trans "Answers use approved agricultural sources" %}</small></div>
-      <button id="floatingChatClose" type="button" aria-label="{% trans 'Close agricultural assistant' %}">×</button>
+      <div>
+        <strong>{% trans "FarmSra Assistant" %}</strong>
+        <small>{% trans "Answers cite agricultural advisory sources" %}</small>
+      </div>
+      <button id="floatingChatClose" type="button" aria-label="{% trans 'Close agricultural assistant' %}">✕</button>
     </header>
     <div class="floating-chat-controls">
       <label for="floatingChatScope">{% trans "Conversation" %}</label>
@@ -29,7 +32,7 @@
                 placeholder="{% trans 'Ask about tomato, potato or maize…' %}"></textarea>
       <input name="token" type="hidden">
       <button type="submit">{% trans "Send" %}</button>
-      <span id="floatingChatLoading" role="status" hidden>{% trans "Finding approved evidence…" %}</span>
+      <span id="floatingChatLoading" role="status" hidden>{% trans "Finding agricultural evidence…" %}</span>
     </form>
   </section>
 </div>
@@ -53,9 +56,43 @@
   const selectedSession = () => state?.sessions.find(item => item.id === scope.value || (scope.value === "general" && item.case_id === null));
   const render = () => {
     const session = selectedSession();
-    messages.innerHTML = session?.messages.length ? session.messages.map(item =>
-      `<article class="floating-chat-message ${item.role}"><small>${item.role === "farmer" ? "{% trans 'You' %}" : "{% trans 'AI Assistant' %}"} · ${escape(item.language.toUpperCase())}</small><div>${escape(item.content)}</div>${item.sources?.length ? `<ul>${item.sources.map(source => `<li>${escape(source.title)}${source.publisher ? ` — ${escape(source.publisher)}` : ""}${source.evidence_tier === "educational_prototype" ? ` (${escape("{% trans 'educational prototype' %}")})` : ""}</li>`).join("")}</ul>` : ""}</article>`
-    ).join("") : `<p class="floating-chat-empty">{% trans "Ask your first agricultural question." %}</p>`;
+    messages.innerHTML = session?.messages.length ? session.messages.map(item => {
+      const isFarmer = item.role === "farmer";
+      const roleLabel = isFarmer ? "{% trans 'You' %}" : "{% trans 'AI Assistant' %}";
+      const langBadge = escape((item.language || "en").toUpperCase());
+      let kindBadge = "";
+      if (!isFarmer && item.kind === "excerpts") {
+        kindBadge = ` · <span class="badge badge-yellow">{% trans 'Source excerpts' %}</span>`;
+      } else if (!isFarmer && item.kind === "notice") {
+        kindBadge = ` · <span class="badge badge-yellow">{% trans 'Notice' %}</span>`;
+      }
+      const formattedContent = escape(item.content).replace(/\n/g, "<br>");
+      let sourcesHtml = "";
+      if (item.sources && item.sources.length) {
+        sourcesHtml = `<div class="floating-chat-sources-title">{% trans 'Sources' %}:</div><ul>` + item.sources.map(source => {
+          const title = source.url ? `<a href="${escape(source.url)}" target="_blank" rel="noopener noreferrer">${escape(source.title)} ↗</a>` : `<strong>${escape(source.title)}</strong>`;
+          const publisher = source.publisher ? ` — ${escape(source.publisher)}` : "";
+          const date = source.date ? ` · ${escape(source.date)}` : "";
+          const prototype = source.evidence_tier === "educational_prototype" ? `<div class="floating-chat-prototype-warning">{% trans 'Educational prototype evidence, not professionally verified' %}</div>` : "";
+          return `<li>${title}${publisher}${date}${prototype}</li>`;
+        }).join("") + `</ul>`;
+      }
+      let disclaimerHtml = "";
+      if (!isFarmer) {
+        disclaimerHtml = `<div class="floating-chat-disclaimer">{% trans 'AI guidance, not a confirmed diagnosis. Verify any chemical product on the official local label with local extension services.' %}</div>`;
+      }
+      return `<article class="floating-chat-message ${item.role}">
+        <div class="floating-chat-message-meta">
+          <span>${roleLabel}</span>
+          <span>·</span>
+          <span>${langBadge}</span>
+          ${kindBadge}
+        </div>
+        <div>${formattedContent}</div>
+        ${sourcesHtml}
+        ${disclaimerHtml}
+      </article>`;
+    }).join("") : `<p class="floating-chat-empty">{% trans "Ask your first agricultural question." %}</p>`;
     messages.scrollTop = messages.scrollHeight;
     const general = scope.value === "general";
     crop.hidden = cropLabel.hidden = !general;
@@ -84,13 +121,34 @@
   const setOpen = open => {
     panel.hidden = !open; launcher.setAttribute("aria-expanded", String(open));
     localStorage.setItem("farmsra-chat-open", open ? "1" : "0");
-    if (open) { if (!state) load(); setTimeout(() => form.elements.question.focus(), 0); }
+    if (open) { if (!state) load(); setTimeout(() => form.elements.question.focus(), 50); }
     else launcher.focus();
   };
   launcher.addEventListener("click", () => setOpen(panel.hidden));
   close.addEventListener("click", () => setOpen(false));
   scope.addEventListener("change", render);
-  document.addEventListener("keydown", event => { if (event.key === "Escape" && !panel.hidden) setOpen(false); });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !panel.hidden) {
+      event.preventDefault();
+      setOpen(false);
+    }
+  });
+
+  panel.addEventListener("keydown", event => {
+    if (event.key !== "Tab") return;
+    const focusables = panel.querySelectorAll("button:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex='-1'])");
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      last.focus();
+      event.preventDefault();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      first.focus();
+      event.preventDefault();
+    }
+  });
+
   form.addEventListener("submit", async event => {
     event.preventDefault(); if (form.dataset.busy === "1") return;
     form.dataset.busy = "1"; loading.hidden = false; error.hidden = true;
@@ -110,7 +168,12 @@
       form.reset(); render();
     } catch (problem) {
       form.elements.question.value = retryQuestion;
-      error.textContent = problem.message; error.hidden = false;
+      error.innerHTML = `<span>${escape(problem.message)}</span> <button type="button" class="button button-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-top: 0.35rem; display: inline-block;">{% trans 'Retry' %}</button>`;
+      error.hidden = false;
+      error.querySelector("button")?.addEventListener("click", () => {
+        error.hidden = true;
+        form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      });
     } finally { form.dataset.busy = "0"; loading.hidden = true; }
   });
   if (localStorage.getItem("farmsra-chat-open") === "1") setOpen(true);

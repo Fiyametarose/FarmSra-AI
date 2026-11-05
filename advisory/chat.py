@@ -28,8 +28,23 @@ EVIDENCE_CHUNKS = 4
 MAX_ANSWER_CHARS = 2500
 ANSWER_MAX_TOKENS = 4096
 REWRITE_MAX_TOKENS = 256
-ANSWER_TIMEOUT = (5, 45)
-REWRITE_TIMEOUT = (5, 15)
+def _get_timeout(env_var, default_connect, default_read):
+    val = os.environ.get(env_var, "").strip()
+    if not val:
+        return (default_connect, default_read)
+    try:
+        parts = [int(p.strip()) for p in val.split(",")]
+        if len(parts) == 1:
+            return (default_connect, max(1, parts[0]))
+        elif len(parts) == 2:
+            return (max(1, parts[0]), max(1, parts[1]))
+    except (ValueError, TypeError):
+        pass
+    return (default_connect, default_read)
+
+
+ANSWER_TIMEOUT = _get_timeout("GEMINI_CHAT_TIMEOUT", 5, 20)
+REWRITE_TIMEOUT = _get_timeout("GEMINI_REWRITE_TIMEOUT", 5, 15)
 FALLBACK_SENTENCES = 3
 FALLBACK_SENTENCE_CHARS = 300
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
