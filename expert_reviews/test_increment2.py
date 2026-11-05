@@ -35,6 +35,30 @@ class ReferralCommunicationTests(TestCase):
         self.assertContains(response, "English")
         self.assertNotContains(response, self.expert.email)
 
+    def test_expert_can_update_profile_but_not_verification(self):
+        self.client.force_login(self.expert)
+        response = self.client.post(reverse("expert-settings"), {
+            "full_name": "Asha K",
+            "email": self.expert.email,
+            "specialization": "Crop disease management",
+            "professional_description": "Extension agronomist",
+            "service_areas": "Nakuru County, Arsi Zone",
+            "speaks_english": "on",
+            "speaks_swahili": "on",
+            "availability": ExpertProfile.Availability.AVAILABLE,
+            "verification_status": ExpertProfile.Verification.VERIFIED,
+        })
+        self.assertRedirects(response, reverse("expert-settings"))
+        self.profile.refresh_from_db()
+        self.assertEqual(self.profile.specialization, "Crop disease management")
+        self.assertEqual(self.profile.service_areas, "Nakuru County, Arsi Zone")
+        self.assertTrue(self.profile.speaks_swahili)
+        self.assertEqual(self.profile.verification_status, ExpertProfile.Verification.UNVERIFIED)
+
+    def test_farmer_cannot_access_expert_profile_settings(self):
+        self.client.force_login(self.farmer)
+        self.assertEqual(self.client.get(reverse("expert-settings")).status_code, 403)
+
     def test_directory_includes_active_expert_without_profile_but_not_as_choice(self):
         incomplete = User.objects.create_user(
             email="incomplete@test.com", password="pw", role="expert", first_name="Incomplete"
@@ -120,6 +144,17 @@ class ReferralCommunicationTests(TestCase):
         self.assertEqual(self.client.post(reverse("expert-send-message", args=[referral.id]), {"body": "Forged"}).status_code, 403)
         self.client.force_login(self.other_farmer)
         self.assertEqual(self.client.post(reverse("expert-send-message", args=[referral.id]), {"body": "Forged"}).status_code, 403)
+
+    def test_assigned_expert_receives_authorized_case_history_context(self):
+        referral = self._assigned_referral()
+        self.client.force_login(self.expert)
+        response = self.client.get(reverse("expert-case-detail", args=[referral.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("follow_ups", response.context)
+        self.assertIn("assessments", response.context)
+        self.assertIn("advisory_versions", response.context)
+        self.assertIn("action_progress", response.context)
+        self.assertIn("weather_observations", response.context)
 
     def test_revocation_immediately_blocks_expert_but_farmer_retains_history(self):
         referral = self._assigned_referral()

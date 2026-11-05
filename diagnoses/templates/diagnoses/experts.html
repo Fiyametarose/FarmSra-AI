@@ -68,6 +68,7 @@
             <div>{{ expert.expert_profile.specialization|default:_('Profile incomplete') }}</div>
             <div>{% trans "Languages" %}: {% for language in expert.expert_profile.supported_languages %}{{ language }}{% if not forloop.last %}, {% endif %}{% empty %}{% trans "Not provided" %}{% endfor %}</div>
             <div>{% trans "Availability" %}: {{ expert.expert_profile.get_availability_display }} · {% trans "Verification" %}: {{ expert.expert_profile.get_verification_status_display }}</div>
+            <div>{% trans "Service areas" %}: {{ expert.expert_profile.service_areas|default:_('Not provided') }}</div>
             {% if not expert.expert_profile.is_complete %}<small>{% trans "Profile incomplete" %}</small>{% endif %}
             {% if expert.expert_profile.professional_description %}<p>{{ expert.expert_profile.professional_description }}</p>{% endif %}
           {% else %}

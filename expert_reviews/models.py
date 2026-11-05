@@ -3,16 +3,17 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.core.validators import MaxLengthValidator
+from django.utils.translation import gettext_lazy as _
 
 
 class ExpertProfile(models.Model):
     class Availability(models.TextChoices):
-        AVAILABLE = "available", "Available"
-        UNAVAILABLE = "unavailable", "Unavailable"
+        AVAILABLE = "available", _("Available")
+        UNAVAILABLE = "unavailable", _("Unavailable")
 
     class Verification(models.TextChoices):
-        UNVERIFIED = "unverified", "Unverified"
-        VERIFIED = "verified", "Verified"
+        UNVERIFIED = "unverified", _("Unverified")
+        VERIFIED = "verified", _("Verified")
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="expert_profile"
@@ -25,6 +26,7 @@ class ExpertProfile(models.Model):
         max_length=20, choices=Availability.choices, default=Availability.UNAVAILABLE
     )
     professional_description = models.TextField(blank=True, validators=[MaxLengthValidator(1000)])
+    service_areas = models.TextField(blank=True, validators=[MaxLengthValidator(500)])
     verification_status = models.CharField(
         max_length=20, choices=Verification.choices, default=Verification.UNVERIFIED
     )
@@ -32,9 +34,9 @@ class ExpertProfile(models.Model):
     @property
     def supported_languages(self):
         return [name for enabled, name in (
-            (self.speaks_english, "English"),
-            (self.speaks_swahili, "Swahili"),
-            (self.speaks_amharic, "Amharic"),
+            (self.speaks_english, _("English")),
+            (self.speaks_swahili, _("Swahili")),
+            (self.speaks_amharic, _("Amharic")),
         ) if enabled]
 
     @property
@@ -47,13 +49,13 @@ class ExpertProfile(models.Model):
 
 class ExpertReferral(models.Model):
     class RecipientChoice(models.TextChoices):
-        ANY = "any", "Any available expert"
-        SPECIFIC = "specific", "Specific expert"
+        ANY = "any", _("Any available expert")
+        SPECIFIC = "specific", _("Specific expert")
     class State(models.TextChoices):
-        REQUESTED = "requested", "Awaiting Assignment"
-        ASSIGNED = "assigned", "Assigned"
-        REVIEWED = "reviewed", "Review Completed"
-        REVOKED = "revoked", "Consent Revoked"
+        REQUESTED = "requested", _("Awaiting Assignment")
+        ASSIGNED = "assigned", _("Assigned")
+        REVIEWED = "reviewed", _("Review Completed")
+        REVOKED = "revoked", _("Consent Revoked")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     diagnosis = models.ForeignKey(
@@ -115,10 +117,10 @@ class ExpertMessage(models.Model):
 
 class ExpertReview(models.Model):
     class Outcome(models.TextChoices):
-        AGREES = "agrees", "Agrees with AI Prediction"
-        ALTERNATIVE = "alternative", "Alternative Assessment"
-        INCONCLUSIVE = "inconclusive", "Inconclusive"
-        MORE_INFO_NEEDED = "more_info_needed", "More Information Needed"
+        AGREES = "agrees", _("Agrees with AI Prediction")
+        ALTERNATIVE = "alternative", _("Alternative Assessment")
+        INCONCLUSIVE = "inconclusive", _("Inconclusive")
+        MORE_INFO_NEEDED = "more_info_needed", _("More Information Needed")
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     referral = models.OneToOneField(

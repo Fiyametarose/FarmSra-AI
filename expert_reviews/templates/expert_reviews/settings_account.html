@@ -135,6 +135,37 @@
       </section>
     </div>
 
+    <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.3rem; margin-top: 0;">{% trans "Professional Information" %}</h2>
+      <p style="color: var(--muted);">{% trans "Keep the information farmers use when choosing an expert up to date." %}</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <div class="form-group">
+          <label for="{{ profile_form.specialization.id_for_label }}">{% trans "Specialization" %}</label>
+          {{ profile_form.specialization }}{{ profile_form.specialization.errors }}
+        </div>
+        <div class="form-group">
+          <label for="{{ profile_form.availability.id_for_label }}">{% trans "Availability" %}</label>
+          {{ profile_form.availability }}{{ profile_form.availability.errors }}
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 1rem;">
+        <label for="{{ profile_form.professional_description.id_for_label }}">{% trans "Professional description" %}</label>
+        {{ profile_form.professional_description }}{{ profile_form.professional_description.errors }}
+      </div>
+      <div class="form-group" style="margin-top: 1rem;">
+        <label for="{{ profile_form.service_areas.id_for_label }}">{% trans "Service areas" %}</label>
+        {{ profile_form.service_areas }}{{ profile_form.service_areas.errors }}
+        <small style="color: var(--muted);">{% trans "List the counties, regions, zones, or districts you serve." %}</small>
+      </div>
+      <fieldset style="margin-top: 1rem; border: 0; padding: 0;">
+        <legend style="font-weight: 600;">{% trans "Languages" %}</legend>
+        <label>{{ profile_form.speaks_english }} {% trans "English" %}</label>
+        <label style="margin-left: 1rem;">{{ profile_form.speaks_swahili }} {% trans "Swahili" %}</label>
+        <label style="margin-left: 1rem;">{{ profile_form.speaks_amharic }} {% trans "Amharic" %}</label>
+      </fieldset>
+      <p style="margin-bottom: 0;"><strong>{% trans "Verification" %}:</strong> {{ profile.get_verification_status_display }} · {% trans "Only an authorized administrator can change verification." %}</p>
+    </section>
+
     <!-- Access & Authorization Card -->
     <section class="card" style="border-radius: 14px; border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; margin-bottom: 1.5rem;">
       <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 1rem 0; color: var(--text);">{% trans "Your expert access" %}</h3>
@@ -150,10 +181,10 @@
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
           <div>
             <div style="font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 0.25rem;">
-              {% trans "Oromia · authorized service areas" %}
+              {% trans "Service areas" %}
             </div>
             <p style="font-size: 0.85rem; color: var(--muted); margin: 0;">
-              {% trans "East Shewa / West Shewa / Arsi · administrator-approved" %}
+              {{ profile.service_areas|default:_('Not provided') }}
             </p>
           </div>
           <span class="badge" style="background: var(--surface-alt); color: var(--muted); border: 1px solid var(--border); font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 4px; white-space: nowrap;">

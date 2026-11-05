@@ -29,6 +29,34 @@
       </section>
     </div>
 
+    <section class="card" style="padding: 1.5rem; margin-bottom: 1.5rem;">
+      <h2>{% trans "Case History Shared by Consent" %}</h2>
+      <h3>{% trans "Follow-up observations" %}</h3>
+      {% for item in follow_ups %}
+        <p><strong>{{ item.observed_at|date:"d M Y, H:i" }}</strong>{% if item.symptoms %} · {{ item.symptoms }}{% endif %}{% if item.actions_taken %}<br>{% trans "Actions taken" %}: {{ item.actions_taken }}{% endif %}</p>
+      {% empty %}<p>{% trans "No follow-up observations yet." %}</p>{% endfor %}
+
+      <h3>{% trans "Assessments and reassessments" %}</h3>
+      {% for item in assessments %}
+        <p>{{ item.created_at|date:"d M Y, H:i" }} · {{ item.display_prediction }}{% if item.model_confidence is not None %} · {{ item.confidence_percent }}%{% endif %}</p>
+      {% endfor %}
+
+      <h3>{% trans "Advisory history" %}</h3>
+      {% for item in advisory_versions %}
+        <details><summary>{{ item.diagnosis.created_at|date:"d M Y" }} · {{ item.get_language_display }} · {% blocktrans with version=item.version %}Version {{ version }}{% endblocktrans %}</summary><div style="white-space: pre-wrap;">{{ item.content }}</div></details>
+      {% empty %}<p>{% trans "No advisory history is available." %}</p>{% endfor %}
+
+      <h3>{% trans "Recommendation action progress" %}</h3>
+      {% for item in action_progress %}
+        <p><strong>{{ item.get_status_display }}</strong> · {{ item.recommendation }}{% if item.farmer_notes %}<br>{{ item.farmer_notes }}{% endif %}</p>
+      {% empty %}<p>{% trans "No recommendation actions are being tracked." %}</p>{% endfor %}
+
+      <h3>{% trans "Weather observations" %}</h3>
+      {% for item in weather_observations %}
+        <p>{{ item.observed_at|date:"d M Y, H:i" }} · {{ item.location_name }} · {{ item.temperature|default_if_none:"—" }}°C · {% trans item.condition %}</p>
+      {% empty %}<p>{% trans "No weather observations are available." %}</p>{% endfor %}
+    </section>
+
     <div class="expert-review-layout">
 
       <!-- Left Column: Specimen Image & AI Prediction Context -->

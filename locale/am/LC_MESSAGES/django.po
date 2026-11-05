@@ -2565,3 +2565,46 @@ msgstr "የFarmSra AI ባለሙያ ግምገማ ቀርቧል"
 
 msgid "An expert has submitted a review for your crop-health case."
 msgstr "አንድ ባለሙያ ለሰብል ጤና ጉዳይዎ ግምገማ አቅርቧል።"
+msgid "Keep the information farmers use when choosing an expert up to date."
+msgstr "ገበሬዎች ባለሙያ ሲመርጡ የሚጠቀሙበትን መረጃ ወቅታዊ ያድርጉ።"
+
+msgid "Professional description"
+msgstr "ሙያዊ መግለጫ"
+
+msgid "List the counties, regions, zones, or districts you serve."
+msgstr "የሚያገለግሉባቸውን ካውንቲዎች፣ ክልሎች፣ ዞኖች ወይም ወረዳዎች ይዘርዝሩ።"
+
+msgid "Only an authorized administrator can change verification."
+msgstr "ማረጋገጫን መቀየር የሚችለው የተፈቀደለት አስተዳዳሪ ብቻ ነው።"
+
+msgid "Case History Shared by Consent"
+msgstr "በፈቃድ የተጋራ የጉዳይ ታሪክ"
+
+msgid "Assessments and reassessments"
+msgstr "ግምገማዎች እና ድጋሚ ግምገማዎች"
+
+msgid "Advisory history"
+msgstr "የምክር ታሪክ"
+
+msgid "No advisory history is available."
+msgstr "ምንም የምክር ታሪክ አይገኝም።"
+
+msgid "Recommendation action progress"
+msgstr "የምክር ተግባር እድገት"
+
+msgid "No recommendation actions are being tracked."
+msgstr "በክትትል ላይ ያለ የምክር ተግባር የለም።"
+
+msgid "No weather observations are available."
+msgstr "ምንም የአየር ሁኔታ ምልከታ አይገኝም።"
+msgid "Follow-up observations"
+msgstr "የክትትል ምልከታዎች"
+
+msgid "Weather observations"
+msgstr "የአየር ሁኔታ ምልከታዎች"
+
+msgid "Service areas"
+msgstr "የአገልግሎት አካባቢዎች"
+
+msgid "Specialization"
+msgstr "ልዩ ሙያ"

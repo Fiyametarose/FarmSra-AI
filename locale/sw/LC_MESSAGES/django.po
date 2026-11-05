@@ -2731,3 +2731,46 @@ msgstr "Ukaguzi wa mtaalamu wa FarmSra AI umewasilishwa"
 
 msgid "An expert has submitted a review for your crop-health case."
 msgstr "Mtaalamu amewasilisha ukaguzi wa kesi yako ya afya ya zao."
+msgid "Keep the information farmers use when choosing an expert up to date."
+msgstr "Sasisha taarifa ambazo wakulima hutumia wanapochagua mtaalamu."
+
+msgid "Professional description"
+msgstr "Maelezo ya kitaaluma"
+
+msgid "List the counties, regions, zones, or districts you serve."
+msgstr "Orodhesha kaunti, mikoa, kanda au wilaya unazohudumia."
+
+msgid "Only an authorized administrator can change verification."
+msgstr "Msimamizi aliyeidhinishwa pekee anaweza kubadilisha uthibitishaji."
+
+msgid "Case History Shared by Consent"
+msgstr "Historia ya Kesi Iliyoshirikiwa kwa Idhini"
+
+msgid "Assessments and reassessments"
+msgstr "Tathmini na tathmini mpya"
+
+msgid "Advisory history"
+msgstr "Historia ya ushauri"
+
+msgid "No advisory history is available."
+msgstr "Hakuna historia ya ushauri inayopatikana."
+
+msgid "Recommendation action progress"
+msgstr "Maendeleo ya utekelezaji wa mapendekezo"
+
+msgid "No recommendation actions are being tracked."
+msgstr "Hakuna hatua za mapendekezo zinazofuatiliwa."
+
+msgid "No weather observations are available."
+msgstr "Hakuna uchunguzi wa hali ya hewa unaopatikana."
+msgid "Follow-up observations"
+msgstr "Uchunguzi wa ufuatiliaji"
+
+msgid "Weather observations"
+msgstr "Uchunguzi wa hali ya hewa"
+
+msgid "Service areas"
+msgstr "Maeneo ya huduma"
+
+msgid "Specialization"
+msgstr "Utaalamu"

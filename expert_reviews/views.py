@@ -12,7 +12,7 @@ from diagnoses.models import DiagnosisCase
 from users.models import User
 from users.forms import FarmerAccountForm
 from .models import ExpertMessage, ExpertProfile, ExpertReferral, ExpertReview
-from .forms import ExpertMessageForm, RequestReviewForm
+from .forms import ExpertMessageForm, ExpertProfileForm, RequestReviewForm
 from .services import notify, notify_assignment, notify_coordinators
 from notifications.models import Notification
 
@@ -169,12 +169,28 @@ def case_detail(request, referral_id):
     if referral.state not in (ExpertReferral.State.ASSIGNED, ExpertReferral.State.REVIEWED):
         raise PermissionDenied
     case = referral.diagnosis
+    root_case = case.parent_case or case
+    family_ids = [root_case.id, *root_case.reassessments.values_list("id", flat=True)]
+    from advisory.models import AdvisoryVersion, RecommendationAction
+    from weather.models import WeatherSnapshot
     referral.messages.exclude(sender=request.user).filter(read_at__isnull=True).update(read_at=timezone.now())
     return render(request, "expert_reviews/case_detail.html", {
         "referral": referral,
         "case": case,
         "expert_messages": referral.messages.select_related("sender"),
         "message_form": ExpertMessageForm(),
+        "follow_ups": root_case.follow_ups.select_related("reassessment"),
+        "assessments": [root_case, *root_case.reassessments.order_by("created_at")],
+        "advisory_versions": AdvisoryVersion.objects.filter(
+            diagnosis_id__in=family_ids, status="succeeded"
+        ).select_related("diagnosis").order_by("-created_at"),
+        "action_progress": RecommendationAction.objects.filter(
+            farmer=case.farmer,
+            advisory_version__diagnosis_id__in=family_ids,
+        ).select_related("advisory_version", "advisory_version__diagnosis").order_by("-updated_at"),
+        "weather_observations": WeatherSnapshot.objects.filter(
+            diagnosis_id__in=family_ids
+        ).select_related("diagnosis").order_by("-observed_at"),
     })
 
 
@@ -305,8 +321,16 @@ def case_image(request, referral_id):
 
 @expert_required
 def settings_account(request):
+    profile, _created = ExpertProfile.objects.get_or_create(user=request.user)
     form = FarmerAccountForm(request.POST or None, instance=request.user)
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    profile_form = ExpertProfileForm(request.POST or None, instance=profile)
+    if request.method == "POST" and form.is_valid() and profile_form.is_valid():
+        with transaction.atomic():
+            form.save()
+            profile_form.save()
         return redirect("expert-settings")
-    return render(request, "expert_reviews/settings_account.html", {"form": form})
+    return render(request, "expert_reviews/settings_account.html", {
+        "form": form,
+        "profile_form": profile_form,
+        "profile": profile,
+    })

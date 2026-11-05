@@ -46,3 +46,28 @@ class ExpertMessageForm(forms.ModelForm):
         if not body:
             raise forms.ValidationError(_("Enter a message."))
         return body
+
+
+class ExpertProfileForm(forms.ModelForm):
+    class Meta:
+        model = ExpertProfile
+        fields = [
+            "professional_description",
+            "specialization",
+            "speaks_english",
+            "speaks_swahili",
+            "speaks_amharic",
+            "service_areas",
+            "availability",
+        ]
+        widgets = {
+            "professional_description": forms.Textarea(attrs={"rows": 4}),
+            "service_areas": forms.Textarea(attrs={"rows": 3}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["availability"].required = False
+
+    def clean_availability(self):
+        return self.cleaned_data.get("availability") or self.instance.availability
