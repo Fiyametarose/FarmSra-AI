@@ -1,6 +1,6 @@
 # FarmSra AI
 
-FarmSra AI is a university crop-health decision-support prototype for farmers in East Africa. Farmers can upload a required crop-leaf image, record symptoms and the case location, run crop-specific image inference, save the result, reopen case history, request guidance, and consent to a case-specific review by an assigned agricultural expert.
+FarmSra AI is a university crop-health decision-support prototype for farmers in East Africa. It combines saved crop cases, local image inference, cited agricultural guidance, multilingual chat, weather history, follow-up reassessment, recommendation tracking, and farmer-controlled expert consultation.
 
 ## Scope and workflows
 
@@ -9,6 +9,8 @@ FarmSra AI is a university crop-health decision-support prototype for farmers in
 - Retrieves agricultural evidence from the source documents in `advisory/sources/` through a local Chroma collection. Optional Gemini configuration can produce source-linked guidance from that retrieved evidence.
 - Public registration creates farmer accounts. Experts are created and managed by administrators.
 - Farmers can access only their own cases. Experts can access a case only after farmer consent and assignment.
+- Follow-ups can record symptoms and photographs, trigger reassessment, and retain earlier predictions, guidance, actions, and weather observations.
+- Farmers can message an assigned expert, revoke access, and receive a professional review without any automatic AI referral.
 - The interface supports English, Amharic, and Swahili through Django gettext catalogs.
 
 The application is a Django 5.2 modular monolith using Django templates, vanilla CSS and JavaScript, PostgreSQL, TensorFlow/Keras, and Chroma.
@@ -76,12 +78,12 @@ python manage.py ingest_knowledge
 
 ### Educational-prototype knowledge archive (development only)
 
-`FarmSra_RAG_v6.zip` (23 topics x English/Swahili/Amharic = 69 Markdown documents) is imported as **educational-prototype** knowledge. It has no professional agronomist sign-off and no certified translation, so it is stored as unverified, inactive, non-expert-reviewed versions with `approval_scope=educational_prototype`. The production approval constraint and the governed workflow are unchanged, and `eligible_versions()` never returns these versions.
+The tracked `knowledge_assets/farmsra_rag_v6/` directory contains 23 topics in English, Swahili, and Amharic (69 Markdown documents) plus the source ledger, evaluation, coverage, QA, display, and integration metadata. Each document identifies itself as a FarmSra original synthesis that links to sources without reproducing external source text. This material is imported as **educational-prototype** knowledge. It has no professional agronomist sign-off and no certified translation, so it is stored as unverified, inactive, non-expert-reviewed versions with `approval_scope=educational_prototype`. The production approval constraint and the governed workflow are unchanged, and `eligible_versions()` never returns these versions.
 
 ```powershell
 python manage.py migrate
-python manage.py import_knowledge_archive --archive "D:\Project Ideas\FarmSra_RAG_v6.zip" --dry-run
-python manage.py import_knowledge_archive --archive "D:\Project Ideas\FarmSra_RAG_v6.zip" --index
+python manage.py import_knowledge_archive --archive knowledge_assets/farmsra_rag_v6 --dry-run
+python manage.py import_knowledge_archive --archive knowledge_assets/farmsra_rag_v6 --index
 ```
 
 The import is idempotent (changed files create a new version and supersede the old one). `--index` writes only to the separate `agricultural_advisory_prototype` Chroma collection. Retrieval from it is disabled unless `RAG_EDUCATIONAL_PROTOTYPE_MODE=true` is set in `.env`; evidence is then labelled "educational prototype" in advisories, chat sources and the guidance library.

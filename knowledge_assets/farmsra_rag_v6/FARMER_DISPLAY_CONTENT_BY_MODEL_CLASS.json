@@ -1,0 +1,1022 @@
+{
+  "Corn_(maize)___Common_rust_": {
+    "topic_id": "maize_common_rust",
+    "kind": "disease",
+    "crop": "maize",
+    "model_class_exact": "Corn_(maize)___Common_rust_",
+    "languages": {
+      "en": {
+        "title": "Maize common rust",
+        "what": "Common rust is a fungal disease of maize caused by Puccinia sorghi.",
+        "signs": "Raised, powdery reddish-brown pustules form on maize leaves, sometimes on both surfaces. Older pustules may darken and the surrounding leaf may yellow.",
+        "check": "Distinguish the raised spore-producing pustules from the flat rectangular lesions of gray leaf spot and the long oval lesions of northern leaf blight.",
+        "action": "Inspect several plants and both leaf sides. Record the share of foliage affected and take a close-up of any powdery pustules.",
+        "manage": "Choose locally adapted resistant maize varieties where available. Monitor crops and avoid making fungicide decisions from a single lesion or model output.",
+        "treatment": "Fungicides can be an option in some production systems, but they require local disease confirmation, an appropriately registered product and expert assessment of need; no chemical rate is provided.",
+        "weather": "Humidity can favor common rust. Spores can move with wind; weather by itself does not diagnose rust.",
+        "monitor": "Observe progression, particularly on leaves important to crop growth; seek an agronomist if symptoms are extensive or atypical.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Kutu ya Kawaida ya Mahindi (Common Rust)",
+        "what": "Kutu ya kawaida ya mahindi ni ugonjwa wa fangasi unaosababishwa na Puccinia sorghi.",
+        "signs": "Angalia vijivimbe vya unga vya kahawia-nyekundu vilivyojitokeza kwenye majani, wakati mwingine pande zote mbili.",
+        "check": "Vipele vya kutu vimeinuka na vina unga wa spora; gray leaf spot ina vidonda bapa vya mstatili, na northern leaf blight huwa na vidonda virefu vya mviringo.",
+        "action": "Kagua pande zote za majani na mimea kadhaa; rekodi mahali vipele vya unga wa rangi ya kutu vilipoonekana.",
+        "manage": "Tumia aina za mahindi zinazostahimili kutu inapofaa; kagua majani mara kwa mara. Uamuzi wa kutumia dawa ya fangasi ufanywe baada ya kuthibitisha ugonjwa na usajili wa bidhaa. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Unyevunyevu mwingi unaweza kusaidia ugonjwa huu; hali ya hewa peke yake si utambuzi.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የበቆሎ የተለመደ ዝገት (Common Rust)",
+        "what": "የበቆሎ የተለመደ ዝገት በ Puccinia sorghi ፈንገስ የሚከሰት የቅጠል በሽታ ነው።",
+        "signs": "በቅጠሎች ላይ ከፍ ያሉ ቀይ-ቡናማ የዱቄት መሰል ነጠብጣቦችን ይመልከቱ፤ በሁለቱም ገጾች ሊታዩ ይችላሉ።",
+        "check": "የራስት ነጠብጣቦች ከፍ ያሉና ዱቄት የሚመስል ስፖር ያላቸው ናቸው፤ ግራጫ ስፖት ጠፍጣፋ አራት ማዕዘን ምልክት ሲሆን ኖርዘርን ብላይት ረጅም ቁስሎች ያሉት ነው።",
+        "action": "በብዙ ተክሎች የቅጠሎችን ሁለቱንም ጎን ይመልከቱ፤ ቀይ-ቡናማ ዱቄታማ ነጠብጣቦችን ይቅረጹ።",
+        "manage": "ተስማሚ የሆኑ በሽታን የሚቋቋሙ የበቆሎ ዝርያዎችን ይምረጡ እና ቅጠሎችን ይከታተሉ። ፈንገስ መድኃኒት ከመጠቀም በፊት በሽታውንና ሕጋዊ ምዝገባን ያረጋግጡ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ከፍተኛ እርጥበት ለዚህ በሽታ ሊመች ይችላል፤ የአየር ሁኔታ ብቻውን ምርመራ አይደለም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "Crop Protection Network",
+        "title": "Common Rust of Corn",
+        "url": "https://cropprotectionnetwork.org/encyclopedia/common-rust-of-corn",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+    "topic_id": "maize_gray_leaf_spot",
+    "kind": "disease",
+    "crop": "maize",
+    "model_class_exact": "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+    "languages": {
+      "en": {
+        "title": "Maize gray leaf spot",
+        "what": "Gray leaf spot is a fungal maize leaf disease associated with Cercospora species.",
+        "signs": "Long, narrow, rectangular tan-to-gray lesions are often bounded by leaf veins, initially appearing as smaller discolored spots.",
+        "check": "These flat rectangular lesions differ from common-rust pustules and from the larger elliptical or cigar-shaped lesions of northern leaf blight.",
+        "action": "Inspect lower and upper canopy leaves; photograph lesion shape and check whether many plants show similar patterns.",
+        "manage": "Use resistant varieties, appropriate crop rotation and residue management where compatible with local soil-conservation needs.",
+        "treatment": "A suitable registered foliar fungicide may be considered if disease threatens yield; necessity depends on stage, severity, field conditions and local expert guidance.",
+        "weather": "Warm, humid conditions and prolonged leaf moisture can favor infection. Infected maize residue can carry the pathogen between crops.",
+        "monitor": "Record the affected area and progression; seek help when lesions spread rapidly or are difficult to distinguish.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Madoa ya Kijivu ya Majani ya Mahindi (Gray Leaf Spot)",
+        "what": "Madoa ya kijivu ya majani ya mahindi ni ugonjwa wa fangasi wa Cercospora.",
+        "signs": "Vidonda huwa virefu, vyembamba na vya mstatili; mishipa ya jani huzuia kuenea kwake pembeni, na hubadilika kuwa kijivu au kahawia hafifu.",
+        "check": "Vidonda vya gray leaf spot ni virefu, bapa na vya mstatili kati ya mishipa; common rust ina vipele vilivyoinuka, northern blight ina vidonda vikubwa vya mviringo mrefu.",
+        "action": "Kagua majani ya chini na ya juu, piga picha ya umbo la vidonda na uangalie mimea mingine.",
+        "manage": "Tumia mbegu zinazostahimili ugonjwa, mzunguko wa mazao na usimamizi mzuri wa mabaki ya mahindi kulingana na hali ya shamba. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Joto na unyevunyevu pamoja na majani yenye maji vinaweza kuongeza hatari; hali ya hewa si uthibitisho.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የበቆሎ ግራጫ ቅጠል ነጠብጣብ (Gray Leaf Spot)",
+        "what": "የበቆሎ ግራጫ ቅጠል ነጠብጣብ በ Cercospora ፈንገስ የሚከሰት በሽታ ነው።",
+        "signs": "ረጅም፣ ጠባብ እና አራት ማዕዘን ቅርጽ ያላቸው ግራጫ ወይም ቡናማ ነጠብጣቦች በቅጠል ሥሮች መካከል ይታያሉ።",
+        "check": "የግራጫ ስፖት ቁስሎች በቅጠል ሥሮች መካከል ያሉ ጠፍጣፋ አራት ማዕዘኖች ናቸው። የራስት ነጠብጣቦች ከፍ ያሉ ሲሆን ኖርዘርን ብላይት ረጅም ሞላላ ነው።",
+        "action": "የታችኛውንና የላይኛውን ቅጠል ይመርምሩ፣ የቁስሉን ቅርጽ ይቅረጹና በሌሎች ተክሎች ላይ ያረጋግጡ።",
+        "manage": "በሽታን የሚቋቋም ዘር፣ የሰብል ቅያሬ እና ከአፈር ጥበቃ ጋር የሚስማማ የቀሪ ሰብል አያያዝ ይጠቀሙ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ሞቃትና እርጥብ አየር እንዲሁም እርጥብ ቅጠሎች አደጋን ሊጨምሩ ይችላሉ፤ የአየር ሁኔታ ብቻ በሽታን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "Crop Protection Network",
+        "title": "Gray Leaf Spot of Corn",
+        "url": "https://cropprotectionnetwork.org/encyclopedia/gray-leaf-spot-of-corn",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Corn_(maize)___healthy": {
+    "topic_id": "maize_healthy",
+    "kind": "healthy",
+    "crop": "maize",
+    "model_class_exact": "Corn_(maize)___healthy",
+    "languages": {
+      "en": {
+        "title": "Maize: healthy-class image result",
+        "what": "The image was classified in the healthy maize category. This is not a field-wide certificate of plant health.",
+        "signs": "Look for unexpected spots, pests, leaf yellowing, stem problems, stunting and uneven patches across the field.",
+        "check": "A single photographed leaf can look healthy while other plant parts show a disease or nutrient/water problem.",
+        "action": "Inspect other plants and record any symptoms not visible in the uploaded image.",
+        "manage": "Continue appropriate crop nutrition, water management and monitoring. Select locally suitable seed and use IPM when an actual problem is identified.",
+        "treatment": "Do not apply a pesticide merely because the application returned a healthy result.",
+        "weather": "Drought, waterlogging and other conditions may affect crop health without producing one of the model’s listed disease classes.",
+        "monitor": "Repeat photos or request expert assessment if symptoms become visible later.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Zao la Mahindi Lenye Afya",
+        "what": "Matokeo ya picha yanayoonyesha mahindi yenye afya hayathibitishi kuwa mmea hauna magonjwa mengine au upungufu wa virutubisho.",
+        "signs": "Kagua majani na mimea mingine kwa madoa, wadudu, kunyauka, manjano au kudumaa.",
+        "check": "Picha ya jani moja inaweza kuonekana salama wakati shina, mizizi au mimea mingine ina tatizo.",
+        "action": "Kagua mimea mingine, majani ya chini na juu, ukuaji na wadudu kabla ya kusema shamba ni salama.",
+        "manage": "Endelea kufuatilia zao; usitumie dawa kwa sababu tu picha imetajwa kuwa yenye afya. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Usitumie kiuatilifu bila tatizo mahsusi kuthibitishwa. Matokeo ya picha ya jani pekee si uthibitisho kwamba shamba lote ni salama.",
+        "weather": "Hali ya hewa inaweza kubadili hatari ya baadaye lakini haithibitishi afya au ugonjwa.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "ጤናማ የበቆሎ ሰብል",
+        "what": "የበቆሎ ምስል ጤናማ መባሉ ሁሉንም በሽታዎች፣ ተባዮች ወይም የንጥረ ምግብ እጥረት አያስወግድም።",
+        "signs": "በተለያዩ ተክሎች ላይ ነጠብጣብ፣ ቢጫነት፣ ተባይ፣ መጠውለግ ወይም የእድገት መቀዛቀዝ ይፈልጉ።",
+        "check": "አንድ ቅጠል ጤናማ ቢታይም ግንድ፣ ሥር ወይም ሌሎች ተክሎች ችግር ሊኖራቸው ይችላል።",
+        "action": "ሙሉ እርሻው ጤናማ ነው ከማለት በፊት ሌሎች ተክሎችን፣ ቅጠሎችን፣ የእድገት ሁኔታንና ተባዮችን ይመልከቱ።",
+        "manage": "ሰብሉን መከታተል ይቀጥሉ፤ የጤናማ ምስል ትንበያ ብቻ ተመስርቶ መድኃኒት አይጠቀሙ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የተረጋገጠ የበሽታ ወይም የተባይ ችግር ከሌለ ፀረ-ተባይ አይጠቀሙ። አንድ ቅጠል ጤናማ መመሰሉ ሙሉ እርሻው ጤናማ መሆኑን አያረጋግጥም።",
+        "weather": "የአየር ሁኔታ የወደፊት አደጋን ሊቀይር ይችላል፤ የተክሉን ጤና ወይም በሽታ ግን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "NC State Extension",
+        "title": "Diagnostics",
+        "url": "https://content.ces.ncsu.edu/extension-gardener-handbook/7-diagnostics",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Corn_(maize)___Northern_Leaf_Blight": {
+    "topic_id": "maize_northern_leaf_blight",
+    "kind": "disease",
+    "crop": "maize",
+    "model_class_exact": "Corn_(maize)___Northern_Leaf_Blight",
+    "languages": {
+      "en": {
+        "title": "Maize northern leaf blight",
+        "what": "Northern leaf blight is a fungal disease of maize associated with Setosphaeria turcica (Exserohilum turcicum).",
+        "signs": "Long, oval or cigar-shaped gray-green to tan dead areas develop on leaves; severely affected leaves can become largely blighted.",
+        "check": "Compared with gray leaf spot, lesions are typically broader and not strictly restricted between leaf veins. Resistant varieties may show smaller lesions.",
+        "action": "Examine multiple plants, including lower leaves, and photograph the characteristic long lesions.",
+        "manage": "Prefer suitable resistant varieties and rotation; manage infected maize residues where practical without compromising soil protection.",
+        "treatment": "A locally registered fungicide may be considered only after assessing the crop stage, disease pressure and likely benefit with a local adviser.",
+        "weather": "Extended leaf wetness and moderate temperatures can favor disease; residues and airborne or splash-dispersed spores also matter.",
+        "monitor": "Track progression into upper canopy leaves and obtain a field assessment if damage is extensive.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Ukungu wa Majani wa Kaskazini wa Mahindi (Northern Corn Leaf Blight)",
+        "what": "Northern leaf blight ni ugonjwa wa fangasi wa mahindi unaosababishwa na Exserohilum turcicum.",
+        "signs": "Vidonda huwa virefu, vya umbo la sigara, mwanzo kijani-kijivu na baadaye kahawia hafifu; vinaweza kuungana.",
+        "check": "Northern blight mara nyingi ina vidonda vikubwa vya mviringo mrefu vinavyofanana na sigara; gray leaf spot huwa ya mstatili na hufuata mishipa ya jani.",
+        "action": "Kagua majani ya chini na ya juu na piga picha ya vidonda virefu vinavyoonekana kama sigara.",
+        "manage": "Tumia aina zinazostahimili ugonjwa, mzunguko wa mazao na usimamizi sahihi wa mabaki ya mazao. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Majani kubaki na maji kunaweza kusaidia kuenea kwa ugonjwa; hali ya hewa peke yake haithibitishi chanzo.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የበቆሎ ሰሜናዊ ቅጠል ቃጠሎ (Northern Corn Leaf Blight)",
+        "what": "የበቆሎ Northern leaf blight በ Exserohilum turcicum ፈንገስ የሚከሰት በሽታ ነው።",
+        "signs": "በቅጠሎች ላይ እንደ ሲጋራ ቅርጽ ረጅም የሆኑ መጀመሪያ ግራጫ-አረንጓዴ ከዚያም ቡናማ የሚሆኑ ጠባሳዎች ይታያሉ።",
+        "check": "ኖርዘርን ብላይት ትላልቅ ረጅም ሞላላ ቁስሎች ሲኖሩት ግራጫ ስፖት የቅጠል ሥሮችን የሚከተል አራት ማዕዘን ቅርጽ አለው።",
+        "action": "የታችኛውንና የላይኛውን ቅጠሎች ይመልከቱ፤ ረጅም የሆኑ ቁስሎችን ፎቶ ይውሰዱ።",
+        "manage": "በሽታን የሚቋቋሙ ዝርያዎች፣ የሰብል ቅያሬ እና ተገቢ የቀሪ ሰብል አያያዝ ይጠቀሙ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ቅጠሎች ረጅም ጊዜ እርጥብ መሆናቸው በሽታን ሊያበረታታ ይችላል፤ ይህ ግን ብቻውን በሽታን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "Crop Protection Network",
+        "title": "Northern Corn Leaf Blight of Corn",
+        "url": "https://cropprotectionnetwork.org/encyclopedia/northern-corn-leaf-blight-of-corn",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Potato___Early_blight": {
+    "topic_id": "potato_early_blight",
+    "kind": "disease",
+    "crop": "potato",
+    "model_class_exact": "Potato___Early_blight",
+    "languages": {
+      "en": {
+        "title": "Potato early blight",
+        "what": "Early blight of potato is commonly associated with the fungus Alternaria solani.",
+        "signs": "Older potato leaves develop dark brown spots with concentric target-like rings; surrounding leaves may yellow. Some infected tubers show dry, sunken lesions.",
+        "check": "Late blight more often shows rapidly expanding irregular water-soaked lesions, sometimes with white growth during humid weather.",
+        "action": "Check older and newer leaves and inspect tubers if affected. Photograph characteristic rings and note how quickly symptoms appeared.",
+        "manage": "Maintain balanced nutrition and irrigation to limit plant stress, use healthy planting material and follow appropriate crop hygiene and rotation.",
+        "treatment": "Crop-specific registered fungicides may be relevant when early disease threatens yield; an expert should evaluate need and local label requirements.",
+        "weather": "Leaf moisture and favorable temperatures can aid infection. Older or stressed foliage is often affected first.",
+        "monitor": "Record spread through the canopy and seek help if rapid blighting or tuber damage occurs.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Ugonjwa wa Madoa ya Mapema ya Viazi (Early Blight)",
+        "what": "Early blight ya viazi ni ugonjwa wa fangasi wa Alternaria.",
+        "signs": "Majani ya zamani huwa na madoa ya kahawia yenye miduara inayofuatana, mara nyingi yakizungukwa na rangi ya njano.",
+        "check": "Early blight huonyesha madoa ya kahawia yenye pete kwenye majani ya zamani; late blight mara nyingi huonyesha vidonda visivyo na umbo maalumu, vilivyolowa maji na vinavyosambaa haraka.",
+        "action": "Kagua majani ya zamani na mapya na viazi vya chini ikiwa vina dalili. Piga picha ya pete katika madoa.",
+        "manage": "Tumia mbegu za viazi zenye afya, dhibiti unyevu wa majani, lishe ya zao na mzunguko wa mazao; bidhaa yoyote ya kinga ihakikiwe kwa eneo lako. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Majani kubaki na maji kunaweza kusaidia kuenea kwa ugonjwa; hali ya hewa peke yake haithibitishi chanzo.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የድንች ቀደምት ቅጠል በሽታ (Early Blight)",
+        "what": "የድንች ቀደምት ብላይት በ Alternaria ፈንገስ የሚከሰት በሽታ ነው።",
+        "signs": "በቆዩ ቅጠሎች ላይ የተደራረቡ ክብ መስመሮች ያሏቸው ቡናማ ነጠብጣቦችና ቢጫ ዙሪያ ይታያሉ።",
+        "check": "ቀደምት ብላይት በአሮጌ ቅጠሎች ላይ ቀለበት ያላቸው ቡናማ ነጠብጣቦችን ያሳያል፤ ዘግይቶ የሚመጣ ብላይት ውሃ የያዙ የሚመስሉ በፍጥነት የሚስፋፉ ቁስሎችን ያሳያል።",
+        "action": "የቆዩና አዲስ ቅጠሎችን እንዲሁም ምልክት ካለ ሀረጎችን ይመርምሩ፤ ቀለበት ያላቸውን ነጠብጣቦች ይቅረጹ።",
+        "manage": "ጤናማ የድንች ዘር፣ ተገቢ መስኖ፣ የተመጣጠነ አመጋገብ እና የሰብል ቅያሬ ይጠቀሙ። ማንኛውም መድኃኒት ለአካባቢው ሕጋዊ መሆኑ ይረጋገጥ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ቅጠሎች ረጅም ጊዜ እርጥብ መሆናቸው በሽታን ሊያበረታታ ይችላል፤ ይህ ግን ብቻውን በሽታን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of California IPM",
+        "title": "Early Blight of Potato",
+        "url": "https://ipm.ucanr.edu/agriculture/potato/early-blight/",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "University of Minnesota Extension",
+        "title": "Managing Plant Diseases",
+        "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-problems/managing-plant-diseases-in-the-home-garden",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Potato___healthy": {
+    "topic_id": "potato_healthy",
+    "kind": "healthy",
+    "crop": "potato",
+    "model_class_exact": "Potato___healthy",
+    "languages": {
+      "en": {
+        "title": "Potato: healthy-class image result",
+        "what": "The uploaded potato leaf resembles the model’s healthy class; roots and tubers were not necessarily assessed.",
+        "signs": "Look for spotted leaves, abnormal growth, wilting, damaged stems and tubers.",
+        "check": "A normal leaf image cannot exclude late blight elsewhere, soil problems or tuber disease.",
+        "action": "Inspect several plants, leaf undersides and available tubers; record any unusual symptoms.",
+        "manage": "Use suitable healthy seed tubers, balanced crop care, field observation and sanitation practices.",
+        "treatment": "Do not prescribe any disease control product for a healthy-class prediction.",
+        "weather": "Conditions may favor future plant disease, but weather does not contradict or prove the current image result by itself.",
+        "monitor": "Monitor new growth and seek an expert if signs emerge.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Zao la Viazi Lenye Afya",
+        "what": "Matokeo ya picha yanayoonyesha viazi vyenye afya hayathibitishi kutokuwepo kwa magonjwa au wadudu wengine.",
+        "signs": "Kagua majani, mashina na, inapofaa, viazi vilivyo chini ya udongo kwa dalili zisizo za kawaida.",
+        "check": "Jani linaloonekana salama haliondoi uwezekano wa ugonjwa wa mizizi, viazi vya chini au sehemu nyingine za mmea.",
+        "action": "Kagua mimea kadhaa, pande za majani, mashina na viazi vya chini ikiwa vimepatikana.",
+        "manage": "Endelea na ufuatiliaji na matumizi ya mbegu safi; usitumie viuatilifu kwa kutegemea lebo ya picha pekee. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Usitumie kiuatilifu bila tatizo mahsusi kuthibitishwa. Matokeo ya picha ya jani pekee si uthibitisho kwamba shamba lote ni salama.",
+        "weather": "Hali ya hewa inaweza kubadili hatari ya baadaye lakini haithibitishi afya au ugonjwa.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "ጤናማ የድንች ሰብል",
+        "what": "የድንች ምስል ጤናማ መባሉ ሁሉም በሽታዎች ወይም ተባዮች እንደሌሉ አያረጋግጥም።",
+        "signs": "ቅጠሎችን፣ ግንዶችን እና ካስፈለገ በአፈር ውስጥ ያሉ የድንች ክፍሎችን ያረጋግጡ።",
+        "check": "ጤናማ የሚመስል ቅጠል በሥር፣ በሀረግ ወይም በሌላ የተክል ክፍል ችግር እንደሌለ አያረጋግጥም።",
+        "action": "ብዙ ተክሎችን፣ የቅጠሉን ሁለቱንም ገጽታዎች፣ ግንድና ሊመረመሩ የሚችሉ ሀረጎችን ይመልከቱ።",
+        "manage": "የሰብል ክትትልን ይቀጥሉ እና ጤናማ ዘር ይጠቀሙ፤ በምስል ምደባ ብቻ መድኃኒት አይጠቀሙ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የተረጋገጠ የበሽታ ወይም የተባይ ችግር ከሌለ ፀረ-ተባይ አይጠቀሙ። አንድ ቅጠል ጤናማ መመሰሉ ሙሉ እርሻው ጤናማ መሆኑን አያረጋግጥም።",
+        "weather": "የአየር ሁኔታ የወደፊት አደጋን ሊቀይር ይችላል፤ የተክሉን ጤና ወይም በሽታ ግን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "NC State Extension",
+        "title": "Diagnostics",
+        "url": "https://content.ces.ncsu.edu/extension-gardener-handbook/7-diagnostics",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Potato___Late_blight": {
+    "topic_id": "potato_late_blight",
+    "kind": "disease",
+    "crop": "potato",
+    "model_class_exact": "Potato___Late_blight",
+    "languages": {
+      "en": {
+        "title": "Potato late blight",
+        "what": "Late blight of potato is caused by the water mold Phytophthora infestans; it can damage foliage and tubers.",
+        "signs": "Irregular green to brown water-soaked leaf areas enlarge rapidly; white growth may be seen at lesion margins in very humid conditions. Stems may darken and tubers may develop firm brown decay.",
+        "check": "Do not confuse with early blight’s smaller spots and distinct concentric rings. Similar symptoms may require field or laboratory confirmation.",
+        "action": "Promptly check multiple plants and tubers; avoid moving suspect infected material to other growing areas. Contact an expert quickly if the pattern matches rapid late blight.",
+        "manage": "Use clean certified seed, remove volunteer potato plants and unmanaged tuber waste, avoid prolonged wet foliage where possible and use locally appropriate preventive measures.",
+        "treatment": "Late blight can require timely crop-specific protectant strategies. Select no product without confirming the diagnosis and local registration; previously infected tissue is not restored by fungicides.",
+        "weather": "Cool to mild, wet or very humid weather can support rapid spread. Spores can move to other potato and tomato plants.",
+        "monitor": "Inspect rapidly changing patches and nearby potatoes and tomatoes; seek timely professional advice because losses can be substantial.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Ugonjwa wa Madoa ya Kuchelewa ya Viazi (Late Blight)",
+        "what": "Late blight ya viazi husababishwa na Phytophthora infestans na inaweza kuenea haraka.",
+        "signs": "Angalia maeneo ya majani yenye mwonekano wa kulowa maji kisha kuwa meusi; ukungu mweupe unaweza kuonekana chini ya jani wakati wa unyevunyevu. Mashina na viazi pia huathirika.",
+        "check": "Late blight inaweza kuenea haraka kwa vidonda visivyo sawa na vilivyolowa maji; early blight huwa na madoa madogo yenye pete za duara.",
+        "action": "Kagua mara moja mimea na viazi kadhaa. Epuka kuhamisha sehemu zinazoshukiwa kuwa na ugonjwa hadi eneo jingine na omba ushauri wa mtaalamu mapema.",
+        "manage": "Tumia mbegu za viazi zilizothibitishwa kuwa safi, dhibiti viazi vya kujitolea na mabaki yaliyoambukizwa, na punguza majani kukaa na unyevunyevu kwa muda mrefu.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Hali yenye unyevunyevu inaweza kusaidia late blight kuenea; usiitambue kwa utabiri wa hali ya hewa pekee.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የድንች ዘግይቶ የሚመጣ ቅጠል በሽታ (Late Blight)",
+        "what": "የድንች ዘግይቶ የሚመጣ ብላይት በ Phytophthora infestans የሚከሰት እና በፍጥነት ሊስፋፋ የሚችል በሽታ ነው።",
+        "signs": "በቅጠሎች ላይ ውሃ የያዙ የሚመስሉ ከዚያም የሚጠቁሩ ጠባሳዎች ይታያሉ፤ በእርጥብ ጊዜ በቅጠሉ ሥር ነጭ እድገት ሊታይ ይችላል።",
+        "check": "ዘግይቶ የሚመጣ ብላይት ውሃ የያዙ የሚመስሉ በፍጥነት የሚስፋፉ ያልተስተካከሉ ቁስሎች አሉት፤ ቀደምት ብላይት ግን ቀለበት ያላቸው ነጠብጣቦች አሉት።",
+        "action": "ብዙ ተክሎችንና ሀረጎችን በፍጥነት ይመርምሩ። የተጠረጠረ የተክል ክፍልን ወደ ሌላ እርሻ አያንቀሳቅሱ፤ ባለሙያ በቶሎ ያማክሩ።",
+        "manage": "ጤናማነቱ የተረጋገጠ የድንች ዘር ይጠቀሙ፣ በራሳቸው የበቀሉ ድንቾችንና ተበክሎ የቀረ ምርትን ያስወግዱ፣ ረጅም የቅጠል እርጥበትን ይቀንሱ።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "እርጥብ ሁኔታ የዘግይቶ የሚመጣ ብላይትን ሊያስፋፋ ይችላል፤ ከትንበያ ብቻ አትወስኑ።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of California IPM",
+        "title": "Late Blight of Potato",
+        "url": "https://ipm.ucanr.edu/agriculture/potato/late-blight/",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "University of Minnesota Extension",
+        "title": "Late Blight of Tomato and Potato",
+        "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/late-blight",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato_Bacterial_spot": {
+    "topic_id": "tomato_bacterial_spot",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato_Bacterial_spot",
+    "languages": {
+      "en": {
+        "title": "Tomato bacterial spot",
+        "what": "Bacterial spot of tomato is caused by Xanthomonas bacteria, not by a fungus.",
+        "signs": "Dark, sometimes water-soaked leaf spots can occur with yellowing; immature fruit may develop small raised, rough or scabby lesions.",
+        "check": "Small lesions can resemble fungal target spot or other bacterial diseases; a leaf photograph alone may not establish the cause.",
+        "action": "Check leaves and fruit on more than one plant. Use clean hands/tools and avoid handling plants while the foliage is wet.",
+        "manage": "Use clean seed and healthy transplants, reduce splash and overhead irrigation where possible, improve air movement and manage diseased residue.",
+        "treatment": "Copper-based disease-management products may have variable usefulness and do not cure already damaged tissue; verify a suitable locally registered product and consult an expert. Do not assume a fungicide for early blight controls this bacterial disease.",
+        "weather": "Warm, wet conditions and splashing water can help bacteria spread.",
+        "monitor": "Record newly appearing spots and fruit lesions; seek an agricultural professional if disease is worsening or similar diseases cannot be distinguished.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Madoa ya Bakteria ya Nyanya (Bacterial Spot)",
+        "what": "Madoa ya bakteria ya nyanya husababishwa na bakteria wa Xanthomonas na huathiri majani na matunda.",
+        "signs": "Madoa madogo ya giza yenye ukingo wa njano yanaweza kuonekana kwenye majani; kwenye matunda kunaweza kuwa na madoa yaliyoinuka na kuwa magumu.",
+        "check": "Madoa madogo yanaweza kufanana na target spot ya fangasi au magonjwa mengine ya bakteria. Picha ya jani pekee haiwezi kuthibitisha chanzo.",
+        "action": "Kagua majani na matunda ya mimea kadhaa. Epuka kugusa mimea wakati majani yamelowa na safisha zana.",
+        "manage": "Tumia mbegu na miche safi, punguza maji yanayoruka juu ya majani na mabaki ya mimea yenye ugonjwa.",
+        "treatment": "Usidhani dawa ya fangasi itatibu ugonjwa huu wa bakteria. Dawa zenye shaba zinaweza kuwa na ufanisi unaotofautiana; hitaji na usajili wa bidhaa vitathibitishwe nchini husika.",
+        "weather": "Hali ya joto na unyevunyevu pamoja na maji yanayoruka yanaweza kueneza bakteria.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ባክቴሪያል ስፖት (Bacterial Spot)",
+        "what": "የቲማቲም ባክቴሪያል ስፖት በ Xanthomonas ባክቴሪያ የሚከሰት የቅጠልና ፍሬ በሽታ ነው።",
+        "signs": "በቅጠሎች ላይ ቢጫ ዙሪያ ያላቸው ትናንሽ ጥቁር ነጠብጣቦች፣ በፍሬ ላይም ከፍ ያሉ ሸካራ ጠባሳዎች ሊታዩ ይችላሉ።",
+        "check": "ትናንሽ ነጠብጣቦች ከፈንገስ የተነሳ ታርጌት ስፖት ወይም ከሌሎች የባክቴሪያ በሽታዎች ሊመሳሰሉ ይችላሉ። አንድ ፎቶ ብቻ መንስኤውን አያረጋግጥም።",
+        "action": "በብዙ ተክሎች ላይ ቅጠልና ፍሬ ይመርምሩ። ቅጠሎች እርጥብ ሲሆኑ መንካትን ያስወግዱ፣ መሳሪያዎችን ያጽዱ።",
+        "manage": "ጤናማ ዘርና ችግኝ ይጠቀሙ፣ በቅጠል ላይ ውሃ መበተንን ይቀንሱ፣ የተጎዳ ቅሪትን በአግባቡ ያስወግዱ።",
+        "treatment": "ይህ የባክቴሪያ በሽታ ስለሆነ የፈንገስ መድኃኒት ይፈውሰዋል ብለው አያስቡ። የመዳብ ዓይነት ምርቶች ውጤታማነት ሊለያይ ይችላል፤ የአካባቢ ምዝገባና የባለሙያ ምክር ያስፈልጋል።",
+        "weather": "ሞቃትና እርጥብ ሁኔታ እና የውሃ መርጨት ባክቴሪያን ሊያስፋፋ ይችላል።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of Minnesota Extension",
+        "title": "Bacterial Spot of Tomato and Pepper",
+        "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/bacterial-spot-of-tomato-and-pepper",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato_Early_blight": {
+    "topic_id": "tomato_early_blight",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato_Early_blight",
+    "languages": {
+      "en": {
+        "title": "Tomato early blight",
+        "what": "Early blight of tomato is commonly caused by Alternaria fungi and affects leaves, stems and sometimes fruit.",
+        "signs": "Brown or black spots, often on older leaves first, may develop visible concentric target-like rings; affected leaves yellow and fruit can show dark sunken lesions.",
+        "check": "Distinguish from Septoria’s numerous smaller pale-centered spots and late blight’s rapidly enlarging irregular water-soaked areas.",
+        "action": "Inspect older leaves and nearby plants; note whether leaves are wet and photograph rings and affected fruit.",
+        "manage": "Reduce prolonged leaf wetness and soil splash, support canopy airflow, remove infected debris and rotate away from related host crops where practical.",
+        "treatment": "Fungicide use may be appropriate when a confirmed, significant disease threatens the crop. Only consider locally registered crop-specific products with professional advice.",
+        "weather": "Spores spread in wind and splashing rain; moisture supports infection, but weather cannot confirm early blight.",
+        "monitor": "Track new lesions on upper leaves and seek help if blighting accelerates.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Ugonjwa wa Madoa ya Mapema ya Nyanya (Early Blight)",
+        "what": "Early blight ya nyanya ni ugonjwa wa fangasi wa Alternaria.",
+        "signs": "Madoa ya kahawia yenye miduara inayofuatana huonekana hasa kwenye majani ya zamani, wakati mwingine yakiwa na njano pembeni.",
+        "check": "Early blight huwa na madoa makubwa yenye pete; Septoria ina madoa mengi madogo yenye katikati iliyofifia, na late blight ina vidonda vinavyoenea haraka vilivyolowa maji.",
+        "action": "Kagua kwanza majani ya zamani na piga picha za pete za madoa na matunda yanayoonyesha dalili.",
+        "manage": "Punguza kulowesha majani, boresha mzunguko wa hewa, tumia miche safi na mzunguko wa mazao. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Majani kubaki na maji kunaweza kusaidia kuenea kwa ugonjwa; hali ya hewa peke yake haithibitishi chanzo.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ቀደምት ቅጠል በሽታ (Early Blight)",
+        "what": "የቲማቲም ቀደምት ብላይት በ Alternaria ፈንገስ የሚከሰት በሽታ ነው።",
+        "signs": "በቆዩ ቅጠሎች ላይ የተደራረቡ ክብ መስመሮች ያሉባቸው ቡናማ ነጠብጣቦች ከቢጫ ዙሪያ ጋር ይታያሉ።",
+        "check": "ቀደምት ብላይት ትላልቅ ቀለበት ያላቸው ነጠብጣቦችን ያሳያል፤ ሴፕቶሪያ ብዙ ትናንሽ ግራጫ መሃል ያላቸውን፣ ዘግይቶ ብላይት ደግሞ ውሃ የያዙ የሚመስሉ በፍጥነት የሚስፋፉ ቁስሎችን ያሳያል።",
+        "action": "በመጀመሪያ የቆዩ ቅጠሎችን ይመልከቱ፤ ቀለበት ያላቸውን ነጠብጣቦችና የተጎዱ ፍሬዎችን ይቅረጹ።",
+        "manage": "በቅጠል ላይ ውሃ መቆየትን ይቀንሱ፣ አየር ዝውውር ያሻሽሉ፣ ጤናማ ችግኝና የሰብል ቅያሬ ይጠቀሙ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ቅጠሎች ረጅም ጊዜ እርጥብ መሆናቸው በሽታን ሊያበረታታ ይችላል፤ ይህ ግን ብቻውን በሽታን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of California IPM",
+        "title": "Early Blight of Tomato",
+        "url": "https://ipm.ucanr.edu/agriculture/tomato/early-blight/",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "University of Minnesota Extension",
+        "title": "Managing Plant Diseases",
+        "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-problems/managing-plant-diseases-in-the-home-garden",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato_healthy": {
+    "topic_id": "tomato_healthy",
+    "kind": "healthy",
+    "crop": "tomato",
+    "model_class_exact": "Tomato_healthy",
+    "languages": {
+      "en": {
+        "title": "Tomato: healthy-class image result",
+        "what": "A healthy tomato label is the model’s prediction for the uploaded leaf, not proof that all tomato plants are healthy.",
+        "signs": "Look for spots, mottling, yellowing, curling, insects, unusual fruit markings, wilting or poor growth on other parts of plants.",
+        "check": "An apparently healthy leaf can coexist with a root disorder, viral infection, nutrient imbalance or pest symptoms elsewhere.",
+        "action": "Inspect several plants and their leaf undersides; photograph any unusual fruit or stem symptoms.",
+        "manage": "Continue appropriate irrigation, hygiene, nutrition, spacing and field monitoring.",
+        "treatment": "Avoid unnecessary pesticide application without a specific diagnosed problem.",
+        "weather": "Rain, dryness and heat may change disease and stress risk but do not prove a diagnosis.",
+        "monitor": "Return to the case and upload fresh evidence if new symptoms develop.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Zao la Nyanya Lenye Afya",
+        "what": "Picha iliyoainishwa kuwa nyanya yenye afya si uthibitisho kuwa mmea mzima hauna tatizo.",
+        "signs": "Kagua majani, shina, matunda na mizizi kwa madoa, wadudu, kukunjamana, kunyauka au upungufu wa lishe.",
+        "check": "Jani moja linaweza kuonekana salama ilhali mizizi, matunda au matawi yanaonyesha tatizo la wadudu, virusi au lishe.",
+        "action": "Kagua mimea na pande zote za majani, mashina na matunda; andika dalili mpya ikiwa zipo.",
+        "manage": "Fuatilia mimea, tumia miche safi na usitumie dawa bila tatizo lililothibitishwa. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Usitumie kiuatilifu bila tatizo mahsusi kuthibitishwa. Matokeo ya picha ya jani pekee si uthibitisho kwamba shamba lote ni salama.",
+        "weather": "Hali ya hewa inaweza kubadili hatari ya baadaye lakini haithibitishi afya au ugonjwa.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "ጤናማ የቲማቲም ሰብል",
+        "what": "የቲማቲም ምስል ጤናማ መባሉ ተክሉ ሁሉ ጤናማ መሆኑን አያረጋግጥም።",
+        "signs": "ቅጠል፣ ግንድ፣ ፍሬ እና ሥር ላይ ነጠብጣብ፣ ተባይ፣ መጠምዘዝ ወይም መጠውለግ ይፈልጉ።",
+        "check": "አንድ ቅጠል ጤናማ ቢመስልም ሥር፣ ፍሬ ወይም ቅርንጫፍ የተባይ፣ የቫይረስ ወይም የምግብ እጥረት ምልክት ሊያሳይ ይችላል።",
+        "action": "ብዙ ተክሎችን፣ የቅጠሉን ሁለቱንም ጎኖች፣ ግንድና ፍሬ ይመልከቱ፤ አዲስ ምልክት ካለ ይመዝግቡ።",
+        "manage": "ተክሎቹን ይከታተሉ፣ ጤናማ ችግኝ ይጠቀሙ እና ችግር ሳይረጋገጥ መድኃኒት አይጠቀሙ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የተረጋገጠ የበሽታ ወይም የተባይ ችግር ከሌለ ፀረ-ተባይ አይጠቀሙ። አንድ ቅጠል ጤናማ መመሰሉ ሙሉ እርሻው ጤናማ መሆኑን አያረጋግጥም።",
+        "weather": "የአየር ሁኔታ የወደፊት አደጋን ሊቀይር ይችላል፤ የተክሉን ጤና ወይም በሽታ ግን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "NC State Extension",
+        "title": "Diagnostics",
+        "url": "https://content.ces.ncsu.edu/extension-gardener-handbook/7-diagnostics",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato_Late_blight": {
+    "topic_id": "tomato_late_blight",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato_Late_blight",
+    "languages": {
+      "en": {
+        "title": "Tomato late blight",
+        "what": "Late blight of tomato is caused by the water mold Phytophthora infestans and can progress quickly.",
+        "signs": "Large irregular water-soaked patches turn brown; white growth may appear at lesion edges in humid conditions. Dark stem lesions or firm brown fruit lesions can occur.",
+        "check": "Differentiate from the smaller ringed lesions of early blight. Similar damage can also result from noninfectious stresses.",
+        "action": "Inspect multiple plants immediately, document leaves, stems and fruit, and consult a qualified expert promptly if rapid late blight is suspected.",
+        "manage": "Use disease-free transplants, limit extended leaf wetness, manage volunteer tomato/potato plants and remove confirmed infected material safely.",
+        "treatment": "A registered preventive late-blight management program may be necessary in some crops; do not claim a fungicide cures existing dead tissue or specify products/rates without local expert checks.",
+        "weather": "Damp conditions and moderate temperatures favor late blight, and spores may disperse through air and water.",
+        "monitor": "Check whether symptoms spread quickly to adjacent tomato or potato plants; escalate to an expert only when the farmer requests it.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Ugonjwa wa Madoa ya Kuchelewa ya Nyanya (Late Blight)",
+        "what": "Late blight ya nyanya husababishwa na Phytophthora infestans na inaweza kuenea kwa kasi.",
+        "signs": "Vidonda vya majani huanza kama sehemu zilizolowa maji na kuwa nyeusi; mashina yanaweza kuwa kahawia na ukungu mweupe kuonekana wakati wa unyevunyevu.",
+        "check": "Late blight huonyesha maeneo makubwa yasiyo na umbo maalumu yaliyolowa maji; early blight huwa na madoa madogo yenye pete.",
+        "action": "Kagua majani, mashina na matunda ya mimea kadhaa mara moja. Ikiwa dalili zinasambaa haraka, omba tathmini ya mtaalamu mapema.",
+        "manage": "Tumia miche isiyo na ugonjwa, punguza unyevunyevu wa majani wa muda mrefu na dhibiti mimea ya kujitolea ya nyanya au viazi.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Hali yenye unyevunyevu inaweza kusaidia late blight kuenea; usiitambue kwa utabiri wa hali ya hewa pekee.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ዘግይቶ የሚመጣ ቅጠል በሽታ (Late Blight)",
+        "what": "የቲማቲም ዘግይቶ የሚመጣ ብላይት በ Phytophthora infestans የሚከሰት እና በፍጥነት ሊስፋፋ የሚችል በሽታ ነው።",
+        "signs": "በቅጠል ላይ ውሃ የያዙ የሚመስሉ ጥቁር ጠባሳዎች፣ በግንድ ላይ ቡናማ ክፍሎች እና በእርጥብ ጊዜ ነጭ እድገት ሊታዩ ይችላሉ።",
+        "check": "ዘግይቶ ብላይት ውሃ የያዙ የሚመስሉ ትላልቅ ያልተስተካከሉ ቁስሎችን ያሳያል፤ ቀደምት ብላይት ግን ትናንሽ ቀለበት ያላቸው ነጠብጣቦችን ያሳያል።",
+        "action": "ቅጠሎችን፣ ግንዶችንና ፍሬዎችን በብዙ ተክሎች ላይ በፍጥነት ይመርምሩ። ምልክቱ በፍጥነት ከተስፋፋ ባለሙያ በቶሎ ያማክሩ።",
+        "manage": "ከበሽታ ነጻ ችግኝ ይጠቀሙ፣ ረጅም የቅጠል እርጥበትን ይቀንሱ፣ በራሳቸው የበቀሉ ቲማቲምና ድንች ተክሎችን ይቆጣጠሩ።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "እርጥብ ሁኔታ የዘግይቶ የሚመጣ ብላይትን ሊያስፋፋ ይችላል፤ ከትንበያ ብቻ አትወስኑ።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of Minnesota Extension",
+        "title": "Late Blight of Tomato and Potato",
+        "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/late-blight",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "University of Minnesota Extension",
+        "title": "Managing Plant Diseases",
+        "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-problems/managing-plant-diseases-in-the-home-garden",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato_Leaf_Mold": {
+    "topic_id": "tomato_leaf_mold",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato_Leaf_Mold",
+    "languages": {
+      "en": {
+        "title": "Tomato leaf mold",
+        "what": "Tomato leaf mold is caused by Passalora fulva (also called Fulvia fulva) and is favored by humid foliage.",
+        "signs": "Pale yellow spots on the upper leaf surface often align with olive-green or brown velvety fungal growth underneath; older leaves may dry and die.",
+        "check": "Examine the undersides: the characteristic velvet-like growth helps separate leaf mold from ordinary yellowing and other leaf spots.",
+        "action": "Lift and inspect both sides of multiple symptomatic leaves and check air circulation.",
+        "manage": "Lower sustained humidity, improve ventilation and spacing, avoid wetting leaves and use a locally suitable resistant variety if available.",
+        "treatment": "Fungicides may be considered in some situations, but verify local registrations, likely benefit and appropriate professional guidance first.",
+        "weather": "High humidity, including in dense or protected cropping systems, is an important risk factor.",
+        "monitor": "Check whether new upper leaves develop matching spots and obtain expert review if extensive foliage is affected.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Ukungu wa Majani ya Nyanya (Leaf Mold)",
+        "what": "Ukungu wa majani ya nyanya husababishwa na fangasi Passalora fulva.",
+        "signs": "Madoa ya njano juu ya majani yanalingana na ukungu wa kijani-zaituni au kahawia chini ya majani, hasa katika mazingira yenye unyevunyevu mwingi.",
+        "check": "Madoa ya njano kwenye upande wa juu wa jani na ukungu wa rangi ya mzeituni wenye muundo wa velvet chini ya jani ni dalili muhimu ya leaf mold.",
+        "action": "Geuza majani kadhaa na kagua ukungu wa upande wa chini; pia chunguza unyevunyevu na upitishaji hewa.",
+        "manage": "Ongeza hewa, punguza unyevunyevu kwenye majani, kagua pande zote mbili na tumia aina zinazostahimili ugonjwa inapopatikana. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Unyevunyevu mwingi unaweza kusaidia ugonjwa huu; hali ya hewa peke yake si utambuzi.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ቅጠል ሻጋታ (Leaf Mold)",
+        "what": "የቲማቲም ቅጠል ሻጋታ በ Passalora fulva ፈንገስ የሚከሰት በሽታ ነው።",
+        "signs": "በቅጠሉ የላይኛው ገጽ ቢጫ ነጠብጣቦች፣ በታችኛው ገጽ ደግሞ አረንጓዴ-ቡናማ ለስላሳ ሻጋታ ሊታይ ይችላል።",
+        "check": "በቅጠሉ ላይኛው ገጽታ ላይ ቢጫ ነጠብጣብ እና በታችኛው ጎን የወይራ ቀለም ያለው ለስላሳ ሻጋታ የሊፍ ሞልድ አስፈላጊ ምልክት ነው።",
+        "action": "የብዙ ቅጠሎችን ታችኛውን ጎን ይመልከቱ፤ እርጥበትንና የአየር ዝውውርንም ያረጋግጡ።",
+        "manage": "የአየር ዝውውርን ያሻሽሉ፣ በቅጠሎች ላይ እርጥበት ይቀንሱ እና ተስማሚ የሆኑ በሽታን የሚቋቋሙ ዝርያዎችን ይጠቀሙ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ከፍተኛ እርጥበት ለዚህ በሽታ ሊመች ይችላል፤ የአየር ሁኔታ ብቻውን ምርመራ አይደለም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of Minnesota Extension",
+        "title": "Tomato Leaf Mold",
+        "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/tomato-leaf-mold",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "University of Minnesota Extension",
+        "title": "Managing Plant Diseases",
+        "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-problems/managing-plant-diseases-in-the-home-garden",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato__Tomato_mosaic_virus": {
+    "topic_id": "tomato_mosaic_virus",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato__Tomato_mosaic_virus",
+    "languages": {
+      "en": {
+        "title": "Tomato mosaic virus",
+        "what": "Tomato mosaic virus (ToMV) is a tobamovirus that can spread mechanically through infected material, handling and contaminated tools.",
+        "signs": "Light and dark green leaf mottling, distortion or uneven leaf shape can appear; symptoms vary with the plant and virus strain.",
+        "check": "Other viruses and nutrient problems also cause mottling; a model image cannot distinguish every cause without field observations or testing.",
+        "action": "Limit movement between suspicious and healthy plants, wash hands and sanitize shared tools, and record which plants show mosaic patterns.",
+        "manage": "Start with clean seed or transplants, use appropriate resistance where available, and use stringent hygiene; confirmed infected material needs careful management.",
+        "treatment": "There is no fungicide or insecticide that cures plants infected by tomato mosaic virus. Do not propose a whitefly-control spray as a cure for this mechanically transmitted virus.",
+        "weather": "This virus is chiefly spread by handling and contaminated material rather than by a simple rain or humidity threshold.",
+        "monitor": "If many plants show similar mosaic symptoms, seek expert testing before making irreversible removal decisions.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Virusi vya Mosaiki ya Nyanya (Tomato Mosaic Virus)",
+        "what": "Virusi vya tomato mosaic vinaweza kusambaa kwa kugusana na mimea au vifaa vilivyochafuliwa.",
+        "signs": "Majani yanaweza kuwa na mchanganyiko wa kijani kilichokolea na kijani hafifu, kupinda au kudumaa; dalili hizi si za virusi hivi pekee.",
+        "check": "Virusi vingine na matatizo ya virutubisho pia huleta muundo wa rangi tofauti kwenye jani. Tomato mosaic huenea hasa kwa kugusana na zana chafu, si kwa njia ya nzi weupe kama yellow leaf curl.",
+        "action": "Punguza kushika mimea mingine baada ya ile inayoshukiwa; safisha mikono na zana, na rekodi mimea yenye muundo wa mosaic.",
+        "manage": "Anza na mbegu na miche safi, safisha vifaa na tumia aina zenye ustahimilivu inapopatikana. Usiudai uwepo wa dawa inayoponya virusi.",
+        "treatment": "Hakuna dawa inayoponya mmea ambao tayari umeambukizwa virusi. Kuzuia kuenea ni muhimu kuliko kudai tiba ya virusi.",
+        "weather": "Virusi hivi huenea hasa kwa mgusano na zana zilizochafuliwa, si kutokana na kipimo kimoja cha hali ya hewa.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ሞዛይክ ቫይረስ (Tomato Mosaic Virus)",
+        "what": "የቲማቲም ሞዛይክ ቫይረስ በተበከለ ተክል ወይም መሣሪያ ንክኪ ሊተላለፍ ይችላል።",
+        "signs": "በቅጠሎች ላይ የቀላልና የጥቁር አረንጓዴ ቅልቅል፣ መጠምዘዝ ወይም የእድገት መቀዛቀዝ ሊታይ ይችላል።",
+        "check": "ሌሎች ቫይረሶችና የንጥረ ምግብ ችግሮች ተመሳሳይ የቅጠል ቀለም ልዩነት ሊያመጡ ይችላሉ። ቲማቲም ሞዛይክ በአብዛኛው በንክኪና በተበከሉ መሳሪያዎች ይተላለፋል፤ እንደ የሎው ሊፍ ከርል በነጭ ዝንብ አይደለም።",
+        "action": "የተጠረጠሩ ተክሎችን ከነኩ በኋላ ጤናማ ተክሎችን አይንኩ፤ እጅና መሳሪያዎችን ያጽዱ። ምልክት ያላቸውን ተክሎች ይመዝግቡ።",
+        "manage": "ጤናማ ዘርና ችግኝ ይጠቀሙ፣ መሳሪያዎችን ያጽዱ እና ተቋቋሚ ዝርያ ካለ ይምረጡ። ቫይረስን የሚፈውስ መድኃኒት እንዳለ አትግለጹ።",
+        "treatment": "በቫይረስ የተያዘ ተክልን የሚፈውስ መድኃኒት የለም። የበሽታውን ስርጭት መከላከል ዋናው እርምጃ ነው።",
+        "weather": "ይህ ቫይረስ በዋናነት በንክኪና በተበከሉ መሣሪያዎች ይተላለፋል፤ በአንድ የአየር መጠን ብቻ አይወሰንም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of California IPM",
+        "title": "Tobacco Mosaic (including Tomato Mosaic Virus)",
+        "url": "https://ipm.ucanr.edu/agriculture/tomato/tobacco-mosaic/",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "Colorado State University Extension",
+        "title": "Diagnosing Plant Disorders",
+        "url": "https://extension.colostate.edu/resource/diagnosing-plant-disorders/",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato_Septoria_leaf_spot": {
+    "topic_id": "tomato_septoria_leaf_spot",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato_Septoria_leaf_spot",
+    "languages": {
+      "en": {
+        "title": "Tomato Septoria leaf spot",
+        "what": "Septoria leaf spot of tomato is caused by the fungus Septoria lycopersici.",
+        "signs": "Many small, usually round gray-centered spots with dark margins appear especially on lower leaves; tiny black fruiting bodies may be visible in spots.",
+        "check": "Early blight more often forms larger ringed lesions; bacterial spot and other leaf damage can still resemble Septoria.",
+        "action": "Inspect lower leaves and look for small dark dots inside pale spot centers; photograph leaf undersides and the whole plant.",
+        "manage": "Improve airflow and spacing, water near the base, use mulch to reduce soil splash and remove infected residues as appropriate.",
+        "treatment": "Where disease severity justifies protection, a crop-registered fungicide may help reduce additional infection; follow label and local expert advice, not invented application rates.",
+        "weather": "Wet leaves and splash can aid disease development and spread.",
+        "monitor": "Track yellowing and loss of lower leaves; consult an expert if most of the canopy becomes affected.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Madoa ya Majani ya Septoria ya Nyanya (Septoria Leaf Spot)",
+        "what": "Septoria leaf spot ya nyanya husababishwa na fangasi Septoria lycopersici.",
+        "signs": "Madoa mengi madogo ya mviringo yenye kitovu cheupe-kijivu na ukingo wa giza huanza hasa kwenye majani ya chini; nukta nyeusi ndogo zinaweza kuonekana ndani ya doa.",
+        "check": "Septoria huwa na madoa mengi madogo yenye katikati ya kijivu na nukta nyeusi. Early blight huwa na madoa makubwa yenye pete zinazozunguka.",
+        "action": "Kagua majani ya chini na tafuta nukta nyeusi ndani ya madoa yenye katikati iliyopauka.",
+        "manage": "Epuka kulowesha majani, boresha nafasi na hewa, punguza maji yanayoruka kutoka udongoni na ondoa mabaki yaliyoathirika kwa usalama. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Majani kubaki na maji kunaweza kusaidia kuenea kwa ugonjwa; hali ya hewa peke yake haithibitishi chanzo.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ሴፕቶሪያ ቅጠል ነጠብጣብ (Septoria Leaf Spot)",
+        "what": "የቲማቲም ሴፕቶሪያ ቅጠል ነጠብጣብ በ Septoria lycopersici ፈንገስ የሚከሰት በሽታ ነው።",
+        "signs": "በታችኛው ቅጠል ላይ ነጭ-ግራጫ መሃልና ጥቁር ጠርዝ ያላቸው ብዙ ትናንሽ ክብ ነጠብጣቦች ይታያሉ፤ በመሃላቸው ጥቁር ነጥቦች ሊኖሩ ይችላሉ።",
+        "check": "ሴፕቶሪያ ግራጫ መሃልና ትናንሽ ጥቁር ነጥቦች ያላቸው ብዙ ትናንሽ ነጠብጣቦችን ያሳያል። ቀደምት ብላይት ትላልቅ ቀለበት ያላቸውን ያሳያል።",
+        "action": "በታችኛው ቅጠል ላይ ግራጫ መሃል ያላቸውን ነጠብጣቦች እና በውስጣቸው ያሉ ትናንሽ ጥቁር ነጥቦችን ይፈልጉ።",
+        "manage": "ቅጠሎችን አታርጥቡ፣ በተክሎች መካከል በቂ ክፍተት ይኑር፣ የአፈር ውሃ መርጨትን ይቀንሱ እና የተበከሉ ቀሪዎችን በተገቢው መንገድ ያስወግዱ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ቅጠሎች ረጅም ጊዜ እርጥብ መሆናቸው በሽታን ሊያበረታታ ይችላል፤ ይህ ግን ብቻውን በሽታን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of Maryland Extension",
+        "title": "Septoria Leaf Spot of Tomatoes",
+        "url": "https://extension.umd.edu/resource/septoria-leaf-spot-tomatoes",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "University of Minnesota Extension",
+        "title": "Managing Plant Diseases",
+        "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-problems/managing-plant-diseases-in-the-home-garden",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato_Spider_mites_Two_spotted_spider_mite": {
+    "topic_id": "tomato_spider_mites",
+    "kind": "out_of_scope_pest",
+    "crop": "tomato",
+    "model_class_exact": "Tomato_Spider_mites_Two_spotted_spider_mite",
+    "languages": {
+      "en": {
+        "title": "Tomato: two-spotted spider mite (pest; outside disease scope)",
+        "what": "Two-spotted spider mites are tiny arthropod pests and are not a tomato fungal, bacterial or viral disease. This class is present in the model but pest-treatment decisions are outside the initial disease advisory scope.",
+        "signs": "Fine pale stippling or yellowing, sometimes with thin webbing, may occur on leaves. Tiny moving mites can be seen beneath affected leaves with magnification.",
+        "check": "Look for mites or webbing: dry-weather stress and nutrient symptoms may cause yellowing without mites.",
+        "action": "Inspect the undersides of several leaves and take close-up photos of any visible mites or webbing.",
+        "manage": "Reduce severe water stress where possible and conserve natural mite predators; broad-spectrum insecticides can worsen mite problems by reducing natural enemies.",
+        "treatment": "Do not issue an automated miticide prescription for this out-of-scope class. A pest specialist can discuss suitable biological or locally registered controls.",
+        "weather": "Hot, dry conditions can support rapid mite increase; weather alone does not prove an infestation.",
+        "monitor": "If mites are seen and damage spreads, offer a farmer-initiated expert referral and clearly label the model scope limitation.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Utitiri wa Madoa Mawili (nje ya wigo wa programu)",
+        "what": "Utitiri wa buibui wa nyanya ni wadudu wadogo, si ugonjwa wa fangasi.",
+        "signs": "Angalia nukta ndogo za njano au nyeupe, majani kubadilika rangi na nyuzi nyembamba chini ya majani; hakiki uwepo wa utitiri.",
+        "check": "Tafuta utitiri mdogo au utando chini ya majani. Njano kwenye majani pekee inaweza kusababishwa na ukame au ukosefu wa virutubisho pia.",
+        "action": "Kagua chini ya majani kadhaa na upige picha ya utitiri au utando ukionekana.",
+        "manage": "Linda wadudu wanaokula utitiri, punguza msongo wa ukame na epuka viuatilifu visivyohitajika. Dawa za fangasi si tiba ya utitiri. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Huu ni mdudu/kisumbufu kilicho nje ya ushauri wa awali wa magonjwa. Usiamue kutumia dawa ya kuua utitiri kwa kutegemea picha pekee; omba ushauri wa mtaalamu wa wadudu.",
+        "weather": "Hali ya joto na ukavu inaweza kuongeza utitiri; thibitisha utitiri kwenye mimea.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "ባለሁለት ነጥብ የሸረሪት ምስጥ (Two-spotted spider mite — ከመተግበሪያው ወሰን ውጭ)",
+        "what": "የቲማቲም ስፓይደር ማይት ትንሽ ተባይ ነው፤ የፈንገስ በሽታ አይደለም።",
+        "signs": "በቅጠል ላይ ትናንሽ ቢጫ ወይም ነጭ ነጥቦች፣ የቀለም ለውጥና በቅጠል ሥር ቀጭን ድር ሊታይ ይችላል። ተባዩን ራሱን ያረጋግጡ።",
+        "check": "በቅጠሉ ታችኛው ጎን ትናንሽ ሸረሪት መሰል ተባዮችን ወይም ለስላሳ ድር ይፈልጉ። ቢጫ መሆን ብቻ ከድርቅ ወይም ከምግብ እጥረትም ሊመጣ ይችላል።",
+        "action": "የብዙ ቅጠሎችን ታችኛውን ጎን ይመልከቱ፤ ተባይ ወይም ድር ካዩ ግልጽ ፎቶ ይውሰዱ።",
+        "manage": "ተባዩን የሚበሉ ጠቃሚ ፍጥረታትን ይጠብቁ፣ የድርቅ ጭንቀትን ይቀንሱ እና ያላስፈለገ ኬሚካል አይጠቀሙ። የፈንገስ መድኃኒት ማይትን አያክምም። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "ይህ ተባይ ነው፣ ከመጀመሪያው የበሽታ ምክር ወሰን ውጭ ነው። በፎቶ ብቻ ተመስርተው መድኃኒት አይምረጡ፤ የተባይ ባለሙያ ያማክሩ።",
+        "weather": "ሞቃትና ደረቅ ሁኔታ የማይት ብዛትን ሊጨምር ይችላል፤ ተባዩን በተክሉ ላይ ያረጋግጡ።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of Minnesota Extension",
+        "title": "Twospotted Spider Mites",
+        "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/yard-and-garden-insects/spider-mites",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato__Target_Spot": {
+    "topic_id": "tomato_target_spot",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato__Target_Spot",
+    "languages": {
+      "en": {
+        "title": "Tomato target spot",
+        "what": "Target spot of tomato is caused by Corynespora cassiicola, a fungus that may affect leaves, stems and fruit.",
+        "signs": "Small lesions can enlarge into light-brown spots with dark concentric rings and yellow halos; fruit may develop sunken brown spots.",
+        "check": "Target spot resembles early blight and bacterial spot, especially early in development, so a single leaf image is not definitive.",
+        "action": "Inspect the inside and lower part of the canopy and photograph leaf spots and any fruit lesions.",
+        "manage": "Use clean transplants, reduce weed hosts and crop debris, improve airflow and consider rotation to a nonhost crop when feasible.",
+        "treatment": "A locally registered fungicide may be used after disease confirmation and expert evaluation; effectiveness and resistance patterns vary, so do not prescribe brands or schedules.",
+        "weather": "Extended leaf wetness and high humidity can favor infection; wind and splash can distribute fungal spores.",
+        "monitor": "Check for rapid leaf loss or worsening fruit spots and request expert input when the cause is uncertain.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Madoa ya Shabaha ya Nyanya (Target Spot)",
+        "what": "Target spot ya nyanya husababishwa na fangasi Corynespora cassiicola.",
+        "signs": "Madoa kwenye majani yanaweza kuwa na kitovu cha kahawia hafifu na miduara myeusi; shina na matunda pia yanaweza kupata vidonda. Hufanana na early blight.",
+        "check": "Target spot inaweza kufanana na early blight na bacterial spot, hasa mwanzoni. Angalia pia madoa yaliyodidimia kwenye matunda.",
+        "action": "Kagua ndani na chini ya matawi ya nyanya pamoja na matunda; piga picha za madoa yenye pete na yale ya matunda.",
+        "manage": "Tumia miche safi, boresha hewa na usafi wa shamba; thibitisha ugonjwa kabla ya kuchagua kinga iliyosajiliwa. Hakuna jina la bidhaa, kipimo, mchanganyiko au ratiba ya kunyunyizia inayotolewa. Kiwatilifu chochote lazima kisajiliwe kwa zao na tatizo katika nchi ya mkulima na kitumiwe kwa kufuata lebo.",
+        "treatment": "Dawa ya kuzuia fangasi inaweza kuzingatiwa baada ya kuthibitisha ugonjwa na manufaa yake. Tumia tu bidhaa iliyosajiliwa kwa zao na tatizo husika katika nchi yako kwa kufuata lebo; hapa hakuna kipimo au ratiba.",
+        "weather": "Majani kubaki na maji kunaweza kusaidia kuenea kwa ugonjwa; hali ya hewa peke yake haithibitishi chanzo.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ታርጌት ስፖት (Target Spot)",
+        "what": "የቲማቲም Target spot በ Corynespora cassiicola ፈንገስ የሚከሰት በሽታ ነው።",
+        "signs": "በቅጠሎች ላይ ቀላል ቡናማ መሃልና ጥቁር ክብ መስመሮች ያሉት ነጠብጣቦች ሊታዩ ይችላሉ፤ ግንድና ፍሬም ሊጎዱ ይችላሉ።",
+        "check": "ታርጌት ስፖት በመጀመሪያ ከቀደምት ብላይትና ከባክቴሪያ ስፖት ሊመሳሰል ይችላል። በፍሬ ላይ የገቡ ቡናማ ነጠብጣቦችንም ይመልከቱ።",
+        "action": "በቲማቲም ቅጠል ውስጣዊና ታችኛው ክፍል ላይ ይመርምሩ፤ ቀለበት ያላቸውን ነጠብጣቦችና የፍሬ ምልክቶችን ይቅረጹ።",
+        "manage": "ጤናማ ችግኝ፣ ጥሩ የአየር ዝውውርና የእርሻ ንጽህና ይጠቀሙ፤ መድኃኒት ከመምረጥ በፊት በሽታውን ያረጋግጡ። የመድኃኒት ስም፣ መጠን፣ የመቀላቀል መመሪያ ወይም የመርጨት ሰሌዳ አይሰጥም። ማንኛውም መድኃኒት ለሰብሉና ለችግሩ በአገሩ የተመዘገበ እና እንደ መለያው የሚጠቀም መሆን አለበት።",
+        "treatment": "የፈንገስ መቆጣጠሪያ መድኃኒት በሽታው ከተረጋገጠ እና ጥቅሙ ከተመዘነ በኋላ ብቻ ሊታሰብ ይችላል። ለዚህ ሰብልና በሽታ በአገርዎ የተመዘገበ ምርት በመለያው መሠረት ብቻ ይጠቀሙ፤ እዚህ መጠን ወይም የመርጨት ሰሌዳ አይሰጥም።",
+        "weather": "ቅጠሎች ረጅም ጊዜ እርጥብ መሆናቸው በሽታን ሊያበረታታ ይችላል፤ ይህ ግን ብቻውን በሽታን አያረጋግጥም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of Florida IFAS Extension",
+        "title": "Target Spot of Tomato (symptoms and general management only)",
+        "url": "https://ask.ifas.ufl.edu/publication/PP351",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  },
+  "Tomato__Tomato_YellowLeaf__Curl_Virus": {
+    "topic_id": "tomato_yellow_leaf_curl_virus",
+    "kind": "disease",
+    "crop": "tomato",
+    "model_class_exact": "Tomato__Tomato_YellowLeaf__Curl_Virus",
+    "languages": {
+      "en": {
+        "title": "Tomato yellow leaf curl disease",
+        "what": "Tomato yellow leaf curl disease is associated with viruses transmitted by the Bemisia tabaci whitefly complex.",
+        "signs": "Young tomato leaves may curl upward, yellow between veins and become small; plants can be stunted and fruit production reduced.",
+        "check": "Curling may also result from environmental or herbicide problems; whiteflies and plant history are useful clues, but confirm a viral cause when possible.",
+        "action": "Inspect young growth and the undersides of leaves for whiteflies, and check healthy transplants nearby.",
+        "manage": "Use healthy transplants, appropriate resistant varieties and integrated whitefly management; prevent whiteflies carrying virus between susceptible plants.",
+        "treatment": "No product cures virus-infected plants. Whitefly control may reduce future transmission where appropriate but does not reverse an existing infection.",
+        "weather": "Whitefly activity and infected plants drive spread; do not invent a rainfall threshold for this virus.",
+        "monitor": "Follow new growth and affected plants, and consult an expert if a widespread virus problem is suspected.",
+        "translation_reviewed": null
+      },
+      "sw": {
+        "title": "Virusi vya Kujikunja kwa Majani ya Nyanya (Tomato Yellow Leaf Curl Virus)",
+        "what": "Tomato yellow leaf curl virus ni ugonjwa wa virusi unaoenezwa hasa na nzi weupe wa Bemisia.",
+        "signs": "Majani machanga yanaweza kuwa madogo, kujikunja juu na kuwa ya njano; mmea unaweza kudumaa na kutoa maua au matunda machache.",
+        "check": "Majani yanayokunjamana pia yanaweza kuwa na shida ya mazingira au dawa ya magugu. Angalia nzi weupe chini ya majani na historia ya miche.",
+        "action": "Kagua ukuaji mpya na chini ya majani kwa nzi weupe; linganisha mimea iliyoathirika na miche yenye afya.",
+        "manage": "Tumia miche safi na aina zinazostahimili virusi inapopatikana, na udhibiti wa nzi weupe kwa njia ya IPM. Dawa inayolenga nzi weupe haiponyi mmea ulioambukizwa.",
+        "treatment": "Hakuna dawa inayoponya mmea ambao tayari umeambukizwa virusi. Kuzuia kuenea ni muhimu kuliko kudai tiba ya virusi.",
+        "weather": "Kuenea kunahusiana na mimea iliyoambukizwa na nzi weupe, si kiwango kimoja cha mvua.",
+        "monitor": "Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.",
+        "translation_reviewed": false
+      },
+      "am": {
+        "title": "የቲማቲም ቢጫ ቅጠል ጥምዘዛ ቫይረስ (Tomato Yellow Leaf Curl Virus)",
+        "what": "የቲማቲም ቢጫ ቅጠል መጠምዘዝ ቫይረስ በዋናነት በ Bemisia ነጭ ዝንቦች ይተላለፋል።",
+        "signs": "ወጣት ቅጠሎች ትንሽ ሆነው ወደ ላይ ሊጠማዘዙና ሊቢጫ ይችላሉ፤ ተክሉ ሊደክም እና ፍሬ መያዝ ሊቀንስ ይችላል።",
+        "check": "የቅጠል መጠምዘዝ ከአየር ሁኔታ ወይም ከአረም መድኃኒት ጉዳትም ሊመጣ ይችላል። በቅጠል ታች ነጭ ዝንቦችንና የችግኝ ታሪክን ይፈትሹ።",
+        "action": "አዲስ እድገትንና የቅጠል ታችኛውን ጎን ለነጭ ዝንብ ይመልከቱ፤ ከጤናማ ችግኞች ጋር ያነጻጽሩ።",
+        "manage": "ጤናማ ችግኝና ተቋቋሚ ዝርያ ካለ ይጠቀሙ፤ ነጭ ዝንቦችን በተቀናጀ መንገድ ይቆጣጠሩ። የነጭ ዝንብ መድኃኒት በቫይረስ የተያዘ ተክልን አይፈውስም።",
+        "treatment": "በቫይረስ የተያዘ ተክልን የሚፈውስ መድኃኒት የለም። የበሽታውን ስርጭት መከላከል ዋናው እርምጃ ነው።",
+        "weather": "መስፋፋቱ በተበከሉ ተክሎችና በነጭ ዝንቦች ይወሰናል፤ በአንድ የዝናብ መጠን ብቻ አይደለም።",
+        "monitor": "ምልክቶች እየተስፋፉ መሆናቸውን ይመዝግቡ። በሽታዎች ሲመሳሰሉ ወይም መድኃኒት ሲታሰብ ባለሙያ ያማክሩ፤ ሪፈራል የሚጀምረው ገበሬው ብቻ ነው።",
+        "translation_reviewed": false
+      }
+    },
+    "sources": [
+      {
+        "id": "SRC1",
+        "publisher": "University of California IPM",
+        "title": "Tomato Yellow Leaf Curl",
+        "url": "https://ipm.ucanr.edu/agriculture/tomato/tomato-yellow-leaf-curl/",
+        "source_language": "en"
+      },
+      {
+        "id": "SRC2",
+        "publisher": "FAO",
+        "title": "Integrated Pest Management",
+        "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+        "source_language": "en"
+      }
+    ]
+  }
+}

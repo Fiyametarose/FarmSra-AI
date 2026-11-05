@@ -1,0 +1,75 @@
+---
+title: Matumizi Salama ya Dawa za Kuua Wadudu na Magonjwa
+crop: all
+condition: general
+language: sw
+country: general
+publisher: FarmSra AI — original evidence-guided synthesis
+source_type: source-grounded original educational summary
+url: https://www.fao.org/pest-and-pesticide-management/pesticide-risk-reduction/pesticide-management/en/
+references_json: '[{"id": "SRC1", "publisher": "FAO", "title": "Pesticide Management", "url": "https://www.fao.org/pest-and-pesticide-management/pesticide-risk-reduction/pesticide-management/en/",
+  "source_language": "en", "scope": "general context / safety"}, {"id": "SRC2", "publisher": "FAO", "title":
+  "Integrated Pest Management", "url": "https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en",
+  "source_language": "en", "scope": "general context / safety"}, {"id": "SRC3", "publisher": "Kenya Pest Control
+  Products Board", "title": "Registered Products (Kenya only)", "url": "https://www.pcpb.go.ke/registered-products/",
+  "source_language": "en", "scope": "general context / safety"}]'
+evidence_map_json: '{"what": "SRC1", "signs": "SRC1", "check": "SRC1", "action": "SRC1", "manage": "SRC1; additional
+  general IPM context when available", "treatment": "SRC1 for condition; local label and registration must
+  be checked separately", "weather": "SRC1 when stated; otherwise no diagnosis from weather alone", "monitor":
+  "Published crop source for signs/progression; FarmSra project policy for farmer-initiated expert consent"}'
+licence: FarmSra original synthesis, links only; external sources not reproduced
+source_language: en
+editorial_review: English core facts and references reviewed 2026-11-04
+translation_review: not independently reviewed
+agronomist_signoff: false
+approved_for_rag: true
+safe_for_unreviewed_treatment_decisions: false
+last_reviewed: '2026-11-04'
+content_version: '6.0'
+rag_approval_scope: educational_prototype_only
+production_approval: false
+production_review_requirement: independent agronomist and qualified language review pending
+activation_basis: owner-requested staging use; editorial source-relevance checks, not independent professional
+  certification
+review_method: human-authored editorial comparison to retrieved authoritative web sources; no field or laboratory
+  verification
+topic_id: general_safe_pesticide_use
+topic_type: general
+review_status: translated_draft_requires_language_review
+intended_display: general_guidance_library_and_chatbot
+provenance_note: System behavior and farmer-consent rules originate from FarmSra specifications; agricultural
+  citations do not substantiate app-specific feature claims.
+---
+
+# Matumizi Salama ya Dawa za Kuua Wadudu na Magonjwa
+
+## Maelezo ya hali hii [what]
+Tumia bidhaa baada ya kuthibitisha tatizo na usajili wa bidhaa hiyo kwa zao, mdudu au ugonjwa na nchi husika. Soma lebo rasmi na tahadhari zake.
+
+## Dalili za kuchunguza [signs]
+Dalili zinazofanana zinaweza kuwa na sababu tofauti. Linganisha majani kadhaa, mmea mzima na maelezo ya hali ya shamba kabla ya kuamua.
+
+## Hali zinazoweza kufanana [check]
+Bidhaa iliyoruhusiwa katika zao moja au nchi moja inaweza isiruhusiwe kwa zao na nchi nyingine.
+
+## Hatua za kuchukua sasa [action]
+Hakikisha jina la tatizo na zao, kisha hakiki usajili wa nchi na lebo ya bidhaa. Fuatilia kinga binafsi, muda wa kuingia shambani tena na muda wa kusubiri kabla ya kuvuna.
+
+## Udhibiti na kinga [manage]
+Tumia mbinu shirikishi za udhibiti na punguza hatari kwa watu, viumbe rafiki na mazingira.
+
+## Mambo ya kuzingatia kuhusu tiba [treatment]
+Chagua bidhaa baada ya kuthibitisha tatizo, usajili wa eneo lako na maelekezo ya lebo; hakuna bidhaa maalumu, kipimo wala muda wa kunyunyizia unaotolewa.
+
+## Hali ya hewa na kuenea [weather]
+Taarifa ya hali ya hewa ni muktadha tu, si uthibitisho wa ugonjwa; tumia mahali na muda sahihi wa shamba.
+
+## Ufuatiliaji na ushauri wa mtaalamu [monitor]
+Andika kama dalili zinaongezeka. Omba uhakiki wa mtaalamu magonjwa yakifanana au dawa inapozingatiwa; mkulima pekee ndiye huanzisha ushauri wa mtaalamu.
+
+## Marejeo na ushahidi [references]
+- [SRC1] FAO: Pesticide Management — https://www.fao.org/pest-and-pesticide-management/pesticide-risk-reduction/pesticide-management/en/ (source language: English)
+- [SRC2] FAO: Integrated Pest Management — https://www.fao.org/pest-and-pesticide-management/ipm/integrated-pest-management/en (source language: English)
+- [SRC3] Kenya Pest Control Products Board: Registered Products (Kenya only) — https://www.pcpb.go.ke/registered-products/ (source language: English)
+
+Maelezo haya yametafsiriwa kwa madhumuni ya elimu; tafsiri haijahakikiwa kwa kujitegemea na mtaalamu wa lugha na kilimo.

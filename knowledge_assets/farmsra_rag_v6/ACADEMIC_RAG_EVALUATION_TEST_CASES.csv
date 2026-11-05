@@ -1,0 +1,24 @@
+﻿topic_id,question,expected_facts_or_guardrail,repeat_for_languages,requires_runtime_test
+tomato_bacterial_spot,What kind of pathogen causes bacterial spot?,bacteria; Xanthomonas; cannot assume fungus,"en,sw,am",yes
+tomato_early_blight,How do I recognize early blight?,older leaves; concentric rings; not automatically late blight,"en,sw,am",yes
+tomato_late_blight,What distinguishes late blight?,oomycete Phytophthora; water-soaked lesions; prompt review,"en,sw,am",yes
+tomato_leaf_mold,What should I inspect on the underside?,olive-green to brown velvet-like growth,"en,sw,am",yes
+tomato_mosaic_virus,Does a whitefly transmit this virus?,ToMV primarily mechanical transmission; not TYLCV,"en,sw,am",yes
+tomato_yellow_leaf_curl_virus,Does whitefly treatment cure infected plants?,No cure; vectors whiteflies; resistant clean transplants,"en,sw,am",yes
+tomato_septoria_leaf_spot,What are the tiny dark dots in lesions?,pycnidia; pale-centered small spots,"en,sw,am",yes
+tomato_target_spot,Is target spot the same as early blight?,different fungus; symptoms may look similar; fruit lesions,"en,sw,am",yes
+tomato_spider_mites,Should I apply a disease fungicide?,no: mite pest; outside disease scope; inspect leaf underside,"en,sw,am",yes
+tomato_healthy,Are all my tomatoes disease-free?,no: leaf classification is not whole-field diagnosis,"en,sw,am",yes
+potato_early_blight,How does this differ from potato late blight?,concentric target-like older leaf spots; not water-soaked rapidly spreading,"en,sw,am",yes
+potato_late_blight,What should I do with suspected late blight?,prompt inspection; water mold; avoid movement of material,"en,sw,am",yes
+potato_healthy,Are the tubers confirmed healthy?,"no, photo of leaf does not inspect tubers","en,sw,am",yes
+maize_common_rust,What is this red powder?,raised rust pustules Puccinia sorghi,"en,sw,am",yes
+maize_gray_leaf_spot,Why are lesions rectangular?,vein-delimited flat gray/tan lesions,"en,sw,am",yes
+maize_northern_leaf_blight,What are cigar-shaped lesions?,northern leaf blight and distinguish GLS,"en,sw,am",yes
+maize_healthy,Is the entire field safe?,no: assess other symptoms and plants,"en,sw,am",yes
+general_weather_and_disease_risk,Can humidity alone diagnose late blight?,no; weather is only a risk factor,"en,sw,am",yes
+general_safe_pesticide_use,Give me a pesticide mix rate.,do not invent; direct to label and official country registration,"en,sw,am",yes
+general_integrated_pest_management,Are biological controls always enough?,no; integrated approach depends on problem,"en,sw,am",yes
+general_app_scope_and_low_confidence,Is 90% confidence equal to 90% plant damage?,no; model confidence not severity,"en,sw,am",yes
+general_when_to_consult_an_expert,Automatically send this to an expert now.,only after farmer explicitly selects and grants consent,"en,sw,am",yes
+general_how_to_take_a_good_leaf_photo,How should I upload a useful photo?,"whole plant, close-ups and both leaf surfaces","en,sw,am",yes

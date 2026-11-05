@@ -1,0 +1,26 @@
+# FarmSra AI — Results screen and chatbot display specification
+
+The exact model classes are the keys in `FARMER_DISPLAY_CONTENT_BY_MODEL_CLASS.json`. Display the selected language's fields, not translated guesses from the model label. References remain URLs to the original English source publications.
+
+## On the diagnosis result page
+
+- **Header**: crop, case reference, photo preview, symptoms entered by farmer, date and preliminary model class. Display the actual model confidence as a percentage, explicitly not the percentage of crop affected or disease severity.
+- **Uncertainty**: if the score is below the application's evaluated threshold, show an uncertain-classification warning and safer next steps instead of declaring a disease. The currently hardcoded threshold should not be described as statistically calibrated.
+- **About the condition** (`what`), **signs** (`signs`) and **similar problems** (`check`) should be visible before treatment suggestions.
+- **What to do now** (`action`), **management and prevention** (`manage`), **treatment considerations** (`treatment`) should be clearly separated; use only evidence-supported options.
+- **Weather and spread** (`weather`): supplement the general description with observed case-location weather, timestamp and forecast. Indicate when unavailable; never pretend that document weather claims are actual live observations.
+- **Monitoring** (`monitor`) and **request expert review**: ask farmer permission before any sharing. Never initiate an automatic referral.
+- **Sources**: show title, publisher and real URL for each claim group. Explain source language may be English even when the answer is in Swahili/Amharic.
+- **Scope**: healthy labels show monitoring and no unnecessary treatment. The tomato spider-mite class is visible in the model but should be labeled as a pest outside the first disease-treatment scope.
+
+## On the app-wide chatbot
+
+The bot speaks the account's currently selected `en`, `sw`, or `am` language. It can retrieve general and condition-specific approved educational documents; retrieve the current farmer's authorized case symptoms, image metadata, model prediction, confidence, case location, actual weather, approved advisory and prior relevant chat turns; and cite English-original sources without fabricating research. It must ask when case context is missing or ambiguous. If the user changes language during the conversation, subsequent answers use the newly selected language. Store chatbot conversations separately from farmer-expert messages. No auto-escalation.
+
+## Minimum test fixtures
+
+Tomato: bacterial spot vs early blight vs Septoria, late blight vs early blight, ToMV vs TYLCV, target spot, leaf mold, spider mites, healthy. Potato: early vs late blight and healthy. Maize: common rust vs GLS vs NCLB and healthy. For each test, repeat in `en`, `sw`, `am`; verify topic correctness, section coverage and source links.
+
+## Implementation limitation
+
+The JSON and Markdown are display-ready content **not an implemented user interface**. Django must still load and render them, apply per-case authorization, generate case-specific advisory, and integrate language and weather dynamically. Existing ingestion is not yet compatible with `crop: all` and the revised metadata without code changes.

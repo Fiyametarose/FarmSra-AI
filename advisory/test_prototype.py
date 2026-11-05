@@ -1,7 +1,6 @@
 import io
 import json
 import tempfile
-import unittest
 import zipfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -30,7 +29,9 @@ from advisory.workflow import execute_job
 from diagnoses.models import DiagnosisCase
 from users.models import User
 
-ARCHIVE = Path(r"D:\Project Ideas\FarmSra_RAG_v6.zip")
+ARCHIVE = Path(__file__).resolve().parents[1] / "knowledge_assets" / "farmsra_rag_v6"
+if not ARCHIVE.is_dir():
+    raise RuntimeError(f"Required tracked knowledge directory is missing: {ARCHIVE}")
 Version = KnowledgeDocumentVersion
 
 
@@ -76,7 +77,6 @@ def empty_production():
     return collection
 
 
-@unittest.skipUnless(ARCHIVE.exists(), "FarmSra_RAG_v6.zip is not available")
 class ArchiveTests(TestCase):
     def test_archive_has_all_documents_and_exact_model_class_mappings(self):
         records, summary = validate_archive(read_archive_files(ARCHIVE))
@@ -175,7 +175,6 @@ class ArchiveTests(TestCase):
             )
 
 
-@unittest.skipUnless(ARCHIVE.exists(), "FarmSra_RAG_v6.zip is not available")
 @override_settings(RAG_EDUCATIONAL_PROTOTYPE_MODE=False)
 class PrototypeRetrievalTests(TestCase):
     @classmethod
@@ -306,7 +305,6 @@ class PrototypeRetrievalTests(TestCase):
         self.assertTrue(all("[" not in h for d in documents for h in d["headings"]))
 
 
-@unittest.skipUnless(ARCHIVE.exists(), "FarmSra_RAG_v6.zip is not available")
 class PrototypeFeatureIntegrationTests(TestCase):
     @classmethod
     def setUpTestData(cls):

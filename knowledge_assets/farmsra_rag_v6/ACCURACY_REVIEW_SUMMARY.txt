@@ -1,0 +1,18 @@
+# English agricultural fact-check and QA summary
+
+## Scope of checks (November 4, 2026)
+
+- English source content rewritten for each of 17 model classes and 6 general topics. All clinical-looking claims about plants were restricted to source-supported horticultural explanations; local agricultural management varies.
+- Primary source evidence drawn from specific agricultural extension publications: Crop Protection Network for maize rust/gray leaf spot/northern leaf blight; University of California IPM for potato blights, tomato early blight, mosaic and yellow leaf curl; University of Minnesota Extension for late blight, bacterial spot, leaf mold and spider mites; University of Maryland Extension for Septoria; UF/IFAS for target spot; NC State and Colorado State Extension for differential diagnosis, FAO for IPM and safe pesticide management.
+- No unsupported US prevalence statements appear in advice paragraphs. Research links may originate from US institutions; that does not make geographic prevalence claims relevant to the farmer.
+- Treated oomycete late blight separately from fungal early blight; ToMV mechanical transmission separately from TYLCV whitefly spread; bacterial spot separately from fungal leaf spots; spider mite as pest outside the initial treatment scope; three healthy results without claiming full crop health.
+- No numeric treatment doses, application schedules, fictitious pesticide labels or brand-name prescriptions.
+- Each English section has at least one disease-relevant source link or a general diagnostic/safety reference. `ENGLISH_SOURCE_AND_CLAIM_LEDGER.csv` lists section/claim excerpts and candidate supporting sources.
+
+## Important limitations
+
+- English editorial source checks do not establish field-level model accuracy, complete agronomist certification, or validity of any product in a particular country. Some recommendations are general safe principles synthesized from source pages.
+- Swahili and Amharic translations are classroom drafts aligned to core disease facts, not full professional native-speaker-certified translations. Further native-speaker checking is desirable; do not claim otherwise.
+- Web links were retrieved or checked through search results and indexed authoritative pages; link availability may vary by browsing device/region. All links include publisher metadata, no bare or invented URLs.
+- `approved_for_rag: true` means classroom/demo only; it does not authorize commercial advice.
+- `FARMER_DISPLAY_CONTENT_BY_MODEL_CLASS.json` is output-ready content, but Django still requires ingestion, model integration, language switching and dynamic weather work.
